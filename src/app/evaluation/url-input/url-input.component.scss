@@ -1,0 +1,39 @@
+.input_url {
+  padding: 0 !important;
+  margin: 0;
+  color: whitesmoke;
+
+  input {
+    border: none;
+    padding: 1em;
+    background-color: transparent;
+    color: whitesmoke;
+    font-size: 1.2em;
+    outline: none;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  }
+
+  mat-icon {
+    cursor: pointer;
+  }
+
+  .info {
+    color: lightblue;
+  }
+
+  .error {
+    color: red;
+  }
+}
+
+.info-tooltip {
+  font-size: 1em;
+  color: whitesmoke;
+  background-color: lightblue;
+}
+
+.error-tooltip {
+  font-size: 1em;
+  color: whitesmoke;
+  background-color: red;
+}

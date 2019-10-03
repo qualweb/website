@@ -1,0 +1,160 @@
+{
+  "HEADER": {
+      "homepage": "Página inicial",
+      "language": "Língua"
+  },
+  "EVALUATION_PAGE": {
+    "sidenav": {
+      "title": "Conteúdo",
+      "summary": "Sumário",
+      "filters": "Filtros",
+      "report": "Relatório de acessibilidade"
+    },
+    "summary": {
+      "title": "Sumário",
+      "rules": "regras e técnicas testadas",
+      "tests": "testes",
+      "passed": "Número de regras e técnicas passadas",
+      "failed": "Número de regras e técnicas falhadas",
+      "inapplicable": "Número de regras e técnicas não aplicáveis",
+      "warning": "Número de regras e técnicas de aviso"
+    },
+    "filters": {
+      "title": "Filtros",
+      "outcome": "Resultado",
+      "show_not_applicable_rule": "Não aplicável",
+      "show_passed_rule": "Passou",
+      "show_failed_rule": "Falhou",
+      "show_warning_rule": "Aviso",
+      "principle": "Princípio",
+      "level": "Nível",
+      "show_not_applicable_result": "Não aplicável",
+      "show_passed_result": "Passou",
+      "show_failed_result": "Falhou",
+      "show_warning_result": "Aviso",
+      "expand_all": "Expandir todas as regras",
+      "close_all": "Fechar todas as regras",
+      "results":  "resultado(s)"
+    },
+    "report": {
+      "title": "Relatório de acessibilidade",
+      "description": "Descrição",
+      "criteria": {
+        "title": "Critérios de sucesso",
+        "level": "Nível",
+        "principle": "Princípio"
+      },
+      "target_elem": "Elemento alvo: ",
+      "target_attr": "Atributos alvo: ",
+      "results": "Resultados",
+      "result_code": "Ver representação visual"
+    }
+  },
+  "RESULT_CODE_DIALOG": {
+    "title": "Representação visual",
+    "close": "Fechar"
+  },
+  "FOOTER": {
+    "language": "Língua"
+  },
+  "LANGUAGES": {
+    "Portuguese": "Português",
+    "English": "English"
+  },
+  "HOMEPAGE": {
+    "title": "Valide uma página web:"
+  },
+  "INPUT_URL": {
+    "placeholder": "Insira o url aqui",
+    "invalid_url": "O url inserido é inválido",
+    "submit": "Verificar"
+  },
+  "MISC": {
+    "go_to_top": "Ir para o topo"
+  },
+  "RULES": {
+    "QW-ACT-R1": {
+      "name": "Página HTML tem um título",
+      "description": "Esta regra verifica se a página tem um título.",
+      "RC1": "O elemento <title> não existe",
+      "RC2": "O elemento <title> está vazio",
+      "RC3": "O elemento <title> existe e não está vazio",
+      "RC4": "O elemento raiz da página não é um elemento <html>"
+    },
+    "QW-ACT-R2": {
+      "name": "HTML tem atributo 'lang'",
+      "description": "Esta regra verifica se o elemento html tem um atributo lang ou xml:lang não-vazio.",
+      "RC1": "Não existe o elemento <html>",
+      "RC2": "O elemento raiz da página não é um elemento <html>",
+      "RC3": "O atributo 'xml:lang' tem um valor",
+      "RC4": "O atributo 'lang' tem um valor",
+      "RC5": "O atributo 'lang' ou 'xml:lang' está vazio ou indefinido"
+    },
+    "QW-ACT-R3": {
+      "name": "HMTL 'lang' e 'xml:lang' correspondem",
+      "description": "Esta regra verifica se, para o elemento html, não existe incompatibilidade entre o idioma primário nos atributos lang e xml:lang não-vazios, se ambos são usados.",
+      "RC1": "Não existe o elemento <html>",
+      "RC2": "O elemento raiz da página não é um elemento <html>",
+      "RC3": "O elemento <html> não tem atributos",
+      "RC4": "O atributo 'lang' ou 'xml:lang' não existe",
+      "RC5": "O atributo 'lang' ou 'xml:lang' está vazio"
+    },
+    "QW-ACT-R4": {
+      "name": "Meta-refresh no delay",
+      "description": "Esta regra verifica se o elemento meta não é utilizado para redireccionamentos ou atualizações atrasadas.",
+      "RC1": "Já existe um elemento <meta> válido ou inválido acima",
+      "RC2": "Os atributos 'content' e 'http-equiv' são inexistentes",
+      "RC3": "O atributo 'content' não existe",
+      "RC4": "O atributo 'http-equiv' não existe",
+      "RC5": "O atributo 'content' está vazio",
+      "RC6": "O valor temporal é negativo",
+      "RC7": "Atualiza imediatamente",
+      "RC8": "Atualiza após mais de 20 horas",
+      "RC9": "Não atualiza imediatamente nem após mais de 20 horas",
+      "RC10": "O atributo 'content' é inválido",
+      "RC11": "O atributo 'content' está formatado incorretamente",
+      "RC12": "Redireciona imediatamente",
+      "RC13": "Redireciona após mais de 20 horas",
+      "RC14": "Não redireciona imediatamente nem após mais de 20 horas",
+      "RC15": "URL pretendido é inválido",
+      "RC16": "URL pretendido está formatado incorretamente"
+    },
+    "QW-ACT-R5": {
+      "name": "Validade do atributo HTML 'lang'",
+      "description": "Esta regra verifica se o atributo lang ou xml:lang tem uma subtag de idioma válido.",
+      "RC1": "Não existe o elemento <html>",
+      "RC2": "O elemento raiz da página não é um elemento <html>",
+      "RC3": "O elemento <html> não tem atributos",
+      "RC4": "Os atributos 'lang' e 'xml:lang' têm um valor válido",
+      "RC5": "O atributo 'lang' ou 'xml:lang' não é válido",
+      "RC6": "O atributo 'lang' tem um valor válido",
+      "RC7": "O atributo 'xml:lang' tem um valor válido",
+      "RC8": "Os atributos 'lang' e 'xml:lang' estão vazios ou indefinidos"
+    }
+  },
+  "PRINCIPLES": {
+    "perceivable": "Percetível",
+    "operable": "Operável",
+    "understandable": "Compreensível",
+    "robust": "Robusto"
+  },
+  "SUCCESS_CRITERIA":  {
+    "2.1.1": "Teclado",
+    "2.2.4": "Interrupções",
+    "2.4.2": "Página com Título",
+    "3.1.1": "Idioma da Página",
+    "3.2.5": "Alteração a Pedido"
+  },
+  "ABOUT_PAGE": {
+    "1": "O QualWeb é um serviço de avaliação automática de acessibilidade web, que integra resultados de diferentes projetos de investigação.",
+    "2": "O QualWeb verifica automaticamente a conformidade de uma página web com um conjunto de ",
+    "wcag": "Técnicas WCAG 2.1",
+    "and": " e ",
+    "act": "Regras ACT",
+    "3": "O QualWeb disponibiliza, ocasionalmente, módulos experimentais que resultam de trabalhos de investigação, e que podem melhorar diferentes aspetos da avaliação de acessibilidade web (por examplo, um módulo para avaliar a qualidade de alternativas textuais). O utilizador tem sempre a opção de usar o QualWeb sem estes módulos.",
+    "4": "O código fonte do QualWeb é disponibilizado em ",
+    "5": "Pode usar o QualWeb como um serviço online neste sítio web, ou como uma ",
+    "cli": "ferramenta de linha de comando",
+    "projects": "Os seguintes projetos contribuíram para o desenvolvimento do QualWeb:"
+  }
+}

@@ -1,0 +1,46 @@
+img {
+  width: 20vw;
+  min-width: 250px;
+  //margin-bottom: 2vh;
+}
+
+div {
+  font-size: 1.05em;
+  text-align: justify;
+}
+
+a {
+  color: white;
+  text-decoration: underline;
+  text-decoration-color: #ffab57;
+
+  &:hover {
+    color: #ffaf1c;
+    text-decoration: none;
+  }
+
+  &:active {
+    color: white;
+    text-decoration: none;
+  }
+}
+
+ul {
+  line-height: 150%;
+  margin-top: 0;
+}
+
+p:last-of-type {
+  margin-bottom: 5px;
+}
+
+@media screen and (min-width: 320px) {
+  div {
+    font-size: calc(16px + 3 * ((100vw - 320px) / 680));
+  }
+}
+
+.main {
+  min-height: calc(80vh - 5vh - 50px);
+  padding-bottom: 5vh;
+}

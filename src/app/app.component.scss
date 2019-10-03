@@ -1,0 +1,21 @@
+@import 'themes.scss';
+
+/*#skip_to_main_content {
+  position: absolute;
+  visibility: hidden;
+  z-index: -999;
+}*/
+
+.main {
+  min-height: 100vh;
+  //min-height: calc(100vh - 5vh - 50px);
+  //padding-bottom: 5vh;
+}
+
+.go-to-top {
+  display: block;
+  position: fixed;
+  bottom: 12vh;
+  right: 5vw;
+  z-index: 100;
+}

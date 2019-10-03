@@ -1,0 +1,21 @@
+img {
+  width: 25vw;
+  min-width: 250px;
+}
+
+.line {
+  width: 100%;
+  text-align: center;
+  font-size: 1.1em;
+  padding: 1vh 0;
+  background-color: #943709;
+  place-content: center;
+  position: fixed;
+  bottom: 0;
+  a {
+    color: white;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    text-decoration: none;
+  }
+}

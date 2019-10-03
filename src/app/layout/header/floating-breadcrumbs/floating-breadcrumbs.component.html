@@ -1,0 +1,54 @@
+<!--div fxLayout="row" fxLayoutAlign="start center" [class.mat-elevation-z2]="true">
+  <img src="/assets/images/logo2.png" alt="Qualweb logo" routerLink="/">
+  <nav fxLayout="row" fxLayoutAlign="start center">
+    <a routerLink="/">
+      {{ "HEADER.breadcrumbs.homepage" | translate }}
+    </a>
+
+    <mat-icon *ngIf="uri">keyboard_arrow_right</mat-icon>
+    <a [routerLink]="[uri]" *ngIf="uri">
+      {{ uri }}
+    </a>
+  </nav>
+</div>-->
+<div fxLayout="row" fxLayoutAlign="start center">
+  <span fxLayout="row" fxLayoutAlign="start center" class="right-buttons">
+    <!--<nav fxLayout="row" fxLayoutAlign="start center">
+      <a routerLink="/">
+        {{ "HEADER.breadcrumbs.homepage" | translate }}
+      </a>
+
+      <mat-icon *ngIf="uri">keyboard_arrow_right</mat-icon>
+      <a [routerLink]="[uri]" *ngIf="uri">
+        {{ uri }}
+      </a>-->
+    <a routerLink="/" mat-icon-button matTooltip="{{'HEADER.homepage' | translate}}"
+       attr.aria-label="{{'HEADER.homepage' | translate}}">
+      <mat-icon>home</mat-icon>
+    </a>
+    <!--</nav>-->
+  </span>
+
+  <span style="flex: 1 1 auto"></span>
+
+  <span fxLayout="row" fxLayoutAlign="start center" class="left-buttons">
+    <!-- TODO themes
+    <button mat-icon-button *ngIf="isDarkTheme | async" (click)="toggleDarkTheme(false)">
+      <mat-icon>brightness_6</mat-icon>
+    </button>
+    <button mat-icon-button *ngIf="!(isDarkTheme | async)" (click)="toggleDarkTheme(true)">
+      <mat-icon>brightness_3</mat-icon>
+    </button>
+    -->
+
+    <button mat-icon-button [matMenuTriggerFor]="languages" matTooltip="{{'HEADER.language' | translate}}"
+            attr.aria-label="{{'HEADER.language' | translate}}">
+      <mat-icon>language</mat-icon>
+    </button>
+
+    <mat-menu #languages="matMenu">
+      <button (click)="changeLanguage('Portuguese')" mat-menu-item>{{"LANGUAGES.Portuguese" | translate}}</button>
+      <button (click)="changeLanguage('English')" mat-menu-item>{{"LANGUAGES.English" | translate}}</button>
+    </mat-menu>
+  </span>
+</div>

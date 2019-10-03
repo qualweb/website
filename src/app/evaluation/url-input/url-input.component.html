@@ -1,0 +1,16 @@
+<mat-card class="input_url">
+  <form (submit)="submit($event)" novalidate>
+    <input type="url" placeholder="{{ 'INPUT_URL.placeholder' | translate }}" [formControl]="urlForm" autofocus fxFlex>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="info" *ngIf="urlForm.hasError('required')" matTooltip="Ex.: www.google.pt" matTooltipClass="info-tooltip">
+        info
+      </mat-icon>
+      <mat-icon class="error" *ngIf="urlForm.hasError('url')" matTooltip="{{ 'INPUT_URL.invalid_url' | translate }}" matTooltipClass="error-tooltip">
+        error
+      </mat-icon>
+    </div>
+    <button mat-button type="submit" [disabled]="urlForm.invalid">
+      {{ "INPUT_URL.submit" | translate }}
+    </button>
+  </form>
+</mat-card>

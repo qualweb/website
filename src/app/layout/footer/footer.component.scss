@@ -1,0 +1,31 @@
+footer {
+  &.light-theme {
+    background-color: #9999996b !important;
+  }
+  padding: 5px 0;
+  height: 49px;
+}
+
+.first_img {
+  margin-left: 1vw;
+}
+
+.last_img{
+  margin-right: 1vw;
+}
+
+.fifth_container{
+  display: flex;
+  vertical-align: middle;
+}
+
+.w3c {
+  height: 75%;
+  padding-top: 0.5vh;
+}
+
+img, svg {
+  height: 100%;
+  width: 100%;
+  object-fit: contain !important;
+}

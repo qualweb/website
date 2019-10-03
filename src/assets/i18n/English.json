@@ -1,0 +1,160 @@
+{
+  "HEADER": {
+      "homepage": "Homepage",
+      "language": "Language"
+  },
+  "EVALUATION_PAGE": {
+    "sidenav": {
+      "title": "Contents",
+      "summary": "Summary",
+      "filters": "Filters",
+      "report": "Accessibility report"
+    },
+    "summary": {
+      "title": "Summary",
+      "rules": "tested rules and techniques",
+      "tests": "tests",
+      "passed": "Number of passed rules and techniques",
+      "failed": "Number of failed rules and techniques",
+      "inapplicable": "Number of not applicable rules and techniques",
+      "warning": "Number of warning rules and techniques"
+    },
+    "filters": {
+      "title": "Filters",
+      "outcome": "Outcome",
+      "show_not_applicable_rule": "Not applicable",
+      "show_passed_rule": "Passed",
+      "show_failed_rule": "Failed",
+      "show_warning_rule": "Warning",
+      "principle": "Principle",
+      "level": "Level",
+      "show_not_applicable_result": "Not applicable",
+      "show_passed_result": "Passed",
+      "show_failed_result": "Failed",
+      "show_warning_result": "Warning",
+      "expand_all": "Expand all rules and techniques",
+      "close_all": "Close all rules and techniques",
+      "results":  "result(s)"
+    },
+    "report": {
+      "title": "Accessibility report",
+      "description": "Description",
+      "criteria": {
+        "title": "Success criteria",
+        "level": "Level",
+        "principle": "Principle"
+      },
+      "target_elem": "Target element: ",
+      "target_attr": "Target attributes: ",
+      "results": "Results",
+      "result_code": "See visual representation"
+    }
+  },
+  "RESULT_CODE_DIALOG": {
+    "title": "Visual representation",
+    "close": "Close"
+  },
+  "FOOTER": {
+    "language": "Language"
+  },
+  "LANGUAGES": {
+    "Portuguese": "Português",
+    "English": "English"
+  },
+  "HOMEPAGE": {
+    "title": "Validate a webpage:"
+  },
+  "INPUT_URL": {
+    "placeholder": "Insert url here",
+    "invalid_url": "The inserted url is invalid",
+    "submit": "Check"
+  },
+  "MISC": {
+    "go_to_top": "Go to top"
+  },
+  "RULES": {
+    "QW-ACT-R1": {
+      "name": "HTML Page has a title",
+      "description": "This rule checks that the HTML page has a title.",
+      "RC1": "<title> element doesn't exist",
+      "RC2": "<title> element is empty",
+      "RC3": "<title> element exists and it's not empty",
+      "RC4": "<html> element is not the root element of the page"
+    },
+    "QW-ACT-R2": {
+      "name": "HTML has 'lang' attribute",
+      "description": "This rule checks that the html element has a non-empty lang or xml:lang attribute.",
+      "RC1": "<html> element doesn't exist",
+      "RC2": "<html> element is not the root element of the page",
+      "RC3": "'xml:lang' attribute has a value",
+      "RC4": "'lang' attribute has a value",
+      "RC5": "'lang' or 'xml:lang' attribute is empty or undefined"
+    },
+    "QW-ACT-R3": {
+      "name": "HTML lang and xml:lang match",
+      "description": "The rule checks that for the html element, there is no mismatch between the primary language in non-empty lang and xml:lang attributes, if both are used.",
+      "RC1": "<html> element doesn't exist",
+      "RC2": "<html> element is not the root element of the page",
+      "RC3": "<html> element doesn't have attributes",
+      "RC4": "'lang' or 'xml:lang' attribute doesn't exist",
+      "RC5": "'lang' or 'xml:lang' attribute is empty"
+    },
+    "QW-ACT-R4": {
+      "name": "Meta-refresh no delay",
+      "description": "This rule checks that the meta element is not used for delayed redirecting or refreshing.",
+      "RC1": "Already exists one valid or invalid <meta> element above",
+      "RC2": "'content' and 'http-equiv' attributes don't exist",
+      "RC3": "'content' attribute doesn't exist",
+      "RC4": "'http-equiv' attribute doesn't exist",
+      "RC5": "'content' attribute is empty",
+      "RC6": "The temporal value is negative",
+      "RC7": "It refreshes immediately",
+      "RC8": "It refreshes after more than 20 hours",
+      "RC9": "It doesn't refresh immediately nor after more than 20 hours",
+      "RC10": "'content' attribute is invalid",
+      "RC11": "'content' attribute is incorrectly formatted",
+      "RC12": "It redirects immediately",
+      "RC13": "It redirects after more than 20 hours",
+      "RC14": "It doesn't redirect immediately nor after more than 20 hours",
+      "RC15": "URL is invalid",
+      "RC16": "URL is incorrectly formatted"
+    },
+    "QW-ACT-R5": {
+      "name": "Validity of HTML 'lang' attribute",
+      "description": "This rule checks the lang or xml:lang attribute has a valid language subtag.",
+      "RC1": "<html> element doesn't exist",
+      "RC2": "<html> element is not the root element of the page",
+      "RC3": "<html> element doesn't have attributes",
+      "RC4": "'lang' and 'xml:lang' attributes have a valid value",
+      "RC5": "'lang' or 'xml:lang' attribute is not valid",
+      "RC6": "'lang' attribute has a valid value",
+      "RC7": "'xml:lang' attribute has a valid value",
+      "RC8": "'lang' and 'xml:lang' are empty or undefined"
+    }
+  },
+  "PRINCIPLES": {
+    "perceivable": "Perceivable",
+    "operable": "Operable",
+    "understandable": "Understandable",
+    "robust": "Robust"
+  },
+  "SUCCESS_CRITERIA":  {
+    "2.1.1": "Keyboard",
+    "2.2.4": "Interruptions",
+    "2.4.2": "Page Titled",
+    "3.1.1": "Language of Page",
+    "3.2.5": "Change on Request"
+  },
+  "ABOUT_PAGE": {
+    "1": "QualWeb is an automated web accessibility evaluation service which incorporates contributions from different research projects and efforts.",
+    "2": "QualWeb is able to automatically check a webpage against a set of ",
+    "wcag": "WCAG 2.1 Techniques",
+    "and": " and ",
+    "act": "ACT Rules",
+    "3": "QualWeb will also make available, from time to time, experimental modules that come out of specific research projects, and which might improve different aspects of web accessibility evaluation (for example, a module to assess the quality of text alternatives). You will always have the option to use QualWeb without these modules.",
+    "4": "QualWeb is open-source and available at ",
+    "5": "You can use QualWeb online at this website, or as a ",
+    "cli": "command line tool",
+    "projects": "The following projects have contributed to QualWeb's development:"
+  }
+}

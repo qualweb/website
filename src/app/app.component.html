@@ -1,0 +1,17 @@
+<!--<a id="skip_to_main_content" routerLink="#main-content">Skip to main content</a>-->
+<div [ngClass]="(isDarkTheme | async) ? 'dark-theme' : 'light-theme'">
+  <div class="mat-app-background">
+    <div class="main">
+      <app-header></app-header>
+      <main id="main-content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+
+    <button *ngIf="showGoToTop" class="go-to-top" mat-fab color="primary"
+            matTooltip="{{ 'MISC.go_to_top' | translate }}"
+            (click)="goToTop()">
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
+  </div>
+</div>
