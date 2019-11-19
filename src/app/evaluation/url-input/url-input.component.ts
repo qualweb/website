@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormControl, Validators, AbstractControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import * as _ from 'lodash';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {FormControl, Validators, AbstractControl} from '@angular/forms';
+import {Router} from '@angular/router';
+import {replace, startsWith, includes, size} from 'lodash';
 
 @Component({
   selector: 'app-url-input',
@@ -27,9 +27,9 @@ export class UrlInputComponent implements OnInit {
     e.preventDefault();
 
     let url = this.urlForm.value;
-    url = _.replace(url, 'https://', '');
-    url = _.replace(url, 'http://', '');
-    url = _.replace(url, 'www.', '');
+    url = replace(url, 'https://', '');
+    url = replace(url, 'http://', '');
+    url = replace(url, 'www.', '');
 
     this.router.navigate(['/', url]);
   }
@@ -41,27 +41,27 @@ export class UrlInputComponent implements OnInit {
       return null;
     }
 
-    if (!_.startsWith(url, 'http://') && !_.startsWith(url, 'https://') && !_.startsWith(url, 'www.')) {
-      if (_.includes(url, '.') && url[_.size(url) - 1] !== '.') {
+    if (!startsWith(url, 'http://') && !startsWith(url, 'https://') && !startsWith(url, 'www.')) {
+      if (includes(url, '.') && url[size(url) - 1] !== '.') {
         return null;
       }
-    } else if (_.startsWith(url, 'http://')) {
-      url = _.replace(url, 'http://', '');
-      if (_.includes(url, '.') && url[_.size(url) - 1] !== '.') {
+    } else if (startsWith(url, 'http://')) {
+      url = replace(url, 'http://', '');
+      if (includes(url, '.') && url[size(url) - 1] !== '.') {
         return null;
       }
-    } else if (_.startsWith(url, 'https://')) {
-      url = _.replace(url, 'https://', '');
-      if (_.includes(url, '.') && url[_.size(url) - 1] !== '.') {
+    } else if (startsWith(url, 'https://')) {
+      url = replace(url, 'https://', '');
+      if (includes(url, '.') && url[size(url) - 1] !== '.') {
         return null;
       }
-    } else if (_.startsWith(url, 'www.')) {
-      url = _.replace(url, 'www.', '');
-      if (_.includes(url, '.') && url[_.size(url) - 1] !== '.') {
+    } else if (startsWith(url, 'www.')) {
+      url = replace(url, 'www.', '');
+      if (includes(url, '.') && url[size(url) - 1] !== '.') {
         return null;
       }
     }
 
-    return { 'url': true };
+    return {'url': true};
   }
 }

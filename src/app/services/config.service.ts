@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import { HttpLink } from 'apollo-angular-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import _ from 'lodash';
+import {Injectable} from '@angular/core';
+import {Apollo} from 'apollo-angular';
+import {HttpLink} from 'apollo-angular-link-http';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+import {split} from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class ConfigService {
     private httpLink: HttpLink
   ) {
     this.PROTOCOL = 'http://';
-    this.HOST = _.split(location.host, ':')[0];
+    this.HOST = split(location.host, ':')[0];
 
     if (this.HOST === 'localhost') {
       this.PORT = 4000;
@@ -42,7 +42,7 @@ export class ConfigService {
 
   server(): void {
     this.apollo.create({
-      link: this.httpLink.create({ uri: this.URI }),
+      link: this.httpLink.create({uri: this.URI}),
       cache: new InMemoryCache()
     });
   }

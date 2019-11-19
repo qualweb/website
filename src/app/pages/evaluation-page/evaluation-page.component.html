@@ -13,43 +13,38 @@
           {{ "EVALUATION_PAGE.summary.title" | translate }}
         </h1>
 
-        <table class="summary_table">
-          <tr>
-            <th colspan="3" fittext [maxFontSize]="22" class="url"><a class="hidden_link"
-                                                                      href="{{ json.system.url.inputUrl }}"
-                                                                      target="_blank">{{ json.system.url.inputUrl }}</a>
-            </th>
-          </tr>
-          <tr>
-            <td colspan="3" fittext [maxFontSize]="25">
-              {{json.metadata.passed + json.metadata.failed + json.metadata.inapplicable + json.metadata.warning}} {{"EVALUATION_PAGE.summary.rules" | translate}}
-            </td>
-          </tr>
-          <tr class="summary_icons">
-            <span fxFlex="32"></span>
-            <td fittext [maxFontSize]="30">
-              <span class="screenreader">{{"EVALUATION_PAGE.summary.passed" | translate}}</span>
-              <mat-icon class="passed">check_circle_outline</mat-icon>
-              {{ json.metadata.passed }}
-            </td>
-            <td fittext [maxFontSize]="30">
-              <span class="screenreader">{{"EVALUATION_PAGE.summary.failed" | translate}}</span>
-              <mat-icon class="failed">highlight_off</mat-icon>
-              {{ json.metadata.failed }}
-            </td>
-            <td fittext [maxFontSize]="30">
-              <span class="screenreader">{{"EVALUATION_PAGE.summary.warning" | translate}}</span>
-              <mat-icon class="warning">warning</mat-icon>
-              {{ json.metadata.warning }}
-            </td>
-            <td fittext [maxFontSize]="30">
-              <span class="screenreader">{{"EVALUATION_PAGE.summary.inapplicable" | translate}}</span>
-              <mat-icon class="inapplicable">not_interested</mat-icon>
-              {{ json.metadata.inapplicable }}
-            </td>
-            <span fxFlex="32%"></span>
-          </tr>
-        </table>
+        <div class="summary_info" fxLayout="column" fxLayoutAlign="space-around center">
+        <span fittext [maxFontSize]="22" class="url">
+          <a class="hidden_link" href="{{ json.system.url.inputUrl }}"
+             target="_blank">{{ json.system.url.inputUrl }}</a>
+        </span>
+          <span fittext [maxFontSize]="25">
+          {{json.metadata.passed + json.metadata.failed + json.metadata.inapplicable + json.metadata.warning}} {{"EVALUATION_PAGE.summary.rules" | translate}}
+        </span>
+        </div>
+
+        <div class="summary_icons" fxLayout="row" fxLayoutGap="3%" fxLayoutAlign="center">
+          <div>
+            <span class="screenreader">{{"EVALUATION_PAGE.summary.passed" | translate}}</span>
+            <mat-icon class="passed">check_circle_outline</mat-icon>
+            {{ json.metadata.passed }}
+          </div>
+          <div>
+            <span class="screenreader">{{"EVALUATION_PAGE.summary.failed" | translate}}</span>
+            <mat-icon class="failed">highlight_off</mat-icon>
+            {{ json.metadata.failed }}
+          </div>
+          <div>
+            <span class="screenreader">{{"EVALUATION_PAGE.summary.warning" | translate}}</span>
+            <mat-icon class="warning">warning</mat-icon>
+            {{ json.metadata.warning }}
+          </div>
+          <div>
+            <span class="screenreader">{{"EVALUATION_PAGE.summary.inapplicable" | translate}}</span>
+            <mat-icon class="inapplicable">not_interested</mat-icon>
+            {{ json.metadata.inapplicable }}
+          </div>
+        </div>
       </div>
     </section>
 
@@ -61,71 +56,104 @@
           {{ "EVALUATION_PAGE.filters.title" | translate }}
         </h1>
 
-        <div fxLayout="row">
+        <div fxLayout="row" fxShow.gt-xs="false" fxShow="true" >
+          <button class="buttons" mat-stroked-button fxFill (click)="showFilters = !showFilters">
+            {{ "EVALUATION_PAGE.filters.toggle" | translate }}
+          </button>
+        </div>
 
-          <div class="filter left border" fxFlex fxFlex.gt-sm="20">
-            <h2>
-              {{"EVALUATION_PAGE.filters.outcome" | translate}}
-            </h2>
-            <mat-checkbox class="dropdown-item passed__checkbox" [(ngModel)]="showPassed"
-                          (click)="$event.stopPropagation()">
-              {{ "EVALUATION_PAGE.filters.show_passed_rule" | translate }}
-            </mat-checkbox>
-            <br>
-            <mat-checkbox class="dropdown-item failed__checkbox" [(ngModel)]="showFailed"
-                          (click)="$event.stopPropagation()">
-              {{ "EVALUATION_PAGE.filters.show_failed_rule" | translate }}
-            </mat-checkbox>
-            <br>
-            <mat-checkbox class="dropdown-item warning__checkbox" [(ngModel)]="showWarning"
-                          (click)="$event.stopPropagation()">
-              {{ "EVALUATION_PAGE.filters.show_warning_rule" | translate }}
-            </mat-checkbox>
-            <br>
-            <mat-checkbox class="dropdown-item inapplicable__checkbox" [(ngModel)]="showInapplicable"
-                          (click)="$event.stopPropagation()">
-              {{ "EVALUATION_PAGE.filters.show_not_applicable_rule" | translate }}
-            </mat-checkbox>
-          </div>
+        <div fxLayout="row" *ngIf="showFilters">
+          <div fxLayout.gt-xs="row" fxLayout="column" fxLayoutAlign.gt-xs="center stretch" fxFlex>
+            <div class="filter left border" fxFlex.gt-xs="25"
+                 [ngClass.lt-sm]="{'right':true, 'bottom-border':true, 'border':false}">
+              <h2>
+                {{"EVALUATION_PAGE.filters.outcome" | translate}}
+              </h2>
+              <mat-checkbox class="passed__checkbox" [(ngModel)]="showPassed"
+                            (click)="$event.stopPropagation()">
+                {{ "EVALUATION_PAGE.filters.show_passed_rule" | translate }}
+              </mat-checkbox>
+              <br>
+              <mat-checkbox class="failed__checkbox" [(ngModel)]="showFailed"
+                            (click)="$event.stopPropagation()">
+                {{ "EVALUATION_PAGE.filters.show_failed_rule" | translate }}
+              </mat-checkbox>
+              <br>
+              <mat-checkbox class="warning__checkbox" [(ngModel)]="showWarning"
+                            (click)="$event.stopPropagation()">
+                {{ "EVALUATION_PAGE.filters.show_warning_rule" | translate }}
+              </mat-checkbox>
+              <br>
+              <mat-checkbox class="inapplicable__checkbox" [(ngModel)]="showInapplicable"
+                            (click)="$event.stopPropagation()">
+                {{ "EVALUATION_PAGE.filters.show_not_applicable_rule" | translate }}
+              </mat-checkbox>
+            </div>
 
-          <div class="filter border" fxFlex fxFlex.gt-sm="20">
-            <h2>
-              {{"EVALUATION_PAGE.filters.principle" | translate}}
-            </h2>
-            <mat-checkbox class="dropdown-item" [(ngModel)]="showPerceivable"
-                          (click)="$event.stopPropagation()">{{"PRINCIPLES.perceivable" | translate}}
-            </mat-checkbox>
-            <br>
-            <mat-checkbox class="dropdown-item" [(ngModel)]="showOperable"
-                          (click)="$event.stopPropagation()">{{"PRINCIPLES.operable" | translate}}
-            </mat-checkbox>
-            <br>
-            <mat-checkbox class="dropdown-item" [(ngModel)]="showUnderstandable"
-                          (click)="$event.stopPropagation()">{{"PRINCIPLES.understandable" | translate}}
-            </mat-checkbox>
-            <br>
-            <mat-checkbox class="dropdown-item" [(ngModel)]="showRobust"
-                          (click)="$event.stopPropagation()">{{"PRINCIPLES.robust" | translate}}
-            </mat-checkbox>
+            <div class="filter border" fxFlex.gt-xs="30"
+                 [ngClass.lt-sm]="{'right':true, 'left':true, 'bottom-border':true, 'border':false}">
+              <h2>
+                {{"EVALUATION_PAGE.filters.type" | translate}}
+              </h2>
+              <mat-checkbox [(ngModel)]="showACT"
+                            (click)="$event.stopPropagation()">
+                {{ "EVALUATION_PAGE.filters.show_act" | translate }}
+              </mat-checkbox>
+              <br>
+              <mat-checkbox [(ngModel)]="showHTML"
+                            (click)="$event.stopPropagation()">
+                {{ "EVALUATION_PAGE.filters.show_html" | translate }}
+              </mat-checkbox>
+              <br>
+              <!--mat-checkbox [(ngModel)]="showCSS"
+                            (click)="$event.stopPropagation()">
+                {{ "EVALUATION_PAGE.filters.show_css" | translate }}
+              </mat-checkbox>
+              <br-->
+              <mat-checkbox [(ngModel)]="showBP"
+                            (click)="$event.stopPropagation()">
+                {{ "EVALUATION_PAGE.filters.show_bp" | translate }}
+              </mat-checkbox>
+            </div>
+            <div class="filter border" fxFlex.gt-xs="27"
+                 [ngClass.lt-sm]="{'right':true, 'left':true, 'bottom-border':true, 'border':false}">
+              <h2>
+                {{"EVALUATION_PAGE.filters.principle" | translate}}
+              </h2>
+              <mat-checkbox [(ngModel)]="showPerceivable"
+                            (click)="$event.stopPropagation()">{{"PRINCIPLES.perceivable" | translate}}
+              </mat-checkbox>
+              <br>
+              <mat-checkbox [(ngModel)]="showOperable"
+                            (click)="$event.stopPropagation()">{{"PRINCIPLES.operable" | translate}}
+              </mat-checkbox>
+              <br>
+              <mat-checkbox [(ngModel)]="showUnderstandable"
+                            (click)="$event.stopPropagation()">{{"PRINCIPLES.understandable" | translate}}
+              </mat-checkbox>
+              <br>
+              <mat-checkbox [(ngModel)]="showRobust"
+                            (click)="$event.stopPropagation()">{{"PRINCIPLES.robust" | translate}}
+              </mat-checkbox>
 
-          </div>
+            </div>
 
-          <div class="filter right" fxFlex fxFlex.gt-sm="20">
-            <h2>
-              {{"EVALUATION_PAGE.filters.level" | translate}}
-            </h2>
-            <mat-checkbox class="dropdown-item" [(ngModel)]="showA"
-                          (click)="$event.stopPropagation()">A
-            </mat-checkbox>
-            <br>
-            <mat-checkbox class="dropdown-item" [(ngModel)]="showAA"
-                          (click)="$event.stopPropagation()">AA
-            </mat-checkbox>
-            <br>
-            <mat-checkbox class="dropdown-item" [(ngModel)]="showAAA"
-                          (click)="$event.stopPropagation()">AAA
-            </mat-checkbox>
-
+            <div class="filter right" fxFlex.gt-xs="18" [ngClass.lt-sm]="{'left':true}">
+              <h2>
+                {{"EVALUATION_PAGE.filters.level" | translate}}
+              </h2>
+              <mat-checkbox [(ngModel)]="showA"
+                            (click)="$event.stopPropagation()">A
+              </mat-checkbox>
+              <br>
+              <mat-checkbox [(ngModel)]="showAA"
+                            (click)="$event.stopPropagation()">AA
+              </mat-checkbox>
+              <br>
+              <mat-checkbox [(ngModel)]="showAAA"
+                            (click)="$event.stopPropagation()">AAA
+              </mat-checkbox>
+            </div>
           </div>
         </div>
         <!--
@@ -190,15 +218,21 @@
           <mat-expansion-panel *ngIf="showRuleCard(rule)" [ngClass]="getOutcome(rule)">
             <mat-expansion-panel-header [collapsedHeight]="'55px'" [expandedHeight]="'55px'">
               <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
-                <mat-icon *ngIf="getOutcome(rule) === 'passed'" class="final-outcome">check_circle_outline
-                </mat-icon>
-                <mat-icon *ngIf="getOutcome(rule) === 'failed'" class="final-outcome">highlight_off</mat-icon>
-                <mat-icon *ngIf="getOutcome(rule) === 'inapplicable'" class="final-outcome">
-                  not_interested
-                </mat-icon>
-                <h2 fittext [maxFontSize]="25" class="final-outcome rule_title">
-                  {{ "RULES." + rule + ".name" | translate}}
-                </h2>
+                <div>
+                  <mat-icon *ngIf="getOutcome(rule) === 'passed'" class="final-outcome">check_circle_outline
+                  </mat-icon>
+                  <mat-icon *ngIf="getOutcome(rule) === 'failed'" class="final-outcome">highlight_off</mat-icon>
+                  <mat-icon *ngIf="getOutcome(rule) === 'warning'" class="final-outcome">warning</mat-icon>
+                  <mat-icon *ngIf="getOutcome(rule) === 'inapplicable'" class="final-outcome">
+                    not_interested
+                  </mat-icon>
+                </div>
+                <div class="around_title" fxFlex>
+                  <h2 fittext [maxFontSize]="26" [compression]="0.8" class="final-outcome rule_title">
+                    <!--{{ "RULES." + rule + ".name" | translate}}-->
+                    {{ getValue(rule, 'name')}}
+                  </h2>
+                </div>
               </mat-panel-title>
             </mat-expansion-panel-header>
 
@@ -207,27 +241,44 @@
               <!-- DESCRIPTION -->
               <div fxFlex.gt-sm="49" fxFlex class="rule_description">
                 <h2 class="rule_subtitle">{{"EVALUATION_PAGE.report.description" | translate}}</h2>
-                <p>{{ "RULES." + rule + ".description" | translate }}</p>
+                <!--<p>{{ "RULES." + rule + ".description" | translate }}</p>-->
+                <p>{{ getValue(rule, 'description') }}</p>
                 <p>
-                  <a class="hidden_link" href="{{ json.modules['act-rules'].rules[rule].metadata.url }}"
+                  <a class="hidden_link" href="{{ getUrl(rule) }}"
                      target="_blank">
-                    <code>{{ json.modules['act-rules'].rules[rule].metadata.url }}</code>
+                    <code>{{ getUrl(rule) }}</code>
                   </a>
                 </p>
-                <p *ngIf="json.modules['act-rules'].rules[rule].metadata.target.element">
-                  {{"EVALUATION_PAGE.report.target_elem" | translate}}
-                  <code>{{ json.modules['act-rules'].rules[rule].metadata.target.element }}</code>
+                <p *ngIf="getTarget(rule, 'parent') !== ''">
+                  {{"EVALUATION_PAGE.report.target_parent" | translate}}
+                  <code>{{ getTarget(rule, 'parent') }}</code>
                 </p>
-                <p *ngIf="json.modules['act-rules'].rules[rule].metadata.target.attributes">
+                <p *ngIf="getTarget(rule, 'parent-sibling') !== ''">
+                  {{"EVALUATION_PAGE.report.target_parent_sibling" | translate}}
+                  <code>{{ getTarget(rule, 'parent-sibling') }}</code>
+                </p>
+                <p *ngIf="getTarget(rule, 'element') !== ''">
+                  {{"EVALUATION_PAGE.report.target_elem" | translate}}
+                  <code>{{ getTarget(rule, 'element') }}</code>
+                </p>
+                <p *ngIf="getTarget(rule, 'attributes') !== ''">
                   {{"EVALUATION_PAGE.report.target_attr" | translate}}
-                  <code>{{ json.modules['act-rules'].rules[rule].metadata.target.attributes }}</code>
+                  <code>{{ getTarget(rule, 'attributes') }}</code>
+                </p>
+                <p *ngIf="getTarget(rule, 'css') !== ''">
+                  {{"EVALUATION_PAGE.report.target_css" | translate}}
+                  <code>{{ getTarget(rule, 'css') }}</code>
+                </p>
+                <p *ngIf="getTarget(rule, 'children') !== ''">
+                  {{"EVALUATION_PAGE.report.target_children" | translate}}
+                  <code>{{ getTarget(rule, 'children') }}</code>
                 </p>
               </div>
 
               <!-- SUCCESS CRITERIA -->
               <div fxFlex.gt-sm="49" fxFlex class="rule_criteria">
                 <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.report.criteria.title" | translate}}</h2>
-                <li *ngFor="let sc of json.modules['act-rules'].rules[rule].metadata['success-criteria']">
+                <li *ngFor="let sc of getSuccessCriteria(rule)">
                   {{ sc.name }} - {{ "SUCCESS_CRITERIA." + sc.name | translate}}
                   ({{"EVALUATION_PAGE.report.criteria.level" | translate}} {{ sc.level }})
                 </li>
@@ -236,46 +287,58 @@
 
             <div class="reset_font_size">
               <!-- FILTERS -->
-              <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.filters.title" | translate}}</h2>
-              <div fxLayout="column">
-                <mat-checkbox class="passed__checkbox"
-                              [(ngModel)]="showRulesResults[rule].passed">
-                  {{ "EVALUATION_PAGE.filters.show_passed_result" | translate }}
-                  -
-                  <b>{{ json.modules['act-rules'].rules[rule].metadata.passed }}</b> {{"EVALUATION_PAGE.filters.results" | translate}}
-                </mat-checkbox>
-                <mat-checkbox class="failed__checkbox"
-                              [(ngModel)]="showRulesResults[rule].failed">
-                  {{ "EVALUATION_PAGE.filters.show_failed_result" | translate }}
-                  -
-                  <b>{{ json.modules['act-rules'].rules[rule].metadata.failed }}</b> {{"EVALUATION_PAGE.filters.results" | translate}}
-                </mat-checkbox>
-                <mat-checkbox class="warning__checkbox"
-                              [(ngModel)]="showRulesResults[rule].warning">
-                  {{ "EVALUATION_PAGE.filters.show_warning_result" | translate }}
-                  -
-                  <b>{{ json.modules['act-rules'].rules[rule].metadata.warning }}</b> {{"EVALUATION_PAGE.filters.results" | translate}}
-                </mat-checkbox>
-                <mat-checkbox class="inapplicable__checkbox" [(ngModel)]="showRulesResults[rule].inapplicable">
-                  {{ "EVALUATION_PAGE.filters.show_not_applicable_result" | translate }}
-                  -
-                  <b>{{ json.modules['act-rules'].rules[rule].metadata.inapplicable }}</b> {{"EVALUATION_PAGE.filters.results" | translate}}
-                </mat-checkbox>
+              <div *ngIf="getSumNumberResults(rule) > 1">
+                <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.filters.title" | translate}}</h2>
+                <div fxLayout="column">
+                  <mat-checkbox class="passed__checkbox"
+                                [(ngModel)]="showRulesResults[rule].passed">
+                    {{ "EVALUATION_PAGE.filters.show_passed_result" | translate }}
+                    -
+                    <b>{{ getNumberResults(rule)[0] }}</b> {{"EVALUATION_PAGE.filters.results" | translate}}
+                  </mat-checkbox>
+                  <mat-checkbox class="failed__checkbox"
+                                [(ngModel)]="showRulesResults[rule].failed">
+                    {{ "EVALUATION_PAGE.filters.show_failed_result" | translate }}
+                    -
+                    <b>{{ getNumberResults(rule)[1] }}</b> {{"EVALUATION_PAGE.filters.results" | translate}}
+                  </mat-checkbox>
+                  <mat-checkbox class="warning__checkbox"
+                                [(ngModel)]="showRulesResults[rule].warning">
+                    {{ "EVALUATION_PAGE.filters.show_warning_result" | translate }}
+                    -
+                    <b>{{ getNumberResults(rule)[2] }}</b> {{"EVALUATION_PAGE.filters.results" | translate}}
+                  </mat-checkbox>
+                  <mat-checkbox class="inapplicable__checkbox" [(ngModel)]="showRulesResults[rule].inapplicable">
+                    {{ "EVALUATION_PAGE.filters.show_not_applicable_result" | translate }}
+                    -
+                    <b>{{ getNumberResults(rule)[3] }}</b> {{"EVALUATION_PAGE.filters.results" | translate}}
+                  </mat-checkbox>
+                </div>
               </div>
-
               <!-- ACCESSIBILITY REPORT -->
               <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.report.results" | translate}}</h2>
+
+              <ng-container *ngIf="orderRuleResult(rule).length == 0 || orderRuleResult(rule)[0]['description'] == ''">
+                <mat-card class="inapplicable">
+                  <mat-card-header>
+                    <mat-card-title>
+                      {{ "EVALUATION_PAGE.report.no_results" | translate }}
+                    </mat-card-title>
+                  </mat-card-header>
+                </mat-card>
+              </ng-container>
 
               <ng-container *ngFor="let test of orderRuleResult(rule)">
                 <mat-card *ngIf="showRulesResults[rule][test.verdict]" [ngClass]="test.verdict">
 
                   <mat-card-header>
-                    <mat-card-title>
-                      {{ "RULES." + this.json.modules['act-rules'].rules[rule].code + "." + test.resultCode | translate}}
+                    <mat-card-title [class.with-code]="test.code">
+                      <!--{{ "RULES." + rule + "." + test.resultCode | translate}}-->
+                      {{ test.description }}
                     </mat-card-title>
                   </mat-card-header>
 
-                  <mat-card-content fxLayout="row" fxLayoutAlign="start center">
+                  <mat-card-content fxLayout="row" fxLayoutAlign="start center" *ngIf="test.code">
                     <div fxLayout="column" fxFlex="95">
                       <ngx-highlight [code]="formatCode(test.code)" lang="html"></ngx-highlight>
                     </div>
@@ -285,6 +348,12 @@
                       <mat-icon class="eyeicon">visibility</mat-icon>
                     </button>
                   </mat-card-content>
+
+                  <!--<mat-card-content fxLayout="row" fxLayoutAlign="start center" *ngIf="!test.code">
+                    <div fxLayout="column" fxFlex>
+                      Não existe código
+                    </div>
+                  </mat-card-content>-->
 
                 </mat-card>
                 <br *ngIf="showRulesResults[rule][test.verdict]">

@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
-import _ from 'lodash';
+import {Component, OnInit, AfterViewInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material';
+import {clone} from 'lodash';
 
 @Component({
   selector: 'app-result-code-dialog',
@@ -15,7 +15,7 @@ export class ResultCodeDialogComponent implements OnInit, AfterViewInit {
   code: string;
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any) {
-    this.code = _.clone(data);
+    this.code = clone(data);
   }
 
   ngOnInit(): void {

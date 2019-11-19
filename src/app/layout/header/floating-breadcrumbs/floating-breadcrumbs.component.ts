@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { Location } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';
+import {Component, OnInit, OnDestroy, ChangeDetectionStrategy} from '@angular/core';
+import {Location} from '@angular/common';
+import {Router, NavigationEnd} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';
-import * as _ from 'lodash';
+import {split} from 'lodash';
 import {ThemeService} from '@app/services/theme.service';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -33,7 +33,7 @@ export class FloatingBreadcrumbsComponent implements OnInit, OnDestroy {
     this.routerSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const path = this.location.path();
-        const segments = _.split(path, '/');
+        const segments = split(path, '/');
 
         this.uri = null;
 

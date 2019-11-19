@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy, ElementRef, HostListener } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import {Component, OnInit, OnDestroy, ElementRef, HostListener} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 import {Observable, Subscription} from 'rxjs';
-import { Router, NavigationEnd } from '@angular/router';
-import { Location } from '@angular/common';
-import * as _ from 'lodash';
+import {Router, NavigationEnd} from '@angular/router';
+import {values, includes, keys} from 'lodash';
 import {ThemeService} from '@app/services/theme.service';
 
 @Component({
@@ -38,21 +37,23 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private themeService: ThemeService
   ) {
-    this.translate.addLangs(_.values(this.langs));
-    this.translate.setDefaultLang('Portuguese');
+    this.translate.addLangs(values(this.langs));
+    this.translate.setDefaultLang('English');
 
     const lang = localStorage.getItem('language');
 
-    if (!lang) {
+    /*if (!lang) {
       const browserLang = translate.getBrowserLang();
-      const use = _.includes(_.keys(this.langs), browserLang) ? this.langs[browserLang] : 'Portuguese';
+      const use = includes(keys(this.langs), browserLang) ? this.langs[browserLang] : 'English';
 
       this.translate.use(use);
       localStorage.setItem('language', use);
     } else {
       this.translate.use(lang);
-    }
+    } */
 
+    this.translate.use(lang);
+    localStorage.setItem('language', 'English');
     this.selectedLang = this.translate.currentLang;
 
     this.showGoToTop = false;

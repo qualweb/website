@@ -16,7 +16,7 @@ import {Subscription} from 'rxjs';
 import formatter from 'html-formatter';
 import htmlparser from 'htmlparser2';
 import html from 'htmlparser-to-html';
-import _ from 'lodash';
+import {clone, keys, orderBy, size, replace, includes, sum} from 'lodash';
 
 import {EvaluateService} from '@evaluation/evaluate.service';
 import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code-dialog.component';
@@ -47,19 +47,29 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   html: string;
 
   rules: Array<string>;
-  rulesNames: any;
+  rulesAndTechniquesNames: any;
+
+  showFilters: boolean;
 
   showPassed: boolean;
   showFailed: boolean;
   showWarning: boolean;
   showInapplicable: boolean;
+
+  showACT: boolean;
+  showHTML: boolean;
+  // showCSS: boolean;
+  showBP: boolean;
+
   showPerceivable: boolean;
   showOperable: boolean;
   showUnderstandable: boolean;
   showRobust: boolean;
+
   showA: boolean;
   showAA: boolean;
   showAAA: boolean;
+
   sidenav_stop_moving: boolean;
   showRulesResults: object;
 
@@ -81,22 +91,33 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   ) {
     this.evaluateLoading = true;
     this.error = false;
+
+    this.showFilters = true;
+
     this.showPassed = true;
     this.showFailed = true;
     this.showWarning = true;
     this.showInapplicable = false;
+
+    this.showACT = true;
+    this.showHTML = true;
+    // this.showCSS = true;
+    this.showBP = true;
+
     this.showPerceivable = true;
     this.showOperable = true;
     this.showUnderstandable = true;
     this.showRobust = true;
+
     this.showA = true;
     this.showAA = true;
     this.showAAA = true;
+
     this.showRulesResults = {};
     this.expandRules = false;
     this.sidenav_stop_moving = false;
     this.rules = [];
-    this.rulesNames = {};
+    this.rulesAndTechniquesNames = {};
 
     this.filterShow = false;
     this.filterPrinciples = false;
@@ -139,13 +160,11 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.json = JSON.parse(sessionStorage.getItem('json'));
     this.html = sessionStorage.getItem('postProcessingHTML');
     this.evaluateLoading = false;
-    this.rules = _.keys(this.json.modules.evaluation.act.data);
+    this.rules = keys(this.json.modules.evaluation.act.data);
     this.processData();
     console.log(this.earl);
     console.log(this.json);*/
   }
-
-
 
 
   ngOnDestroy(): void {
@@ -158,6 +177,12 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       event.target.parentNode.id.toString().includes('Filter'))) {
       this.clickedOutside = true;
     }
+  }
+
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.showFilters = window.innerWidth > 599 ? true : this.showFilters;
   }
 
   /*@HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event) {
@@ -181,23 +206,54 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     }*/
 
   private processData(data: any): void {
-    this.json = _.clone(data);
+    this.json = clone(data);
     console.log(this.json);
-    const rulesKeys = _.keys(this.json.modules['act-rules'].rules);
+    const actRulesKeys = keys(this.json.modules['act-rules'].rules);
+    const htmlTechniquesKeys = keys(this.json.modules['html-techniques'].techniques);
+    // const cssTechniquesKeys = keys(this.json.modules['css-techniques'].techniques);
+    const bestPracticesKeys = keys(this.json.modules['best-practices']['best-practices']);
 
-    const rulesJSON = [];
+    const rulesAndTechniquesJSON = [];
 
-    for (const r of rulesKeys) {
+    for (const r of actRulesKeys) {
       const obj = {
         'code': r,
         'title': this.json.modules['act-rules'].rules[r].name,
         'outcome': this.json.modules['act-rules'].rules[r].metadata.outcome
       };
-      rulesJSON.push(obj);
+      rulesAndTechniquesJSON.push(obj);
     }
-    this.rulesNames = _.orderBy(rulesJSON, [rule => rule['title'].toLowerCase()], ['asc']);
-    console.log(this.rulesNames);
-    for (const r of this.rulesNames) {
+
+            for (const r of htmlTechniquesKeys) {
+              const obj = {
+                'code': r,
+                'title': this.json.modules['html-techniques'].techniques[r].name,
+                'outcome': this.json.modules['html-techniques'].techniques[r].metadata.outcome
+              };
+              rulesAndTechniquesJSON.push(obj);
+            }
+
+    /*for (const r of cssTechniquesKeys) {
+      const obj = {
+        'code': r,
+        'title': this.json.modules['css-techniques'].techniques[r].name,
+        'outcome': this.json.modules['css-techniques'].techniques[r].metadata.outcome
+      };
+      rulesAndTechniquesJSON.push(obj);
+    }*/
+
+    for (const r of bestPracticesKeys) {
+      const obj = {
+        'code': r,
+        'title': this.json.modules['best-practices']['best-practices'][r].name,
+        'outcome': this.json.modules['best-practices']['best-practices'][r].metadata.outcome
+      };
+      rulesAndTechniquesJSON.push(obj);
+    }
+
+    this.rulesAndTechniquesNames = orderBy(rulesAndTechniquesJSON, [rule => rule['title'].toLowerCase()], ['asc']);
+    // console.log(this.rulesAndTechniquesNames);
+    for (const r of this.rulesAndTechniquesNames) {
       this.rules.push(r['code']);
       if (r['outcome'] === 'inapplicable') {
         this.showRulesResults[r['code']] = {
@@ -284,7 +340,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           delete elem.attribs['b-right'];
           delete elem.attribs['b-bottom'];
 
-          for (let i = 0; i < _.size(elem['children']); i++) {
+          for (let i = 0; i < size(elem['children']); i++) {
             if (elem['children'][i]['type'] === 'tag') {
 
               format(elem['children'][i]);
@@ -292,7 +348,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           }
         };
 
-        /*for (let i = 0 ; i < _.size(dom) ; i++) {
+        /*for (let i = 0 ; i < size(dom) ; i++) {
           if (dom[i]['type'] === 'tag') {
             format(dom[i]);
           }
@@ -304,14 +360,10 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     });
 
     const parser = new htmlparser.Parser(handler);
-    parser.write(_.replace(code, /(\r\n|\n|\r|\t)/gm, ''));
+    parser.write(replace(code, /(\r\n|\n|\r|\t)/gm, ''));
     parser.end();
 
     return formatter.render(html(parsedCode));
-  }
-
-  getOutcome(rule: string): string {
-    return this.json.modules['act-rules'].rules[rule].metadata.outcome;
   }
 
   showRuleCard(rule: string): boolean {
@@ -319,7 +371,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     const levels = new Array<string>();
     const principles = new Array<string>();
 
-    for (const sc of this.json.modules['act-rules'].rules[rule].metadata['success-criteria']) {
+    for (const sc of this.getSuccessCriteria(rule)) {
       levels.push(sc.level);
       principles.push(sc.principle);
     }
@@ -342,28 +394,45 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     }
 
     if (show) {
-      if (_.includes(levels, 'A')) {
+      switch (this.getType(rule)) {
+        case 'act':
+          show = this.showACT;
+          break;
+        case 'html':
+          show = this.showHTML;
+          break;
+        /*case 'css':
+          show = this.showCSS;
+          break;*/
+        case 'bp':
+          show = this.showBP;
+          break;
+      }
+    }
+
+    if (show) {
+      if (includes(levels, 'A')) {
         show = this.showA;
       }
-      if (_.includes(levels, 'AA')) {
+      if (includes(levels, 'AA')) {
         show = this.showAA;
       }
-      if (!show && _.includes(levels, 'AAA')) {
+      if (!show && includes(levels, 'AAA')) {
         show = this.showAAA;
       }
     }
 
     if (show) {
-      if (_.includes(principles, 'Perceivable')) {
+      if (includes(principles, 'Perceivable')) {
         show = this.showPerceivable;
       }
-      if (_.includes(principles, 'Operable')) {
+      if (includes(principles, 'Operable')) {
         show = this.showOperable;
       }
-      if (_.includes(principles, 'Understandable')) {
+      if (includes(principles, 'Understandable')) {
         show = this.showUnderstandable;
       }
-      if (_.includes(principles, 'Robust')) {
+      if (includes(principles, 'Robust')) {
         show = this.showRobust;
       }
     }
@@ -371,7 +440,22 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   }
 
   orderRuleResult(rule: string): any[] {
-    const dataRule = this.json.modules['act-rules'].rules[rule].results;
+    let dataRule;
+    switch (this.getType(rule)) {
+      case 'act':
+        dataRule = this.json.modules['act-rules'].rules[rule].results;
+        break;
+      case 'html':
+        dataRule = this.json.modules['html-techniques'].techniques[rule].results;
+        break;
+      case 'css':
+        dataRule = this.json.modules['css-techniques'].techniques[rule].results;
+        break;
+      case 'bp':
+        dataRule = this.json.modules['best-practices']['best-practices'][rule].results;
+        break;
+    }
+
     const ordering = {};
     const sortOrder = ['passed', 'failed', 'warning', 'inapplicable'];
     for (let i = 0; i < sortOrder.length; i++) {
@@ -381,5 +465,69 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       return (ordering[a.verdict] - ordering[b.verdict]);
     });
     return dataRule;
+  }
+
+  getType(rule: string): string {
+    if (rule.includes('ACT')) {
+      return 'act';
+    } else if (rule.includes('HTML')) {
+      return 'html';
+    } else if (rule.includes('CSS')) {
+      return 'css';
+    } else if (rule.includes('BP')) {
+      return 'bp';
+    }
+  }
+
+  getValue(rule: string, value: string) {
+    switch (this.getType(rule)) {
+      case 'act':
+        return this.json.modules['act-rules'].rules[rule][value];
+      case 'html':
+        return this.json.modules['html-techniques'].techniques[rule][value];
+      case 'css':
+        return this.json.modules['css-techniques'].techniques[rule][value];
+      case 'bp':
+        return this.json.modules['best-practices']['best-practices'][rule][value];
+    }
+  }
+
+  getOutcome(rule: string): string {
+    return this.getValue(rule, 'metadata').outcome;
+  }
+
+  getSuccessCriteria(rule: string): any {
+    return this.getValue(rule, 'metadata')['success-criteria'];
+  }
+
+  getNumberResults(rule: string): number[] {
+    const metadata = this.getValue(rule, 'metadata');
+    return [metadata['passed'], metadata['failed'], metadata['warning'], metadata['inapplicable']];
+  }
+
+  getSumNumberResults(rule: string): number {
+    return sum(this.getNumberResults(rule));
+  }
+
+  getUrl(rule: string): string {
+    return this.getValue(rule, 'metadata').url;
+  }
+
+  getTarget(rule: string, type: string) {
+    let result = '';
+    if (this.getValue(rule, 'metadata').target[type] === undefined) {
+      return '';
+    } else {
+      const elements = this.getValue(rule, 'metadata').target[type];
+      if (typeof elements === 'string') {
+        return elements;
+      } else {
+        for (const elem of elements) {
+          result += elem;
+          result += ', ';
+        }
+        return result.substring(0, result.length - 2);
+      }
+    }
   }
 }

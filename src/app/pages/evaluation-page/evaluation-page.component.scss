@@ -48,7 +48,7 @@ section {
 
 .failed {
   &.mat-card {
-    background-color: #9d2725;
+    background-color: #741414;
   }
 
   &.mat-icon {
@@ -72,7 +72,7 @@ section {
 
 .warning {
   &.mat-card {
-    background-color: $warning;
+    background-color: #947e0c;
   }
 
   &.mat-icon {
@@ -144,34 +144,16 @@ h1 {
 
 /// SUMMARY ///
 
-.summary_table {
+.url {
+  font-family: 'Raleway', sans-serif;
+}
+
+.summary_info {
   text-align: center;
-  width: 100%;
+}
 
-  td {
-    flex: 12%;
-    vertical-align: middle !important;
-    line-height: 30px;
-    font-weight: 100;
-
-    mat-icon {
-      font-size: 23px;
-      height: 30px;
-      vertical-align: middle !important;
-    }
-
-    p {
-      margin: 0;
-    }
-  }
-
-  .url {
-    font-family: 'Raleway', sans-serif;
-  }
-
-  .summary_icons {
-    padding-top: 0.7em;
-  }
+.summary_icons {
+  font-size: 1.75em;
 }
 
 /// FILTERS ///
@@ -188,7 +170,7 @@ h1 {
     text-align: left;
   }
 }
-
+/*
 .dropdown-menu {
   text-align: left;
   background-color: unset !important;
@@ -204,33 +186,37 @@ h1 {
     padding-left: 0.8em;
     font-size: 16px;
   }
-}
+} */
 
 .open > button {
   border-radius: 4px 4px 0 0;
 }
 
-.mat-checkbox-layout {
-  // 100 - (padding-left mat-checkbox)
-  width: 95%;
-}
-
-.mat-checkbox-label {
-  width: 100%;
+::ng-deep .mat-checkbox-layout .mat-checkbox-label {
+  font-size: 2vmin;
 }
 
 .filter {
   background-color: #393939;
   padding: 1em;
-  border-right: 2px solid white;
 
-  &:last-child {
-    border-right: 0;
+  &.border{
+    border-right: 2px solid white;
+  }
+
+  &.bottom-border{
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom: 2px solid white;
   }
 
   h2 {
     text-align: center;
     margin: 0 0 0.5em 0;
+    font-size: 2.5vmin;
+    .mobile {
+      font-size: 1.2em;
+    }
   }
 
   &.left {
@@ -241,6 +227,18 @@ h1 {
   &.right {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .filter {
+    h2 {
+      font-size: 1.2em;
+    }
+  }
+
+  ::ng-deep .mat-checkbox-layout .mat-checkbox-label {
+    font-size: 3.3vmin;
   }
 }
 
@@ -286,9 +284,15 @@ h1 {
   font-weight: 300;
 }
 
+.around_title {
+  max-height: 55px;
+  margin-right: 16px;
+}
+
 .rule_subtitle {
   margin: 1em 0 0.5em 0;
   font-weight: 600;
+  font-size: 1.5em;
 }
 
 .rule_description,
@@ -315,6 +319,7 @@ h1 {
   }
 }
 
+// para melhorar o espaço entre linhas entre o success criteria e a descricao
 @media screen and (max-width: 960px) {
   .mobile {
     &.rule_subtitle {
@@ -327,9 +332,16 @@ h1 {
   font-size: 1.1em;
 }
 
+.mat-checkbox-layout .mat-checkbox-label{
+  font-size: 2vmin !important;
+}
+
 .mat-card-title {
   margin-bottom: 0 !important;
-  margin-top: 0.5em;
+
+  &.with-code {
+    margin-top: 0.5em;
+  }
 }
 
 .mat-card-content,
