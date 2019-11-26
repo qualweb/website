@@ -8,7 +8,7 @@ import {
   ElementRef,
   HostListener,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef, AfterViewInit
 } from '@angular/core';
 import {MatDialog, MatExpansionPanel, MatMenuTrigger} from '@angular/material';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
@@ -20,6 +20,8 @@ import {clone, keys, orderBy, size, replace, includes, sum} from 'lodash';
 
 import {EvaluateService} from '@evaluation/evaluate.service';
 import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code-dialog.component';
+
+import {NgxPrettifyService} from '@smartcodelab/ngx-prettify';
 
 @Component({
   selector: 'app-evaluation-page',
@@ -70,7 +72,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   showAA: boolean;
   showAAA: boolean;
 
-  sidenav_stop_moving: boolean;
+  // sidenav_stop_moving: boolean;
   showRulesResults: object;
 
   expandRules: boolean;
@@ -81,6 +83,11 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   expandedFilters: boolean;
   clickedOutside: boolean;
+
+  passedTitle: number;
+  failedTitle: number;
+  warningTitle: number;
+  inapplicableTitle: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -115,7 +122,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
     this.showRulesResults = {};
     this.expandRules = false;
-    this.sidenav_stop_moving = false;
+    // this.sidenav_stop_moving = false;
     this.rules = [];
     this.rulesAndTechniquesNames = {};
 
@@ -125,6 +132,11 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
     this.expandedFilters = false;
     this.clickedOutside = false;
+
+    this.passedTitle = 0;
+    this.failedTitle = 0;
+    this.warningTitle = 0;
+    this.inapplicableTitle = 0;
 
     router.events.subscribe(s => {
       if (s instanceof NavigationEnd) {
@@ -179,7 +191,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     }
   }
 
-
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.showFilters = window.innerWidth > 599 ? true : this.showFilters;
@@ -224,14 +235,14 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       rulesAndTechniquesJSON.push(obj);
     }
 
-            for (const r of htmlTechniquesKeys) {
-              const obj = {
-                'code': r,
-                'title': this.json.modules['html-techniques'].techniques[r].name,
-                'outcome': this.json.modules['html-techniques'].techniques[r].metadata.outcome
-              };
-              rulesAndTechniquesJSON.push(obj);
-            }
+    for (const r of htmlTechniquesKeys) {
+      const obj = {
+        'code': r,
+        'title': this.json.modules['html-techniques'].techniques[r].name,
+        'outcome': this.json.modules['html-techniques'].techniques[r].metadata.outcome
+      };
+      rulesAndTechniquesJSON.push(obj);
+    }
 
     /*for (const r of cssTechniquesKeys) {
       const obj = {
@@ -339,6 +350,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           delete elem.attribs['w-scrolly'];
           delete elem.attribs['b-right'];
           delete elem.attribs['b-bottom'];
+          delete elem.attribs['css'];
 
           for (let i = 0; i < size(elem['children']); i++) {
             if (elem['children'][i]['type'] === 'tag') {
@@ -354,7 +366,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           }
         }*/
         format(dom[0]);
-        // console.log(dom);
+        // console.log(dom[0]);
         parsedCode = dom;
       }
     });
@@ -363,7 +375,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     parser.write(replace(code, /(\r\n|\n|\r|\t)/gm, ''));
     parser.end();
 
-    return formatter.render(html(parsedCode));
+    return formatter.render(html(parsedCode[0]));
   }
 
   showRuleCard(rule: string): boolean {
@@ -456,15 +468,36 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         break;
     }
 
-    const ordering = {};
+    /*const ordering = {};
     const sortOrder = ['passed', 'failed', 'warning', 'inapplicable'];
     for (let i = 0; i < sortOrder.length; i++) {
       ordering[sortOrder[i]] = i;
     }
     dataRule.sort(function (a, b) {
       return (ordering[a.verdict] - ordering[b.verdict]);
-    });
-    return dataRule;
+    });*/
+    let result = [[], [], [], []];
+    let counter = 0;
+    for (const data of dataRule) {
+      if (data['verdict'] === 'passed') {
+        result[0].push(data);
+        counter++;
+      } else if (data['verdict'] === 'failed') {
+        result[1].push(data);
+        counter++;
+      } else if (data['verdict'] === 'warning') {
+        result[2].push(data);
+        counter++;
+      } else if (data['verdict'] === 'inapplicable') {
+        result[3].push(data);
+        counter++;
+      }
+    }
+    return result;
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 
   getType(rule: string): string {
@@ -476,6 +509,19 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       return 'css';
     } else if (rule.includes('BP')) {
       return 'bp';
+    }
+  }
+
+  getTypeString(rule: string): string {
+    switch (this.getType(rule)) {
+      case 'act':
+        return 'ACT Rule';
+      case 'html':
+        return 'HTML Technique';
+      case 'css':
+        return 'CSS Technique';
+      case 'bp':
+        return 'Best Practice';
     }
   }
 
@@ -505,8 +551,18 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     return [metadata['passed'], metadata['failed'], metadata['warning'], metadata['inapplicable']];
   }
 
-  getSumNumberResults(rule: string): number {
-    return sum(this.getNumberResults(rule));
+  noResults(rule: string): boolean {
+    return sum(this.getNumberResults(rule)) === 0;
+  }
+
+  areAllTheSameTypeOfResults(rule: string): boolean {
+    let count = 0;
+    for (const results of this.getNumberResults(rule)) {
+      if (results > 0) {
+        count++;
+      }
+    }
+    return count <= 1;
   }
 
   getUrl(rule: string): string {
@@ -530,4 +586,5 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       }
     }
   }
+
 }

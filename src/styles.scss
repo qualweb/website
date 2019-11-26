@@ -84,7 +84,7 @@ $bv-theme: mat-dark-theme($bv-palette-primary, $bv-palette-accent);
 // include the custom theme object into the angular material theme
 @include angular-material-theme($bv-theme);
 
-@import '~highlight.js/styles/darcula.css';
+@import '~highlight.js/styles/atom-one-dark.css';
 
 html, body {
   height: 100%;

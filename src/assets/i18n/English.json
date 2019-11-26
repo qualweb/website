@@ -40,11 +40,13 @@
       "toggle": "Toggle filters",
       "expand_all": "Expand all rules and techniques",
       "close_all": "Close all rules and techniques",
-      "results":  "result(s)"
+      "result":  "result",
+      "results":  "results"
     },
     "report": {
       "title": "Accessibility report",
       "description": "Description",
+      "type": "Type",
       "criteria": {
         "title": "Success criteria",
         "level": "Level",

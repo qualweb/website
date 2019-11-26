@@ -20,7 +20,7 @@ export class EvaluateService {
       }`
     }).pipe(
       map(res => {
-        return JSON.parse(res.data.evaluateUrl.json);
+        return JSON.parse(res['data']['evaluateUrl']['json']);
       }),
       catchError(err => {
         console.log(err);
