@@ -383,9 +383,13 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     const levels = new Array<string>();
     const principles = new Array<string>();
 
-    for (const sc of this.getSuccessCriteria(rule)) {
-      levels.push(sc.level);
-      principles.push(sc.principle);
+    const sucessCriterias = this.getSuccessCriteria(rule);
+
+    if (sucessCriterias !== undefined) {
+      for (const sc of this.getSuccessCriteria(rule)) {
+        levels.push(sc.level);
+        principles.push(sc.principle);
+      }
     }
 
     let show = true;

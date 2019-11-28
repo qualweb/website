@@ -282,7 +282,7 @@
               </div>
             </div>
 
-            <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap="2">
+            <div *ngIf="getSuccessCriteria(rule)" fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap="2">
               <!-- SUCCESS CRITERIA -->
               <div class="rule_criteria" fxFlex fxFlexOrder.gt-sm="2">
                 <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.report.criteria.title" | translate}}</h2>
