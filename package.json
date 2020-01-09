@@ -7,7 +7,8 @@
     "build": "ng build --prod --build-optimizer",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "install": "sh ./src/assets/postinstall.sh"
   },
   "private": true,
   "dependencies": {
