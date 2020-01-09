@@ -44,7 +44,7 @@ section {
   }
 
   &__checkbox.mat-checkbox-checked {
-    /deep/ .mat-checkbox-background {
+    ::ng-deep .mat-checkbox-background {
       background-color: $passed !important;
     }
   }
@@ -68,7 +68,7 @@ section {
   }
 
   &__checkbox.mat-checkbox-checked {
-    /deep/ .mat-checkbox-background {
+    ::ng-deep .mat-checkbox-background {
       background-color: $failed !important;
     }
   }
@@ -92,7 +92,7 @@ section {
   }
 
   &__checkbox.mat-checkbox-checked {
-    /deep/ .mat-checkbox-background {
+    ::ng-deep .mat-checkbox-background {
       background-color: $warning !important;
     }
   }
@@ -116,7 +116,7 @@ section {
   }
 
   &__checkbox.mat-checkbox-checked {
-    /deep/ .mat-checkbox-background {
+    ::ng-deep .mat-checkbox-background {
       background-color: $inapplicable !important;
     }
   }

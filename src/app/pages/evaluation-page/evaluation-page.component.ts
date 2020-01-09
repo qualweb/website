@@ -31,10 +31,10 @@ import {NgxPrettifyService} from '@smartcodelab/ngx-prettify';
 })
 export class EvaluationPageComponent implements OnInit, OnDestroy {
 
-  @ViewChild('summary') summary: ElementRef;
-  @ViewChild('filters') filters: ElementRef;
-  @ViewChild('report') report: ElementRef;
-  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
+  @ViewChild('summary', {static: true}) summary: ElementRef;
+  @ViewChild('filters', {static: true}) filters: ElementRef;
+  @ViewChild('report', {static: true}) report: ElementRef;
+  @ViewChild(MatMenuTrigger, {static: true}) trigger: MatMenuTrigger;
   @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
 
   paramsSub: Subscription;
@@ -480,7 +480,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     dataRule.sort(function (a, b) {
       return (ordering[a.verdict] - ordering[b.verdict]);
     });*/
-    let result = [[], [], [], []];
+    const result = [[], [], [], []];
     let counter = 0;
     for (const data of dataRule) {
       if (data['verdict'] === 'passed') {

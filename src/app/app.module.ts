@@ -56,7 +56,6 @@ export function hljsLanguages() {
     HomePageComponent,
     EvaluationPageComponent,
     BreadcrumbsComponent,
-    // FloatingBreadcrumbsComponent,
     ResultCodeDialogComponent,
     AboutPageComponent,
     ErrorPageComponent
