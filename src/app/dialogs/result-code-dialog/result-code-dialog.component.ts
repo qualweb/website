@@ -10,7 +10,7 @@ import {clone} from 'lodash';
 })
 export class ResultCodeDialogComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('iframe') iframe: ElementRef;
+  @ViewChild('iframe', {static: true}) iframe: ElementRef;
 
   code: string;
 

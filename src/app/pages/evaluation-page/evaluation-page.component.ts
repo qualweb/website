@@ -31,10 +31,10 @@ import {NgxPrettifyService} from '@smartcodelab/ngx-prettify';
 })
 export class EvaluationPageComponent implements OnInit, OnDestroy {
 
-  @ViewChild('summary') summary: ElementRef;
-  @ViewChild('filters') filters: ElementRef;
-  @ViewChild('report') report: ElementRef;
-  @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
+  @ViewChild('summary', {static: true}) summary: ElementRef;
+  @ViewChild('filters', {static: true}) filters: ElementRef;
+  @ViewChild('report', {static: true}) report: ElementRef;
+  @ViewChild(MatMenuTrigger, {static: true}) trigger: MatMenuTrigger;
   @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
 
   paramsSub: Subscription;
@@ -60,7 +60,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   showACT: boolean;
   showHTML: boolean;
-  // showCSS: boolean;
+  showCSS: boolean;
   showBP: boolean;
 
   showPerceivable: boolean;
@@ -108,7 +108,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
     this.showACT = true;
     this.showHTML = true;
-    // this.showCSS = true;
+    this.showCSS = true;
     this.showBP = true;
 
     this.showPerceivable = true;
@@ -218,10 +218,10 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   private processData(data: any): void {
     this.json = clone(data);
-    console.log(this.json);
+    //console.log(this.json);
     const actRulesKeys = keys(this.json.modules['act-rules'].rules);
     const htmlTechniquesKeys = keys(this.json.modules['html-techniques'].techniques);
-    // const cssTechniquesKeys = keys(this.json.modules['css-techniques'].techniques);
+    const cssTechniquesKeys = keys(this.json.modules['css-techniques'].techniques);
     const bestPracticesKeys = keys(this.json.modules['best-practices']['best-practices']);
 
     const rulesAndTechniquesJSON = [];
@@ -244,14 +244,14 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       rulesAndTechniquesJSON.push(obj);
     }
 
-    /*for (const r of cssTechniquesKeys) {
+    for (const r of cssTechniquesKeys) {
       const obj = {
         'code': r,
         'title': this.json.modules['css-techniques'].techniques[r].name,
         'outcome': this.json.modules['css-techniques'].techniques[r].metadata.outcome
       };
       rulesAndTechniquesJSON.push(obj);
-    }*/
+    }
 
     for (const r of bestPracticesKeys) {
       const obj = {
@@ -374,6 +374,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     const parser = new htmlparser.Parser(handler);
     parser.write(replace(code, /(\r\n|\n|\r|\t)/gm, ''));
     parser.end();
+    //console.log(html(parsedCode[0]));
 
     return formatter.render(html(parsedCode[0]));
   }
@@ -417,9 +418,9 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         case 'html':
           show = this.showHTML;
           break;
-        /*case 'css':
+        case 'css':
           show = this.showCSS;
-          break;*/
+          break;
         case 'bp':
           show = this.showBP;
           break;
@@ -480,7 +481,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     dataRule.sort(function (a, b) {
       return (ordering[a.verdict] - ordering[b.verdict]);
     });*/
-    let result = [[], [], [], []];
+    const result = [[], [], [], []];
     let counter = 0;
     for (const data of dataRule) {
       if (data['verdict'] === 'passed') {
