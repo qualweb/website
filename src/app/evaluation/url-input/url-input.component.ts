@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormControl, Validators, AbstractControl} from '@angular/forms';
 import {Router} from '@angular/router';
-import {replace, startsWith, includes, size} from 'lodash';
 
 @Component({
   selector: 'app-url-input',
@@ -27,9 +26,9 @@ export class UrlInputComponent implements OnInit {
     e.preventDefault();
 
     let url = this.urlForm.value;
-    url = replace(url, 'https://', '');
-    url = replace(url, 'http://', '');
-    url = replace(url, 'www.', '');
+    url = url.replace('https://', '');
+    url = url.replace('http://', '');
+    url = url.replace('www.', '');
 
     this.router.navigate(['/', url]);
   }
@@ -41,23 +40,23 @@ export class UrlInputComponent implements OnInit {
       return null;
     }
 
-    if (!startsWith(url, 'http://') && !startsWith(url, 'https://') && !startsWith(url, 'www.')) {
-      if (includes(url, '.') && url[size(url) - 1] !== '.') {
+    if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('www.')) {
+      if (url.includes('.') && url[url.length - 1] !== '.') {
         return null;
       }
-    } else if (startsWith(url, 'http://')) {
-      url = replace(url, 'http://', '');
-      if (includes(url, '.') && url[size(url) - 1] !== '.') {
+    } else if (url.startsWith('http://')) {
+      url = url.replace('http://', '');
+      if (url.includes('.') && url[url.length - 1] !== '.') {
         return null;
       }
-    } else if (startsWith(url, 'https://')) {
-      url = replace(url, 'https://', '');
-      if (includes(url, '.') && url[size(url) - 1] !== '.') {
+    } else if (url.startsWith('https://')) {
+      url = url.replace('https://', '');
+      if (url.includes('.') && url[url.length - 1] !== '.') {
         return null;
       }
-    } else if (startsWith(url, 'www.')) {
-      url = replace(url, 'www.', '');
-      if (includes(url, '.') && url[size(url) - 1] !== '.') {
+    } else if (url.startsWith('www.')) {
+      url = url.replace('www.', '');
+      if (url.includes('.') && url[url.length - 1] !== '.') {
         return null;
       }
     }

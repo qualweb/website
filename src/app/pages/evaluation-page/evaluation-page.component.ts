@@ -8,20 +8,19 @@ import {
   ElementRef,
   HostListener,
   ChangeDetectionStrategy,
-  ChangeDetectorRef, AfterViewInit
+  ChangeDetectorRef
 } from '@angular/core';
 import {MatDialog, MatExpansionPanel, MatMenuTrigger} from '@angular/material';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import formatter from 'html-formatter';
-import htmlparser from 'htmlparser2';
-import html from 'htmlparser-to-html';
-import {clone, keys, orderBy, size, replace, includes, sum} from 'lodash';
+//import formatter from 'html-formatter';
+//import htmlparser from 'htmlparser2';
+//import html from 'htmlparser-to-html';
+import clone from 'lodash.clone';
+import orderBy from 'lodash.orderby';
 
 import {EvaluateService} from '@evaluation/evaluate.service';
 import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code-dialog.component';
-
-import {NgxPrettifyService} from '@smartcodelab/ngx-prettify';
 
 @Component({
   selector: 'app-evaluation-page',
@@ -138,7 +137,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.warningTitle = 0;
     this.inapplicableTitle = 0;
 
-    router.events.subscribe(s => {
+    this.router.events.subscribe(s => {
       if (s instanceof NavigationEnd) {
         const tree = router.parseUrl(router.url);
         if (tree.fragment) {
@@ -184,7 +183,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     // this.evaluationSub.unsubscribe();
   }
 
-  @HostListener('document:click', ['$event']) clickout(event) {
+  @HostListener('document:click', ['$event']) 
+  clickout(event) {
     if (this.expandedFilters && !(event.target.id.toString().includes('Filter') ||
       event.target.parentNode.id.toString().includes('Filter'))) {
       this.clickedOutside = true;
@@ -219,10 +219,10 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   private processData(data: any): void {
     this.json = clone(data);
     //console.log(this.json);
-    const actRulesKeys = this.json.modules['act-rules'] ? keys(this.json.modules['act-rules'].rules) : [];
-    const htmlTechniquesKeys = this.json.modules['html-techniques'] ? keys(this.json.modules['html-techniques'].techniques) : [];
-    const cssTechniquesKeys = this.json.modules['css-techniques'] ? keys(this.json.modules['css-techniques'].techniques) : [];
-    const bestPracticesKeys = this.json.modules['best-practices'] ? keys(this.json.modules['best-practices']['best-practices']) : [];
+    const actRulesKeys = this.json.modules['act-rules'] ? Object.keys(this.json.modules['act-rules'].rules) : [];
+    const htmlTechniquesKeys = this.json.modules['html-techniques'] ? Object.keys(this.json.modules['html-techniques'].techniques) : [];
+    const cssTechniquesKeys = this.json.modules['css-techniques'] ? Object.keys(this.json.modules['css-techniques'].techniques) : [];
+    const bestPracticesKeys = this.json.modules['best-practices'] ? Object.keys(this.json.modules['best-practices']['best-practices']) : [];
 
     const rulesAndTechniquesJSON = [];
 
@@ -339,7 +339,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   }
 
   formatCode(code: string): string {
-    let parsedCode;
+    /*let parsedCode;
     const handler = new htmlparser.DomHandler((error, dom) => {
       if (error) {
         throw new Error();
@@ -352,7 +352,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           delete elem.attribs['b-bottom'];
           delete elem.attribs['css'];
 
-          for (let i = 0; i < size(elem['children']); i++) {
+          for (let i = 0; i < elem['children'].length; i++) {
             if (elem['children'][i]['type'] === 'tag') {
 
               format(elem['children'][i]);
@@ -364,7 +364,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           if (dom[i]['type'] === 'tag') {
             format(dom[i]);
           }
-        }*/
+        }
         format(dom[0]);
         // console.log(dom[0]);
         parsedCode = dom;
@@ -372,11 +372,12 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     });
 
     const parser = new htmlparser.Parser(handler);
-    parser.write(replace(code, /(\r\n|\n|\r|\t)/gm, ''));
+    parser.write(code.replace(/(\r\n|\n|\r|\t)/gm, ''));
     parser.end();
     //console.log(html(parsedCode[0]));
 
-    return formatter.render(html(parsedCode[0]));
+    return formatter.render(html(parsedCode[0]));*/
+    return code;
   }
 
   showRuleCard(rule: string): boolean {
@@ -428,28 +429,28 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     }
 
     if (show) {
-      if (includes(levels, 'A')) {
+      if (levels.includes('A')) {
         show = this.showA;
       }
-      if (includes(levels, 'AA')) {
+      if (levels.includes('AA')) {
         show = this.showAA;
       }
-      if (!show && includes(levels, 'AAA')) {
+      if (!show && levels.includes('AAA')) {
         show = this.showAAA;
       }
     }
 
     if (show) {
-      if (includes(principles, 'Perceivable')) {
+      if (principles.includes('Perceivable')) {
         show = this.showPerceivable;
       }
-      if (includes(principles, 'Operable')) {
+      if (principles.includes('Operable')) {
         show = this.showOperable;
       }
-      if (includes(principles, 'Understandable')) {
+      if (principles.includes('Understandable')) {
         show = this.showUnderstandable;
       }
-      if (includes(principles, 'Robust')) {
+      if (principles.includes('Robust')) {
         show = this.showRobust;
       }
     }
@@ -557,7 +558,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   }
 
   noResults(rule: string): boolean {
-    return sum(this.getNumberResults(rule)) === 0;
+    return this.getNumberResults(rule).reduce((a, b) => a + b, 0) === 0;
   }
 
   areAllTheSameTypeOfResults(rule: string): boolean {

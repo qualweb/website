@@ -2,7 +2,6 @@ import {Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef
 import {Location} from '@angular/common';
 import {Router, NavigationEnd} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';
-import {split} from 'lodash';
 import {ThemeService} from '@app/services/theme.service';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -33,7 +32,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
     this.routerSub = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const path = this.location.path();
-        const segments = split(path, '/');
+        const segments = path.split('/');
 
         this.uri = null;
 
