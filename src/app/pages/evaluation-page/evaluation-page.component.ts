@@ -219,14 +219,14 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   private processData(data: any): void {
     this.json = clone(data);
     //console.log(this.json);
-    const actRulesKeys = keys(this.json.modules['act-rules'].rules);
-    const htmlTechniquesKeys = keys(this.json.modules['html-techniques'].techniques);
-    const cssTechniquesKeys = keys(this.json.modules['css-techniques'].techniques);
-    const bestPracticesKeys = keys(this.json.modules['best-practices']['best-practices']);
+    const actRulesKeys = this.json.modules['act-rules'] ? keys(this.json.modules['act-rules'].rules) : [];
+    const htmlTechniquesKeys = this.json.modules['html-techniques'] ? keys(this.json.modules['html-techniques'].techniques) : [];
+    const cssTechniquesKeys = this.json.modules['css-techniques'] ? keys(this.json.modules['css-techniques'].techniques) : [];
+    const bestPracticesKeys = this.json.modules['best-practices'] ? keys(this.json.modules['best-practices']['best-practices']) : [];
 
     const rulesAndTechniquesJSON = [];
 
-    for (const r of actRulesKeys) {
+    for (const r of actRulesKeys || []) {
       const obj = {
         'code': r,
         'title': this.json.modules['act-rules'].rules[r].name,
@@ -235,7 +235,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       rulesAndTechniquesJSON.push(obj);
     }
 
-    for (const r of htmlTechniquesKeys) {
+    for (const r of htmlTechniquesKeys || []) {
       const obj = {
         'code': r,
         'title': this.json.modules['html-techniques'].techniques[r].name,
@@ -244,7 +244,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       rulesAndTechniquesJSON.push(obj);
     }
 
-    for (const r of cssTechniquesKeys) {
+    for (const r of cssTechniquesKeys || []) {
       const obj = {
         'code': r,
         'title': this.json.modules['css-techniques'].techniques[r].name,
@@ -253,7 +253,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       rulesAndTechniquesJSON.push(obj);
     }
 
-    for (const r of bestPracticesKeys) {
+    for (const r of bestPracticesKeys || []) {
       const obj = {
         'code': r,
         'title': this.json.modules['best-practices']['best-practices'][r].name,
@@ -264,7 +264,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
     this.rulesAndTechniquesNames = orderBy(rulesAndTechniquesJSON, [rule => rule['title'].toLowerCase()], ['asc']);
     // console.log(this.rulesAndTechniquesNames);
-    for (const r of this.rulesAndTechniquesNames) {
+    for (const r of this.rulesAndTechniquesNames || []) {
       this.rules.push(r['code']);
       if (r['outcome'] === 'inapplicable') {
         this.showRulesResults[r['code']] = {
