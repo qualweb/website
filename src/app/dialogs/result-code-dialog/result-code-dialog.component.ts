@@ -1,5 +1,5 @@
 import {Component, OnInit, AfterViewInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import clone from 'lodash.clone';
 
 @Component({

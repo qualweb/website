@@ -10,7 +10,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef
 } from '@angular/core';
-import {MatDialog, MatExpansionPanel, MatMenuTrigger} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { MatMenuTrigger } from '@angular/material/menu';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 //import formatter from 'html-formatter';
