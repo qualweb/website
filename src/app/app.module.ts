@@ -25,7 +25,7 @@ import {EvaluationPageComponent} from './pages/evaluation-page/evaluation-page.c
 import {BreadcrumbsComponent} from './layout/header/breadcrumbs/breadcrumbs.component';
 import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code-dialog.component';
 
-import {AngularFittextModule} from 'angular-fittext';
+//import {AngularFittextModule} from 'angular-fittext';
 import {AboutPageComponent} from './pages/about-page/about-page.component';
 import {ErrorPageComponent} from './pages/error-page/error-page.component';
 
@@ -75,7 +75,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     //InViewportModule,
     //NgxHighlightModule,
     ScrollDispatchModule,
-    AngularFittextModule,
+    //AngularFittextModule,
     //HighlightModule
   ],
   providers: [/*{

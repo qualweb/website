@@ -14,11 +14,11 @@
         </h1>
 
         <div class="summary_info" fxLayout="column" fxLayoutAlign="space-around center">
-        <span fittext [maxFontSize]="22" class="url">
+        <span  class="url">
           <a class="hidden_link" href="{{ json.system.url.inputUrl }}"
              target="_blank">{{ json.system.url.inputUrl }}</a>
         </span>
-          <span fittext [maxFontSize]="25">
+          <span>
           {{json.metadata.passed + json.metadata.failed + json.metadata.inapplicable + json.metadata.warning}} {{"EVALUATION_PAGE.summary.rules" | translate}}
         </span>
         </div>
@@ -229,7 +229,7 @@
                   </mat-icon>
                 </div>
                 <div class="around_title" fxFlex>
-                  <h2 fittext [maxFontSize]="26" [compression]="0.8" class="final-outcome rule_title">
+                  <h2  class="final-outcome rule_title">
                     <!--{{ "RULES." + rule + ".name" | translate}}-->
                     {{ getValue(rule, 'name')}}
                   </h2>
