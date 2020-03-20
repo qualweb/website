@@ -28,7 +28,7 @@ export class EvaluateService {
         return of(null);
       })
     );*/
-    return this.http.get<any>('http://194.117.20.242:3000/' + encodeURIComponent(url))
+    return this.http.get<any>('http://194.117.20.242/api/' + encodeURIComponent(url))
       .pipe(
         map(res => {
           return res;
