@@ -61,6 +61,14 @@
       "results": "Results",
       "result_code": "See visual representation",
       "no_results": "There are no such elements to test"
+    },
+    "loading": {
+      "starting": "Starting evaluation...",
+      "act-rules": "Evaluating ACT rules...",
+      "html-techniques": "Evaluation WCAG 2.1 HTML techniques...",
+      "css-techniques": "Evaluation WCAG 2.1 CSS techniques...",
+      "best-practices": "Checking for best practices...",
+      "preparing-data": "Preparing data..."
     }
   },
   "RESULT_CODE_DIALOG": {

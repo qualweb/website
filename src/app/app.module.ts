@@ -15,7 +15,8 @@ import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 //import {InViewportModule} from '@thisissoon/angular-inviewport';
 //import {NgxHighlightModule} from '@petkit/ngx-highlight';
-import {ScrollDispatchModule} from '@angular/cdk/scrolling';
+
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import {HeaderComponent} from './layout/header/header.component';
 import {FooterComponent} from './layout/footer/footer.component';
@@ -36,6 +37,8 @@ import {ErrorPageComponent} from './pages/error-page/error-page.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
+
+const config: SocketIoConfig = { url: '/api', options: {}};
 
 /*export function hljsLanguages() {
   return [
@@ -74,9 +77,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     //InViewportModule,
     //NgxHighlightModule,
-    ScrollDispatchModule,
+    //ScrollDispatchModule,
     //AngularFittextModule,
-    //HighlightModule
+    //HighlightModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [/*{
     provide: HIGHLIGHT_OPTIONS,

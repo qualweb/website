@@ -20,8 +20,9 @@ import {Subscription} from 'rxjs';
 //import html from 'htmlparser-to-html';
 import clone from 'lodash.clone';
 import orderBy from 'lodash.orderby';
+import { Socket } from 'ngx-socket-io';
+import Evaluation from './evaluation.object';
 
-import {EvaluateService} from '@evaluation/evaluate.service';
 import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code-dialog.component';
 
 @Component({
@@ -90,12 +91,15 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   warningTitle: number;
   inapplicableTitle: number;
 
+  currentModule: string = 'starting';
+  data: Evaluation;
+
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private evaluate: EvaluateService,
     private cd: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private readonly socket: Socket
   ) {
     this.evaluateLoading = true;
     this.error = false;
@@ -150,23 +154,35 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         }
       }
     });
-
   }
 
   ngOnInit(): void {
     this.paramsSub = this.route.params.subscribe(params => {
       this.url = params.url;
-      this.evaluationSub = this.evaluate.url(this.url)
-        .subscribe(data => {
-          if (data) {
-            this.processData(data);
-          } else {
-            this.error = true;
-          }
-
+      this.socket.connect();
+      this.socket.emit('evaluate', encodeURIComponent(this.url));
+      this.socket.on('evaluator', data => {
+        this.data = new Evaluation(data);
+      });
+      this.socket.on('moduleStart', (module: any) => {
+        this.currentModule = module;
+        this.cd.detectChanges();
+      });
+      this.socket.on('moduleEnd', (report: any) => {
+        this.data.addModuleEvaluation(report.module, report.report);
+      });
+      this.socket.on('prepare-data', () => {
+        this.currentModule = 'preparing-data';
+        this.cd.detectChanges();
+      });
+      this.socket.on('evaluationEnd', () => {
+        setTimeout(() => {
+          this.processData(this.data.getFinalReport());
           this.evaluateLoading = false;
           this.cd.detectChanges();
-        });
+          this.socket.disconnect();
+        }, 100);
+      });
     });
 
     /*this.earl = JSON.parse(sessionStorage.getItem('earl'));

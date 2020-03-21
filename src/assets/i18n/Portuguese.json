@@ -58,6 +58,14 @@
       "results": "Resultados",
       "result_code": "Ver representação visual",
       "no_results": "Não existem elementos assim para testar"
+    },
+    "loading": {
+      "starting": "A começar a avaliação...",
+      "act-rules": "A avaliar regras ACT...",
+      "html-techniques": "A avaliar técnicas HTML (WCAG 2.1)...",
+      "css-techniques": "A avaliar técnicas CSS (WCAG 2.1)...",
+      "best-practices": "A verificar por boas práticas...",
+      "preparing-data": "A preparar os dados..."
     }
   },
   "RESULT_CODE_DIALOG": {
