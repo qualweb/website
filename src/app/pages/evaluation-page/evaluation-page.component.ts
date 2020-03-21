@@ -183,6 +183,13 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           this.socket.disconnect();
         }, 100);
       });
+      this.socket.on('error', error => {
+        console.error(error);
+        this.error = true;
+        this.evaluateLoading = false;
+        this.socket.disconnect();
+        this.cd.detectChanges();
+      });
     });
 
     /*this.earl = JSON.parse(sessionStorage.getItem('earl'));
