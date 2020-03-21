@@ -38,7 +38,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
-const config: SocketIoConfig = { url: '/api', options: {}};
+const config: SocketIoConfig = { url: '/', options: {}};
 
 /*export function hljsLanguages() {
   return [
