@@ -208,7 +208,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     // this.evaluationSub.unsubscribe();
   }
 
-  @HostListener('document:click', ['$event']) 
+  @HostListener('document:click', ['$event'])
   clickout(event) {
     if (this.expandedFilters && !(event.target.id.toString().includes('Filter') ||
       event.target.parentNode.id.toString().includes('Filter'))) {
@@ -596,8 +596,15 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     return count <= 1;
   }
 
-  getUrl(rule: string): string {
-    return this.getValue(rule, 'metadata').url;
+  getUrl(rule: string): string | string[] {
+    if (this.getUrlType(rule) === 'string') {
+      return this.getValue(rule, 'metadata').url;
+    } else {
+      return Object.values(this.getValue(rule, 'metadata').url);
+    }
+  }
+  getUrlType(rule: string): string {
+    return typeof this.getValue(rule, 'metadata').url;
   }
 
   getTarget(rule: string, type: string) {

@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "install": "sh ./src/assets/postinstall.sh"
+    "fix-installation": "sh ./src/assets/postinstall.sh"
   },
   "private": true,
   "dependencies": {
@@ -31,6 +31,7 @@
     "lodash.clone": "^4.5.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.orderby": "^4.6.0",
+    "ngx-highlightjs": "^4.1.0-beta",
     "ngx-socket-io": "^3.0.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

@@ -30,7 +30,7 @@ import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code
 import {AboutPageComponent} from './pages/about-page/about-page.component';
 import {ErrorPageComponent} from './pages/error-page/error-page.component';
 
-//import {HIGHLIGHT_OPTIONS, HighlightModule} from 'ngx-highlightjs';
+import {HIGHLIGHT_OPTIONS, HighlightModule} from 'ngx-highlightjs';
 //import xml from 'highlight.js/lib/languages/xml.js';
 
 // AoT requires an exported function for factories
@@ -38,14 +38,15 @@ export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
-const config: SocketIoConfig = { url: '/', options: {}};
+const config: SocketIoConfig = { url: 'http://localhost:3000/', options: {}};
 
-/*export function hljsLanguages() {
-  return [
-    {name: 'xml', func: xml}
-  ];
-}*/
-
+export function getHighlightLanguages() {
+  return {
+    typescript: () => import('highlight.js/lib/languages/typescript'),
+    css: () => import('highlight.js/lib/languages/css'),
+    xml: () => import('highlight.js/lib/languages/xml')
+  };
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,15 +80,15 @@ const config: SocketIoConfig = { url: '/', options: {}};
     //NgxHighlightModule,
     //ScrollDispatchModule,
     //AngularFittextModule,
-    //HighlightModule,
+    HighlightModule,
     SocketIoModule.forRoot(config)
   ],
-  providers: [/*{
+  providers: [{
     provide: HIGHLIGHT_OPTIONS,
     useValue: {
-      languages: hljsLanguages
+      languages: getHighlightLanguages()
     }
-  }*/],
+  }],
   entryComponents: [
     ResultCodeDialogComponent
   ],

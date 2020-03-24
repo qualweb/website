@@ -1,7 +1,7 @@
 img {
   width: 20vw;
   min-width: 250px;
-  //margin-bottom: 2vh;
+  margin-top: 3%;
 }
 
 div {
@@ -40,7 +40,13 @@ p:last-of-type {
   }
 }
 
-.main {
+/*.main {
   min-height: calc(80vh - 5vh - 50px);
   padding-bottom: 5vh;
+}*/
+
+app-footer {
+  background-color: #943709;
+  position: fixed;
+  bottom: 0;
 }
