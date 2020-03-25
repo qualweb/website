@@ -30,6 +30,7 @@
     "core-js": "^2.6.9",
     "lodash.clone": "^4.5.0",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.foreach": "^4.5.0",
     "lodash.orderby": "^4.6.0",
     "ngx-highlightjs": "^4.1.0-beta",
     "ngx-socket-io": "^3.0.1",

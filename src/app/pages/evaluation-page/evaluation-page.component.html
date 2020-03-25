@@ -18,12 +18,12 @@
             <a class="hidden_link" href="{{ json.system.url.inputUrl }}"
                target="_blank">{{ json.system.url.inputUrl }}</a>
           </span>
-            <span>
+          <span>
             {{json.metadata.passed + json.metadata.failed + json.metadata.inapplicable + json.metadata.warning}} {{"EVALUATION_PAGE.summary.rules" | translate}}
           </span>
         </div>
 
-        <div class="summary_icons" fxLayout="row" fxLayoutGap="3%" fxLayoutAlign="center">
+        <div class="summary_icons flow row" fxLayoutGap="3%" fxLayoutAlign="center">
           <div>
             <span class="screenreader">{{"EVALUATION_PAGE.summary.passed" | translate}}</span>
             <mat-icon class="passed">check_circle_outline</mat-icon>
@@ -211,24 +211,21 @@
           </button>
         </div>
 
-        <ng-container *ngFor="let rule of rules; trackBy: trackByIndex">
-          <mat-expansion-panel *ngIf="showRuleCard(rule)" #panel [ngClass]="getOutcome(rule)"
+        <ng-container *ngFor="let rule of rulesJson; trackBy: trackByIndex">
+          <mat-expansion-panel *ngIf="showRuleCard(rule)" #panel [ngClass]="rule['outcome']"
                                [class.sticky]="panel.expanded" class="line_breaker">
             <mat-expansion-panel-header [collapsedHeight]="'55px'" [expandedHeight]="'55px'">
               <mat-panel-title fxLayout="row" fxLayoutAlign="start center" fxFlex>
                 <div>
-                  <mat-icon *ngIf="getOutcome(rule) === 'passed'" class="final-outcome">check_circle_outline
-                  </mat-icon>
-                  <mat-icon *ngIf="getOutcome(rule) === 'failed'" class="final-outcome">highlight_off</mat-icon>
-                  <mat-icon *ngIf="getOutcome(rule) === 'warning'" class="final-outcome">warning</mat-icon>
-                  <mat-icon *ngIf="getOutcome(rule) === 'inapplicable'" class="final-outcome">
-                    not_interested
-                  </mat-icon>
+                  <mat-icon *ngIf="rule['outcome'] === 'passed'" class="final-outcome">check_circle_outline</mat-icon>
+                  <mat-icon *ngIf="rule['outcome'] === 'failed'" class="final-outcome">highlight_off</mat-icon>
+                  <mat-icon *ngIf="rule['outcome'] === 'warning'" class="final-outcome">warning</mat-icon>
+                  <mat-icon *ngIf="rule['outcome'] === 'inapplicable'" class="final-outcome">not_interested</mat-icon>
                 </div>
                 <div class="around_title" fxFlex>
                   <h2  class="final-outcome rule_title">
                     <!--{{ "RULES." + rule + ".name" | translate}}-->
-                    {{ getValue(rule, 'name')}}
+                    {{ rule['name'] }}
                   </h2>
                 </div>
               </mat-panel-title>
@@ -238,61 +235,60 @@
               <!-- TYPE -->
               <div class="rule_type" fxFlex fxFlexOrder.gt-sm="2">
                 <h2 class="rule_subtitle">{{"EVALUATION_PAGE.report.type" | translate}}</h2>
-                <h3 class="type">{{ getTypeString(rule) }}</h3>
+                <h3 class="type">{{ rule['type'] }}</h3>
               </div>
 
               <!-- DESCRIPTION -->
               <div class="order1 rule_description" fxFlex fxFlexOrder.gt-sm="1">
                 <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.report.description" | translate}}</h2>
                 <!--<p>{{ "RULES." + rule + ".description" | translate }}</p>-->
-                <p>{{ getValue(rule, 'description') }}</p>
-                <p *ngIf="getUrlType(rule) === 'string'">
-                  <a class="hidden_link" href="{{ getUrl(rule) }}" target="_blank">
-                    <code>{{ getUrl(rule) }}</code>
+                <p>{{ rule['description'] }}</p>
+                <ng-container [ngSwitch]="rule['urlType']">
+                  <a *ngSwitchCase="'string'" class="hidden_link" href="{{ rule['url'] }}" target="_blank">
+                    <code>{{ rule['url'] }}</code>
                   </a>
-                </p>
-                <div *ngIf="getUrlType(rule) === 'object'">
-                  <ul class="links">
-                    <li *ngFor="let link of getUrl(rule); trackBy: trackByIndex">
+                  <ul class="links" *ngSwitchDefault>
+                    <li *ngFor="let link of rule['url']; trackBy: trackByIndex">
                       <a class="hidden_link" href="{{ link }}" target="_blank">
                         <code>{{ link }}</code>
                       </a>
                     </li>
                   </ul>
-                </div>
-                <p *ngIf="getTarget(rule, 'parent') !== ''">
+                </ng-container>
+                <p>{{rule['targets']['parent']}}</p>
+                <p *ngIf="rule['targets']['parent']">
                   {{"EVALUATION_PAGE.report.target_parent" | translate}}
-                  <code>{{ getTarget(rule, 'parent') }}</code>
+                  <code>{{ rule['targets']['parent'] }}</code>
                 </p>
-                <p *ngIf="getTarget(rule, 'parent-sibling') !== ''">
+                <p *ngIf="rule['targets']['parent-sibling']">
                   {{"EVALUATION_PAGE.report.target_parent_sibling" | translate}}
-                  <code>{{ getTarget(rule, 'parent-sibling') }}</code>
+                  <code>{{ rule['targets']['parent-sibling'] }}</code>
                 </p>
-                <p *ngIf="getTarget(rule, 'element') !== ''">
+                <p *ngIf="rule['targets']['element']">
                   {{"EVALUATION_PAGE.report.target_elem" | translate}}
-                  <code>{{ getTarget(rule, 'element') }}</code>
+                  <code>{{ rule['targets']['element'] }}</code>
                 </p>
-                <p *ngIf="getTarget(rule, 'attributes') !== ''">
+                <p *ngIf="rule['targets']['attributes']">
                   {{"EVALUATION_PAGE.report.target_attr" | translate}}
-                  <code>{{ getTarget(rule, 'attributes') }}</code>
+                  <code>{{ rule['targets']['attributes'] }}</code>
                 </p>
-                <p *ngIf="getTarget(rule, 'css') !== ''">
+                <p *ngIf="rule['targets']['css']">
                   {{"EVALUATION_PAGE.report.target_css" | translate}}
-                  <code>{{ getTarget(rule, 'css') }}</code>
+                  <code>{{ rule['targets']['css'] }}</code>
                 </p>
-                <p *ngIf="getTarget(rule, 'children') !== ''">
+                <p *ngIf="rule['targets']['children']">
                   {{"EVALUATION_PAGE.report.target_children" | translate}}
-                  <code>{{ getTarget(rule, 'children') }}</code>
+                  <code>{{ rule['targets']['children'] }}</code>
                 </p>
               </div>
             </div>
 
-            <div *ngIf="getSuccessCriteria(rule)" fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap="2">
+            <div *ngIf="rule['success-criterias']" fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap="2">
               <!-- SUCCESS CRITERIA -->
               <div class="rule_criteria" fxFlex fxFlexOrder.gt-sm="2">
                 <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.report.criteria.title" | translate}}</h2>
                 <ul>
-                  <li *ngFor="let sc of getSuccessCriteria(rule); trackBy: trackByIndex">
+                  <li *ngFor="let sc of rule['success-criterias']; trackBy: trackByIndex">
                     {{ sc.name }} - {{ "SUCCESS_CRITERIA.".concat(sc.name) | translate}}
                     ({{"EVALUATION_PAGE.report.criteria.level" | translate}} {{ sc.level }})
                   </li>
@@ -300,47 +296,52 @@
               </div>
 
               <!-- FILTERS -->
-              <div *ngIf="!areAllTheSameTypeOfResults(rule)" class="rule_filters" fxFlex fxFlexOrder.gt-sm="1">
+              <div *ngIf="!areAllTheSameTypeOfResults(rule['numbers'])" class="rule_filters" fxFlex fxFlexOrder.gt-sm="1">
                 <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.filters.title" | translate}}</h2>
                 <div fxLayout="column">
                   <mat-checkbox class="passed__checkbox"
-                                [(ngModel)]="showRulesResults[rule].passed">
+                                [(ngModel)]="showRulesResults[rule['code']].passed">
                     {{ "EVALUATION_PAGE.filters.show_passed_result" | translate }}
                     -
-                    <b>{{ getNumberResults(rule)[0] }}</b>
-                    <span
-                      *ngIf="getNumberResults(rule)[0] === 1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                    <span
-                      *ngIf="getNumberResults(rule)[0] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                    <b>{{ rule['numbers']['nPassed'] }}</b>
+                    <ng-container [ngSwitch]="rule['numbers']['nPassed']">
+                      <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
+                      <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                    </ng-container>
                   </mat-checkbox>
                   <mat-checkbox class="failed__checkbox"
-                                [(ngModel)]="showRulesResults[rule].failed">
+                                [(ngModel)]="showRulesResults[rule['code']].failed">
                     {{ "EVALUATION_PAGE.filters.show_failed_result" | translate }}
                     -
-                    <b>{{ getNumberResults(rule)[1] }}</b>
-                    <span
-                      *ngIf="getNumberResults(rule)[1] === 1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                    <span
-                      *ngIf="getNumberResults(rule)[1] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                    <b>{{ rule['numbers']['nFailed'] }}</b>
+                    <ng-container [ngSwitch]="rule['numbers']['nFailed']">
+                      <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
+                      <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                    </ng-container>
                   </mat-checkbox>
                   <mat-checkbox class="warning__checkbox"
-                                [(ngModel)]="showRulesResults[rule].warning">
+                                [(ngModel)]="showRulesResults[rule['code']].warning">
                     {{ "EVALUATION_PAGE.filters.show_warning_result" | translate }}
                     -
-                    <b>{{ getNumberResults(rule)[2] }}</b>
-                    <span
-                      *ngIf="getNumberResults(rule)[2] === 1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                    <span
-                      *ngIf="getNumberResults(rule)[2] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                    <b>{{ rule['numbers']['nWarning'] }}</b>
+                    <ng-container [ngSwitch]="rule['numbers']['nWarning']">
+                      <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
+                      <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                    </ng-container>
                   </mat-checkbox>
-                  <mat-checkbox class="inapplicable__checkbox" [(ngModel)]="showRulesResults[rule].inapplicable">
+                  <mat-checkbox class="inapplicable__checkbox" [(ngModel)]="showRulesResults[rule['code']].inapplicable">
                     {{ "EVALUATION_PAGE.filters.show_not_applicable_result" | translate }}
                     -
-                    <b>{{ getNumberResults(rule)[3] }}</b>
+                    <!--b>{{ getNumberResults(rule)[3] }}</b>
                     <span
                       *ngIf="getNumberResults(rule)[3] === 1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
                     <span
-                      *ngIf="getNumberResults(rule)[3] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                      *ngIf="getNumberResults(rule)[3] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span-->
+                    <b>{{ rule['numbers']['nInapplicable'] }}</b>
+                    <ng-container [ngSwitch]="rule['numbers']['nInapplicable']">
+                      <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
+                      <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                    </ng-container>
                   </mat-checkbox>
                 </div>
               </div>
@@ -351,7 +352,7 @@
               <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.report.results" | translate}}</h2>
 
               <!-- when there are no results -->
-              <ng-container *ngIf="noResults(rule)">
+              <ng-container *ngIf="noResults(rule['numbers'])">
                 <mat-card class="inapplicable" fxLayout="column">
                   <mat-card-header>
                     <mat-card-title>
@@ -361,80 +362,163 @@
                 </mat-card>
               </ng-container>
 
-              <ng-container *ngFor="let results of orderRuleResult(rule); trackBy: trackByIndex">
-
-                <ng-container *ngIf="results.length > 0">
-                  <h3 *ngIf="results[0]['verdict'] === 'passed' && showRulesResults[rule]['passed']">
-                    <span class="passed">{{ "EVALUATION_PAGE.filters.show_passed_result" | translate }}</span>
-                    - {{ getNumberResults(rule)[0] }}
-                    <span
-                      *ngIf="getNumberResults(rule)[0] === 1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                    <span
-                      *ngIf="getNumberResults(rule)[0] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
-                  </h3>
-
-                  <h3 *ngIf="results[0]['verdict'] === 'failed' && showRulesResults[rule]['failed']">
-                    <span class="failed">{{ "EVALUATION_PAGE.filters.show_failed_result" | translate }}</span>
-                    - {{ getNumberResults(rule)[1] }}
-                    <span
-                      *ngIf="getNumberResults(rule)[1] === 1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                    <span
-                      *ngIf="getNumberResults(rule)[1] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
-                  </h3>
-
-                  <h3 *ngIf="results[0]['verdict'] === 'warning' && showRulesResults[rule]['warning']">
-                    <span class="warning">{{ "EVALUATION_PAGE.filters.show_warning_result" | translate }}</span>
-                    - {{ getNumberResults(rule)[2] }}
-                    <span
-                      *ngIf="getNumberResults(rule)[2] === 1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                    <span
-                      *ngIf="getNumberResults(rule)[2] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
-                  </h3>
-
-                  <h3 *ngIf="results[0]['verdict'] === 'inapplicable' && showRulesResults[rule]['inapplicable']">
-                    <span
-                      class="inapplicable">{{ "EVALUATION_PAGE.filters.show_not_applicable_result" | translate }}</span>
-                    - {{ getNumberResults(rule)[3] }}
-                    <span
-                      *ngIf="getNumberResults(rule)[3] === 1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                    <span
-                      *ngIf="getNumberResults(rule)[3] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
-                  </h3>
-                </ng-container>
-
-                <ng-container *ngFor="let test of results; trackBy: trackByIndex">
-                  <mat-card *ngIf="showRulesResults[rule][test.verdict]" [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
-
-                    <mat-card-header>
-                      <mat-card-title [class.with-code]="test.htmlCode || test.cssCode">
-                        <!--{{ "RULES." + rule + "." + test.resultCode | translate}}-->
-                        {{ test.description }}
-                      </mat-card-title>
-                    </mat-card-header>
-
-                    <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
-                                      fxLayout="row" fxLayoutGap="2" fxFlex>
-
-                      <!--pre *ngIf="getType(rule) !== 'css'" fxFlex="95"><code>{{ test.htmlCode.toString() }}</code></pre-->
-                      <pre *ngIf="getType(rule) !== 'css'" fxFlex="95"><code [highlight]="test.htmlCode.toString()"></code></pre>
-                      <pre *ngIf="getType(rule) === 'css'" fxFlex="95"><code [highlight]="test.cssCode.toString()"></code></pre>
-
-                      <button *ngIf="getType(rule) !== 'css'" mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
-                              matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
-                        <mat-icon class="eyeicon">visibility</mat-icon>
-                      </button>
-
-                    </mat-card-content>
-
-                    <!--<mat-card-content fxLayout="row" fxLayoutAlign="start center" *ngIf="!test.code">
-                      <div fxLayout="column" fxFlex>
-                        Não existe código
-                      </div>
-                    </mat-card-content>-->
-                  </mat-card>
-
-                </ng-container>
+              <!------ Passed results ------>
+              <ng-container *ngIf="showRulesResults[rule['code']]['passed'] && rule['numbers']['nPassed']">
+                <h3>
+                  <span class="passed">{{ "EVALUATION_PAGE.filters.show_passed_result" | translate }}</span>
+                  -
+                  {{ rule['numbers']['nPassed'] }}
+                  <ng-container [ngSwitch]="rule['numbers']['nPassed']">
+                    <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
+                    <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                  </ng-container>
+                </h3>
+                <div [class.results_box]="rule['numbers']['nPassed'] > 3">
+                  <ng-container *ngFor="let test of rule['passedResults']; trackBy: trackByIndex">
+                    <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
+                      <mat-card-header>
+                        <mat-card-title [class.with-code]="test.htmlCode || test.cssCode">
+                          {{ test.description }}
+                        </mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
+                                        fxLayout="row" fxLayoutGap="2" fxFlex>
+                        <ng-container [ngSwitch]="rule['type']">
+                          <ng-container *ngSwitchCase="'CSS Technique'">
+                            <pre fxFlex="95"><code [highlight]="test.cssCode.toString()"></code></pre>
+                          </ng-container>
+                          <ng-container *ngSwitchDefault>
+                            <pre fxFlex="95"><code [highlight]="test.htmlCode.toString()"></code></pre>
+                            <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
+                                    matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
+                              <mat-icon class="eyeicon">visibility</mat-icon>
+                            </button>
+                          </ng-container>
+                        </ng-container>
+                      </mat-card-content>
+                    </mat-card>
+                  </ng-container>
+                </div>
               </ng-container>
+
+              <!------ Failed results ------>
+              <ng-container *ngIf="showRulesResults[rule['code']]['failed'] && rule['numbers']['nFailed']">
+                <h3>
+                  <span class="failed">{{ "EVALUATION_PAGE.filters.show_failed_result" | translate }}</span>
+                  -
+                  {{ rule['numbers']['nFailed'] }}
+                  <ng-container [ngSwitch]="rule['numbers']['nFailed']">
+                    <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
+                    <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                  </ng-container>
+                </h3>
+                <div [class.results_box]="rule['numbers']['nFailed'] > 3">
+                  <ng-container *ngFor="let test of rule['failedResults']; trackBy: trackByIndex">
+                    <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
+                      <mat-card-header>
+                        <mat-card-title [class.with-code]="test.htmlCode || test.cssCode">
+                          {{ test.description }}
+                        </mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
+                                        fxLayout="row" fxLayoutGap="2" fxFlex>
+                        <ng-container [ngSwitch]="rule['type']">
+                          <ng-container *ngSwitchCase="'CSS Technique'">
+                            <pre fxFlex="95"><code [highlight]="test.cssCode.toString()"></code></pre>
+                          </ng-container>
+                          <ng-container *ngSwitchDefault>
+                            <pre fxFlex="95"><code [highlight]="test.htmlCode.toString()"></code></pre>
+                            <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
+                                    matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
+                              <mat-icon class="eyeicon">visibility</mat-icon>
+                            </button>
+                          </ng-container>
+                        </ng-container>
+                      </mat-card-content>
+                    </mat-card>
+                  </ng-container>
+                </div>
+              </ng-container>
+
+              <!------ Warning results ------>
+              <ng-container *ngIf="showRulesResults[rule['code']]['warning'] && rule['numbers']['nWarning']">
+                <h3>
+                  <span class="warning">{{ "EVALUATION_PAGE.filters.show_warning_result" | translate }}</span>
+                  -
+                  {{ rule['numbers']['nWarning'] }}
+                  <ng-container [ngSwitch]="rule['numbers']['nWarning']">
+                    <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
+                    <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                  </ng-container>
+                </h3>
+                <div [class.results_box]="rule['numbers']['nWarning'] > 3">
+                  <ng-container *ngFor="let test of rule['warningResults']; trackBy: trackByIndex">
+                    <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
+                      <mat-card-header>
+                        <mat-card-title [class.with-code]="test.htmlCode || test.cssCode">
+                          {{ test.description }}
+                        </mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
+                                        fxLayout="row" fxLayoutGap="2" fxFlex>
+                        <ng-container [ngSwitch]="rule['type']">
+                          <ng-container *ngSwitchCase="'CSS Technique'">
+                            <pre fxFlex="95"><code [highlight]="test.cssCode.toString()"></code></pre>
+                          </ng-container>
+                          <ng-container *ngSwitchDefault>
+                            <pre fxFlex="95"><code [highlight]="test.htmlCode.toString()"></code></pre>
+                            <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
+                                    matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
+                              <mat-icon class="eyeicon">visibility</mat-icon>
+                            </button>
+                          </ng-container>
+                        </ng-container>
+                      </mat-card-content>
+                    </mat-card>
+                  </ng-container>
+                </div>
+              </ng-container>
+
+              <!------ Inapplicable results ------>
+              <ng-container *ngIf="showRulesResults[rule['code']]['inapplicable'] && rule['numbers']['nInapplicable']">
+                <h3>
+                  <span class="inapplicable">{{ "EVALUATION_PAGE.filters.show_inapplicable_result" | translate }}</span>
+                  -
+                  {{ rule['numbers']['nInapplicable'] }}
+                  <ng-container [ngSwitch]="rule['numbers']['nInapplicable']">
+                    <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
+                    <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                  </ng-container>
+                </h3>
+                <div [class.results_box]="rule['numbers']['nInapplicable'] > 3">
+                  <ng-container *ngFor="let test of rule['inapplicableResults']; trackBy: trackByIndex">
+                    <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
+                      <mat-card-header>
+                        <mat-card-title [class.with-code]="test.htmlCode || test.cssCode">
+                          {{ test.description }}
+                        </mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
+                                        fxLayout="row" fxLayoutGap="2" fxFlex>
+                        <ng-container [ngSwitch]="rule['type']">
+                          <ng-container *ngSwitchCase="'CSS Technique'">
+                            <pre fxFlex="95"><code [highlight]="test.cssCode.toString()"></code></pre>
+                          </ng-container>
+                          <ng-container *ngSwitchDefault>
+                            <pre fxFlex="95"><code [highlight]="test.htmlCode.toString()"></code></pre>
+                            <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
+                                    matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
+                              <mat-icon class="eyeicon">visibility</mat-icon>
+                            </button>
+                          </ng-container>
+                        </ng-container>
+                      </mat-card-content>
+                    </mat-card>
+                  </ng-container>
+                </div>
+              </ng-container>
+
+
             </div>
 
           </mat-expansion-panel>
@@ -443,7 +527,6 @@
       </div>
     </section>
   </div>
-  <span fxFlex></span>
 </div>
 <div *ngIf="evaluateLoading" fxLayout="column">
   <div fxLayoutAlign="center center">
