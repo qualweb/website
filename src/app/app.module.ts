@@ -13,8 +13,6 @@ import {MaterialModule} from '@material';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
 import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-//import {InViewportModule} from '@thisissoon/angular-inviewport';
-//import {NgxHighlightModule} from '@petkit/ngx-highlight';
 
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
@@ -26,12 +24,12 @@ import {EvaluationPageComponent} from './pages/evaluation-page/evaluation-page.c
 import {BreadcrumbsComponent} from './layout/header/breadcrumbs/breadcrumbs.component';
 import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code-dialog.component';
 
-//import {AngularFittextModule} from 'angular-fittext';
 import {AboutPageComponent} from './pages/about-page/about-page.component';
 import {ErrorPageComponent} from './pages/error-page/error-page.component';
 
 import {HIGHLIGHT_OPTIONS, HighlightModule} from 'ngx-highlightjs';
-//import xml from 'highlight.js/lib/languages/xml.js';
+
+import {Ng2SearchPipeModule} from 'ng2-search-filter';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -76,12 +74,9 @@ export function getHighlightLanguages() {
     FlexLayoutModule,
     EvaluationModule,
     FormsModule,
-    //InViewportModule,
-    //NgxHighlightModule,
-    //ScrollDispatchModule,
-    //AngularFittextModule,
     HighlightModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
+    Ng2SearchPipeModule
   ],
   providers: [{
     provide: HIGHLIGHT_OPTIONS,

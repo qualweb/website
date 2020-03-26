@@ -32,6 +32,7 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.foreach": "^4.5.0",
     "lodash.orderby": "^4.6.0",
+    "ng2-search-filter": "^0.5.1",
     "ngx-highlightjs": "^4.1.0-beta",
     "ngx-socket-io": "^3.0.1",
     "rxjs": "~6.5.4",

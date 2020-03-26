@@ -8,13 +8,13 @@ import {
   ElementRef,
   HostListener,
   ChangeDetectionStrategy,
-  ChangeDetectorRef, AfterContentInit, OnChanges
+  ChangeDetectorRef
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatMenuTrigger } from '@angular/material/menu';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription, of} from 'rxjs';
 import clone from 'lodash.clone';
 import orderBy from 'lodash.orderby';
 import forEach from 'lodash.foreach';
@@ -23,6 +23,8 @@ import Evaluation from './evaluation.object';
 
 import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code-dialog.component';
 import {group} from '@angular/animations';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-evaluation-page',
@@ -30,7 +32,7 @@ import {group} from '@angular/animations';
   styleUrls: ['./evaluation-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentInit, OnChanges{
+export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   @ViewChild('summary', {static: true}) summary: ElementRef;
   @ViewChild('filters', {static: true}) filters: ElementRef;
@@ -51,8 +53,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
 
   rules: {}[];
   rulesJson: {}[];
-  groupedResults: any;
-  rulesAndTechniquesNames: any;
 
   showFilters: boolean;
 
@@ -75,25 +75,16 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
   showAA: boolean;
   showAAA: boolean;
 
-  // sidenav_stop_moving: boolean;
   showRulesResults: object;
-
-  expandRules: boolean;
 
   filterShow: boolean;
   filterPrinciples: boolean;
   filterLevels: boolean;
 
-  expandedFilters: boolean;
-  clickedOutside: boolean;
-
-  passedTitle: number;
-  failedTitle: number;
-  warningTitle: number;
-  inapplicableTitle: number;
-
   currentModule = 'starting';
   data: Evaluation;
+
+  term: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -127,24 +118,12 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
     this.showAAA = true;
 
     this.showRulesResults = {};
-    this.expandRules = false;
-    // this.sidenav_stop_moving = false;
     this.rules = [];
-    this.rulesJson = [];
-    this.rulesAndTechniquesNames = {};
 
     this.filterShow = false;
     this.filterShow = false;
     this.filterPrinciples = false;
     this.filterLevels = false;
-
-    this.expandedFilters = false;
-    this.clickedOutside = false;
-
-    this.passedTitle = 0;
-    this.failedTitle = 0;
-    this.warningTitle = 0;
-    this.inapplicableTitle = 0;
 
     this.router.events.subscribe(s => {
       if (s instanceof NavigationEnd) {
@@ -176,22 +155,22 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
       });
       this.socket.on('prepare-data', () => {
         this.currentModule = 'preparing-data';
+        this.processData(this.data.getFinalReport());
         this.cd.detectChanges();
       });
       this.socket.on('evaluationEnd', () => {
         setTimeout(() => {
-          this.processData(this.data.getFinalReport());
           this.evaluateLoading = false;
           this.cd.detectChanges();
           this.socket.disconnect();
         }, 100);
       });
-      this.socket.on('error', error => {
-        console.error(error);
+      this.socket.on('errorHandle', error => {
+        console.log(error);
         this.error = true;
         this.evaluateLoading = false;
-        this.socket.disconnect();
         this.cd.detectChanges();
+        this.socket.disconnect();
       });
     });
 
@@ -203,29 +182,13 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
     this.processData();
     console.log(this.earl);
     console.log(this.json);*/
-  }
 
+    this.cd.detectChanges();
+  }
 
   ngOnDestroy(): void {
     this.paramsSub.unsubscribe();
     // this.evaluationSub.unsubscribe();
-  }
-
-  ngOnChanges(): void {
-    console.log("changes");
-  }
-
-  ngAfterContentInit() {
-    console.log("ohoh");
-    this.cd.detectChanges();
-  }
-
-  @HostListener('document:click', ['$event'])
-  clickout(event) {
-    if (this.expandedFilters && !(event.target.id.toString().includes('Filter') ||
-      event.target.parentNode.id.toString().includes('Filter'))) {
-      this.clickedOutside = true;
-    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -233,33 +196,14 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
     this.showFilters = window.innerWidth > 599 ? true : this.showFilters;
   }
 
-  /*@HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event) {
-    if (this.expandedFilters) {
-      this.expandedFilters = false;
-    }
-  } */
-
-  /*  @HostListener('window:scroll', ['$event'])
-    onScroll(e): void {
-      if (!this.evaluateLoading) {
-        const footer = document.getElementById('footer');
-        const sidenav = document.getElementById('sidenav');
-
-        if (sidenav.getBoundingClientRect()['top'] + 120 >= footer.getBoundingClientRect()['top']) {
-          this.sidenav_stop_moving = true;
-        } else {
-          this.sidenav_stop_moving = false;
-        }
-      }
-    }*/
-
   private processData(data: any): void {
     this.json = clone(data);
     console.log(this.json);
-    let rulesOrTechniques, typeString, groupedResults;
+    let rulesOrTechniques, typeString, groupedResults, dataJson;
     let passedRes, failedRes, warningRes, inapplicableRes;
+    const showRulesFilter = [];
     const result = [];
-    // tslint:disable-next-line:forin
+
     forEach(this.json['modules'], function(value, key) {
       switch (key) {
         case 'act-rules':
@@ -285,7 +229,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
         failedRes = groupedResults.get('failed');
         warningRes = groupedResults.get('warning');
         inapplicableRes = groupedResults.get('inapplicable');
-        result.push({
+        dataJson = {
           'code': val['code'],
           'name': val['name'],
           'type': typeString,
@@ -308,10 +252,28 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
             'nWarning': val['metadata']['warning'],
             'nInapplicable': val['metadata']['inapplicable'] ? val['metadata']['inapplicable'] : 0
           }
-        });
+        };
+        result.push(dataJson);
+        if (val['outcome'] === 'inapplicable') {
+          showRulesFilter[val['code']] = {
+            passed: true,
+            failed: true,
+            warning: true,
+            inapplicable: true
+          };
+        } else {
+          showRulesFilter[val['code']] = {
+            passed: true,
+            failed: true,
+            warning: true,
+            inapplicable: false
+          };
+        }
       });
     });
-    this.rulesJson = clone(result);
+
+    this.rulesJson = orderBy(result, [rule => rule['name'].toLowerCase()], ['asc']);
+    this.showRulesResults = showRulesFilter;
     // this.groupedResults = this.groupBy(this.rulesJson, rule => rule['outcome']);
     /*const actRulesKeys = this.json.modules['act-rules'] ? Object.keys(this.json.modules['act-rules'].rules) : [];
     const htmlTechniquesKeys = this.json.modules['html-techniques'] ? Object.keys(this.json.modules['html-techniques'].techniques) : [];
@@ -354,11 +316,9 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
         'outcome': this.json.modules['best-practices']['best-practices'][r].metadata.outcome
       };
       rulesAndTechniquesJSON.push(obj);
-    }*/
+    }
 
-    this.rulesJson = orderBy(this.rulesJson, [rule => rule['name'].toLowerCase()], ['asc']);
-    // console.log(this.rulesAndTechniquesNames);
-    for (const r of this.rulesJson || []) {
+    for (const r of result || []) {
       if (r['outcome'] === 'inapplicable') {
         this.showRulesResults[r['code']] = {
           passed: true,
@@ -374,10 +334,10 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
           inapplicable: false
         };
       }
-    }
+    }*/
   }
 
-  onInViewportChange(inViewport: boolean, section: string): void {
+  /*onInViewportChange(inViewport: boolean, section: string): void {
     switch (section) {
       case 'summary':
         if (inViewport) {
@@ -414,7 +374,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
       default:
         break;
     }
-  }
+  }*/
 
   openCodeDialog(code: string): void {
     this.dialog.open(ResultCodeDialogComponent, {
@@ -433,8 +393,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
     this.cd.detectChanges();
   }
 
-  formatCode(code: string): string {
-    /*let parsedCode;
+  /*formatCode(code: string): string {
+    let parsedCode;
     const handler = new htmlparser.DomHandler((error, dom) => {
       if (error) {
         throw new Error();
@@ -471,9 +431,9 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
     parser.end();
     //console.log(html(parsedCode[0]));
 
-    return formatter.render(html(parsedCode[0]));*/
+    return formatter.render(html(parsedCode[0]));
     return code;
-  }
+  }*/
 
   showRuleCard(rule: object): boolean {
     const outcome = rule['outcome'];
@@ -567,9 +527,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
       case 'bp':
         dataRule = this.json.modules['best-practices']['best-practices'][rule].results;
         break;
-    }*/
-
-    /*const ordering = {};
+    }
+    const ordering = {};
     const sortOrder = ['passed', 'failed', 'warning', 'inapplicable'];
     for (let i = 0; i < sortOrder.length; i++) {
       ordering[sortOrder[i]] = i;
@@ -597,11 +556,11 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
     return result;
   }
 
-  trackByIndex(index: number): number {
-    return index;
+  trackByIndex(index: number, rule: {}): number {
+    return rule['code'];
   }
 
-  getType(rule: string): string {
+  /*getType(rule: string): string {
     if (rule.includes('ACT')) {
       return 'act';
     } else if (rule.includes('HTML')) {
@@ -649,34 +608,10 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
 
   getNumberResults(rule: string): number[] {
     const metadata = this.getValue(rule, 'metadata');
-    //console.log(rule, [metadata['passed'], metadata['failed'], metadata['warning'], metadata['inapplicable']]);
+    // console.log(rule, [metadata['passed'], metadata['failed'], metadata['warning'], metadata['inapplicable']]);
     return [metadata['passed'], metadata['failed'], metadata['warning'], metadata['inapplicable']];
   }
 
-  noResults(numbers: any): boolean {
-    return (Object.values(numbers)).reduce((a: number, b: number) => a + b, 0) === 0;
-    // rule: string
-    // return this.getNumberResults(rule).reduce((a, b) => a + b, 0) === 0;
-  }
-
-  areAllTheSameTypeOfResults(numbers: any): boolean {
-    let count = 0;
-    for (const results of Object.values(numbers)) {
-      if (results > 0) {
-        count++;
-      }
-    }
-    return count <= 1;
-    /*
-    rule: string
-    let count = 0;
-    for (const results of this.getNumberResults(rule)) {
-      if (results > 0) {
-        count++;
-      }
-    }
-    return count <= 1;*/
-  }
 
   getUrl(rule: string): string | string[] {
     if (this.getUrlType(rule) === 'string') {
@@ -705,6 +640,32 @@ export class EvaluationPageComponent implements OnInit, OnDestroy, AfterContentI
         return result.substring(0, result.length - 2);
       }
     }
+  }
+  */
+
+  noResults(numbers: any): boolean {
+    return (Object.values(numbers)).reduce((a: number, b: number) => a + b, 0) === 0;
+    // rule: string
+    // return this.getNumberResults(rule).reduce((a, b) => a + b, 0) === 0;
+  }
+
+  areAllTheSameTypeOfResults(numbers: any): boolean {
+    let count = 0;
+    for (const results of Object.values(numbers)) {
+      if (results > 0) {
+        count++;
+      }
+    }
+    return count <= 1;
+    /*
+    rule: string
+    let count = 0;
+    for (const results of this.getNumberResults(rule)) {
+      if (results > 0) {
+        count++;
+      }
+    }
+    return count <= 1;*/
   }
 
 }
