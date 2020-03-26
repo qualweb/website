@@ -441,7 +441,8 @@ h1 {
 .results_box {
   max-height: 20em;
   overflow-y: auto;
-  border: 2px solid white;
+  border: 1px solid #909090;
+  border-radius: 3px;
   padding: 1em;
   .line_breaker:first-child {
     margin-top: 0;
