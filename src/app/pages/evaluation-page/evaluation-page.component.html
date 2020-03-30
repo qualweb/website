@@ -200,7 +200,7 @@
           {{ "EVALUATION_PAGE.report.title" | translate }}
         </h1>
 
-        <div fxLayout.gt-xs="row" fxLayout="column">
+        <div fxLayout.gt-sm="row" fxLayout="column">
           <button class="buttons" mat-stroked-button (click)="expandAllRules()">
             {{ "EVALUATION_PAGE.filters.expand_all" | translate }}
           </button>
@@ -223,19 +223,18 @@
           <mat-expansion-panel *ngIf="showRuleCard(rule)" #panel [ngClass]="rule['outcome']"
                                [class.sticky]="panel.expanded" class="line_breaker">
             <mat-expansion-panel-header [collapsedHeight]="'55px'" [expandedHeight]="'55px'">
-              <mat-panel-title fxLayout="row" fxLayoutAlign="start center" fxFlex>
-                <div>
+              <mat-panel-title fxLayout="row">
+                <div fxLayout="row" class="around_title">
                   <mat-icon *ngIf="rule['outcome'] === 'passed'" class="final-outcome">check_circle_outline</mat-icon>
                   <mat-icon *ngIf="rule['outcome'] === 'failed'" class="final-outcome">highlight_off</mat-icon>
                   <mat-icon *ngIf="rule['outcome'] === 'warning'" class="final-outcome">warning</mat-icon>
                   <mat-icon *ngIf="rule['outcome'] === 'inapplicable'" class="final-outcome">not_interested</mat-icon>
-                </div>
-                <div class="around_title" fxFlex>
-                  <h2  class="final-outcome rule_title">
+                  <h2 class="final-outcome rule_title">
                     <!--{{ "RULES." + rule + ".name" | translate}}-->
                     {{ rule['name'] }}
                   </h2>
                 </div>
+                <div class="rule_code">{{rule['code'].substring(3)}}</div>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <!--div fxShow="panel.expanded" class="filler"></div-->

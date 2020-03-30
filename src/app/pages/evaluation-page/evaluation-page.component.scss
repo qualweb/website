@@ -280,6 +280,12 @@ h1 {
   padding-bottom: 0 !important;
   margin: 0 !important;
 }
+::ng-deep .mat-focused .mat-form-field-label{
+  color: white !important;
+}
+::ng-deep .mat-input-element {
+  caret-color: white !important;
+}
 
 @media screen and (max-width: 599px) {
   .filter {
@@ -290,6 +296,10 @@ h1 {
 
   ::ng-deep .mat-checkbox-layout .mat-checkbox-label {
     font-size: 3.3vmin;
+  }
+
+  .rule_title {
+    font-size: 1.3em;
   }
 }
 
@@ -329,15 +339,40 @@ h1 {
   }
 }
 
+
 .rule_title {
   margin: 0 0 0 0.3em;
   font-family: 'Oswald', sans-serif;
   font-weight: 300;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-right: 30px;
+}
+
+.rule_code {
+  //display: block;
+  min-width: 80px;
+  text-align: right;
+  align-self: center;
+  padding-right: 15px;
+  white-space: nowrap;
+  display: inline-block;
 }
 
 .around_title {
   max-height: 55px;
-  margin-right: 16px;
+  flex: 1;
+  min-width: 0;
+  h2 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+::ng-deep .mat-expansion-panel-header-title {
+  min-width: 100%;
 }
 
 .rule_subtitle {
