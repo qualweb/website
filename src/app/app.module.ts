@@ -30,6 +30,7 @@ import {ErrorPageComponent} from './pages/error-page/error-page.component';
 import {HIGHLIGHT_OPTIONS, HighlightModule} from 'ngx-highlightjs';
 
 import {Ng2SearchPipeModule} from 'ng2-search-filter';
+import {CustomBreakPointsProvider} from '@app/services/custom-breakpoints';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -45,6 +46,7 @@ export function getHighlightLanguages() {
     xml: () => import('highlight.js/lib/languages/xml')
   };
 }
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -78,12 +80,15 @@ export function getHighlightLanguages() {
     SocketIoModule.forRoot(config),
     Ng2SearchPipeModule
   ],
-  providers: [{
-    provide: HIGHLIGHT_OPTIONS,
-    useValue: {
-      languages: getHighlightLanguages()
-    }
-  }],
+  providers: [
+    {
+      provide: HIGHLIGHT_OPTIONS,
+      useValue: {
+        languages: getHighlightLanguages()
+      }
+    },
+    CustomBreakPointsProvider
+  ],
   entryComponents: [
     ResultCodeDialogComponent
   ],

@@ -1,3 +1,10 @@
+@use "sass:selector";
+@mixin unify-parent($child) {
+  @at-root #{selector.unify(&, $child)} {
+    @content;
+  }
+}
+
 .input_url {
   padding: 0 !important;
   margin: 0;
@@ -36,4 +43,37 @@
   font-size: 1em;
   color: whitesmoke;
   background-color: red;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  min-height: 100%;
+  button {
+    margin-top: 10px;
+  }
+
+  .error {
+    color: #ff766e;
+    @include unify-parent("p"){
+      margin-bottom: 0;
+    }
+  }
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  padding: 0 1em 1em 1em;
+  right: 0;
+  min-width: 200px;
+  border-radius: 5px;
+  background-color: #383838;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  z-index: 1;
+
+}
+
+.dropdown-content-open {
+  display: block;
 }

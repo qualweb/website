@@ -5,10 +5,10 @@
 
 $passed: #46f73f;
 $passed-card: #225a16;
-$failed: #ff0000;
+$failed: #ff3535;
 $failed-card: #741414;
 $warning: #ffd600;
-$warning-card: #947e0c;
+$warning-card: #695805;
 $inapplicable: white;
 $inapplicable-card: #595959;
 $orange-deep: #F4511E;
@@ -101,7 +101,11 @@ section {
   }
 
   .final-outcome {
-    color: #ff3535;
+    color: $failed;
+  }
+
+  .rule_title {
+    color: #ff7878;
   }
 
   .eyeicon {
@@ -215,24 +219,6 @@ h1 {
   }
 }
 
-/*
-.dropdown-menu {
-  text-align: left;
-  background-color: unset !important;
-  padding: 10px 0;
-  margin-top: 0;
-  border-top-width: 0;
-  border-color: #494949;
-  border-radius: 0 0 4px 4px;
-  box-sizing: border-box;
-  line-height: 30px;
-
-  mat-checkbox {
-    padding-left: 0.8em;
-    font-size: 16px;
-  }
-} */
-
 .open > button {
   border-radius: 4px 4px 0 0;
 }
@@ -343,11 +329,12 @@ h1 {
 .rule_title {
   margin: 0 0 0 0.3em;
   font-family: 'Oswald', sans-serif;
-  font-weight: 300;
+  font-weight: normal;
+  font-size: 1.6em;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  padding-right: 30px;
+  padding-right: 1.25em;
 }
 
 .rule_code {
@@ -355,7 +342,7 @@ h1 {
   min-width: 80px;
   text-align: right;
   align-self: center;
-  padding-right: 15px;
+  padding-right: 0.7em;
   white-space: nowrap;
   display: inline-block;
 }
@@ -520,6 +507,15 @@ h1 {
   margin-top: 1em;
 }
 
+.code_block {
+  align-items: center;
+}
+
+  code {
+    overflow-x: auto;
+  }
+
+
 img {
   width: 25vw;
   outline: none;
@@ -550,10 +546,6 @@ mat-expansion-panel {
   }
 }
 
-pre {
-  margin-top: 1em !important;
-}
-
 /*.filler {
   height: 2%;
   bottom: -2%;
@@ -566,4 +558,8 @@ pre {
 
 :not(mat-spinner){
   transition: none;
+}
+
+mat-card-content > div {
+  width: 100%;
 }

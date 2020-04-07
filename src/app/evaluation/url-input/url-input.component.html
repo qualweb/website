@@ -1,4 +1,4 @@
-<mat-card class="input_url">
+<mat-card class="input_url" fxFlex="95" fxFlex.xs="90">
   <form (submit)="submit($event)" novalidate fxLayout="row">
     <input type="url" placeholder="{{ 'INPUT_URL.placeholder' | translate }}" [formControl]="urlForm" autofocus fxFlex="70" fxFlex.gt-sm="85">
     <div fxLayout="row" fxLayoutAlign="center center" fxFlex="10" fxFlex.gt-sm="5">
@@ -9,8 +9,24 @@
         error
       </mat-icon>
     </div>
-    <button mat-button type="submit" [disabled]="urlForm.invalid" fxFlex="20" fxFlex.gt-sm>
+    <button mat-button type="submit" [disabled]="urlForm.invalid || noCheckboxSelected" fxFlex="20" fxFlex.gt-sm>
       {{ "INPUT_URL.submit" | translate }}
     </button>
   </form>
 </mat-card>
+<div class="dropdown" fxFlex>
+  <button mat-icon-button (click)="toggleDropdown()" id="dropdownButton" aria-label="dropdown to choose which modules to execute">
+    <mat-icon id="dropdownIconError" *ngIf="noCheckboxSelected" [class.error]="noCheckboxSelected">assignment_late</mat-icon>
+    <mat-icon id="dropdownIcon" *ngIf="!noCheckboxSelected">assignment</mat-icon>
+  </button>
+  <div id="dropdownContent" class="dropdown-content" [class.dropdown-content-open]="showDropdown">
+    <div fxLayout="column">
+      <p>Choose which modules you want to execute</p>
+      <mat-checkbox [(ngModel)]="executeACT" (change)="updateCheckboxStatus()">ACT Rules</mat-checkbox>
+      <mat-checkbox [(ngModel)]="executeHTML" (change)="updateCheckboxStatus()">HTML Techniques</mat-checkbox>
+      <mat-checkbox [(ngModel)]="executeCSS" (change)="updateCheckboxStatus()">CSS Techniques</mat-checkbox>
+      <mat-checkbox [(ngModel)]="executeBP" (change)="updateCheckboxStatus()">Best Practices</mat-checkbox>
+      <p *ngIf="noCheckboxSelected" class="error">You need to execute at least one module</p>
+    </div>
+  </div>
+</div>

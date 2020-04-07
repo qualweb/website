@@ -25,6 +25,7 @@ import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code
 import {group} from '@angular/animations';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
+import {ModulesService} from '@app/services/modules.service';
 
 @Component({
   selector: 'app-evaluation-page',
@@ -81,6 +82,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   filterPrinciples: boolean;
   filterLevels: boolean;
 
+  modulesToExecute: {};
+
   currentModule = 'starting';
   data: Evaluation;
 
@@ -91,7 +94,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private cd: ChangeDetectorRef,
     private router: Router,
-    private readonly socket: Socket
+    private readonly socket: Socket,
+    private modulesService: ModulesService
   ) {
     this.evaluateLoading = true;
     this.error = false;
@@ -102,11 +106,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.showFailed = true;
     this.showWarning = true;
     this.showInapplicable = false;
-
-    this.showACT = true;
-    this.showHTML = true;
-    this.showCSS = true;
-    this.showBP = true;
 
     this.showPerceivable = true;
     this.showOperable = true;
@@ -139,10 +138,17 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.modulesService.modules.subscribe(modules => this.modulesToExecute = modules);
+
+    this.showACT = this.modulesToExecute['act'];
+    this.showHTML = this.modulesToExecute['html'];
+    this.showCSS = this.modulesToExecute['css'];
+    this.showBP = this.modulesToExecute['bp'];
+
     this.paramsSub = this.route.params.subscribe(params => {
       this.url = params.url;
       this.socket.connect();
-      this.socket.emit('evaluate', encodeURIComponent(this.url));
+      this.socket.emit('evaluate', {url: encodeURIComponent(this.url), modules: this.modulesToExecute});
       this.socket.on('evaluator', data => {
         this.data = new Evaluation(data);
       });
@@ -166,7 +172,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         }, 100);
       });
       this.socket.on('errorHandle', error => {
-        console.log(error);
         this.error = true;
         this.evaluateLoading = false;
         this.cd.detectChanges();

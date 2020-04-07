@@ -370,6 +370,9 @@
                   </mat-card>
                 </ng-container>
 
+                <!-- the results are now split up by outcome -->
+                <!-- because this way it's only needed to make one verification per outcome (first *ngIf) -->
+
                 <!------ Passed results ------>
                 <ng-container *ngIf="showRulesResults[rule['code']]['passed'] && rule['numbers']['nPassed']">
                   <h3>
@@ -392,16 +395,26 @@
                         <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
                                           fxLayout="row" fxLayoutGap="2" fxFlex>
                           <ng-container [ngSwitch]="rule['type']">
+
                             <ng-container *ngSwitchCase="'CSS Technique'">
-                              <pre fxFlex="95"><code [highlight]="test.cssCode.toString()"></code></pre>
+                              <div fxLayout="row" class="code_block" fxFlex>
+                                <pre fxFlex><code [highlight]="test.cssCode.toString()"></code></pre>
+                              </div>
                             </ng-container>
+
                             <ng-container *ngSwitchDefault>
-                              <pre fxFlex="95"><code [highlight]="test.htmlCode.toString()"></code></pre>
-                              <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
-                                      matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
-                                <mat-icon class="eyeicon">visibility</mat-icon>
-                              </button>
+                              <div fxLayout="column" fxFlex>
+                                <div fxLayout="row" class="code_block">
+                                  <pre fxFlex="95" fxFlex.lt-md="90"><code [highlight]="test.htmlCode.toString()"></code></pre>
+                                  <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
+                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
+                                    <mat-icon class="eyeicon">visibility</mat-icon>
+                                  </button>
+                                </div>
+                                <p class="element_selector">Element selector: <code>{{test.pointer}}</code></p>
+                              </div>
                             </ng-container>
+
                           </ng-container>
                         </mat-card-content>
                       </mat-card>
@@ -429,17 +442,27 @@
                           </mat-card-title>
                         </mat-card-header>
                         <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
-                                          fxLayout="row" fxLayoutGap="2" fxFlex>
+                                          fxLayout="row">
                           <ng-container [ngSwitch]="rule['type']">
+
                             <ng-container *ngSwitchCase="'CSS Technique'">
-                              <pre fxFlex="95"><code [highlight]="test.cssCode.toString()"></code></pre>
+                              <div fxLayout="row" class="code_block" fxFlex>
+                                <pre fxFlex><code [highlight]="test.cssCode.toString()"></code></pre>
+                              </div>
                             </ng-container>
+
                             <ng-container *ngSwitchDefault>
-                              <pre fxFlex="95"><code [highlight]="test.htmlCode.toString()"></code></pre>
-                              <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
-                                      matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
-                                <mat-icon class="eyeicon">visibility</mat-icon>
-                              </button>
+                              <div fxLayout="column" fxFlex>
+                                <div fxLayout="row" class="code_block">
+                                  <pre fxFlex="95" fxFlex.lt-md="90"><code [highlight]="test.htmlCode.toString()"></code></pre>
+                                  <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
+                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
+                                    <mat-icon class="eyeicon">visibility</mat-icon>
+                                  </button>
+                                </div>
+                                <p class="element_selector">Element selector: <code>{{test.pointer}}</code></p>
+                              </div>
+
                             </ng-container>
                           </ng-container>
                         </mat-card-content>
@@ -470,16 +493,26 @@
                         <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
                                           fxLayout="row" fxLayoutGap="2" fxFlex>
                           <ng-container [ngSwitch]="rule['type']">
+
                             <ng-container *ngSwitchCase="'CSS Technique'">
-                              <pre fxFlex="95"><code [highlight]="test.cssCode.toString()"></code></pre>
+                              <div fxLayout="row" class="code_block" fxFlex>
+                                <pre fxFlex><code [highlight]="test.cssCode.toString()"></code></pre>
+                              </div>
                             </ng-container>
+
                             <ng-container *ngSwitchDefault>
-                              <pre fxFlex="95"><code [highlight]="test.htmlCode.toString()"></code></pre>
-                              <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
-                                      matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
-                                <mat-icon class="eyeicon">visibility</mat-icon>
-                              </button>
+                              <div fxLayout="column" fxFlex>
+                                <div fxLayout="row" class="code_block">
+                                  <pre fxFlex="95" fxFlex.lt-md="90"><code [highlight]="test.htmlCode.toString()"></code></pre>
+                                  <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
+                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
+                                    <mat-icon class="eyeicon">visibility</mat-icon>
+                                  </button>
+                                </div>
+                                <p class="element_selector">Element selector: <code>{{test.pointer}}</code></p>
+                              </div>
                             </ng-container>
+
                           </ng-container>
                         </mat-card-content>
                       </mat-card>
@@ -509,16 +542,26 @@
                         <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
                                           fxLayout="row" fxLayoutGap="2" fxFlex>
                           <ng-container [ngSwitch]="rule['type']">
+
                             <ng-container *ngSwitchCase="'CSS Technique'">
-                              <pre fxFlex="95"><code [highlight]="test.cssCode.toString()"></code></pre>
+                              <div fxLayout="row" class="code_block" fxFlex>
+                                <pre fxFlex><code [highlight]="test.cssCode.toString()"></code></pre>
+                              </div>
                             </ng-container>
+
                             <ng-container *ngSwitchDefault>
-                              <pre fxFlex="95"><code [highlight]="test.htmlCode.toString()"></code></pre>
-                              <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
-                                      matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
-                                <mat-icon class="eyeicon">visibility</mat-icon>
-                              </button>
+                              <div fxLayout="column" fxFlex>
+                                <div fxLayout="row" class="code_block">
+                                  <pre fxFlex="95" fxFlex.lt-md="90"><code [highlight]="test.htmlCode.toString()"></code></pre>
+                                  <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
+                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
+                                    <mat-icon class="eyeicon">visibility</mat-icon>
+                                  </button>
+                                </div>
+                                <p class="element_selector">Element selector: <code>{{test.pointer}}</code></p>
+                              </div>
                             </ng-container>
+
                           </ng-container>
                         </mat-card-content>
                       </mat-card>
@@ -533,7 +576,7 @@
           </mat-expansion-panel>
 
         </ng-container>
-        <!--em cima-->
+
       </div>
     </section>
   </div>

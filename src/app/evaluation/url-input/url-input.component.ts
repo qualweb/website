@@ -1,6 +1,7 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, HostListener, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormControl, Validators, AbstractControl} from '@angular/forms';
 import {Router} from '@angular/router';
+import {ModulesService} from '@app/services/modules.service';
 
 @Component({
   selector: 'app-url-input',
@@ -11,8 +12,14 @@ import {Router} from '@angular/router';
 export class UrlInputComponent implements OnInit {
 
   urlForm: FormControl;
+  showDropdown = false;
+  executeACT = true;
+  executeHTML = true;
+  executeCSS = true;
+  executeBP = true;
+  noCheckboxSelected = false;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private data: ModulesService) {
     this.urlForm = new FormControl('', [
       Validators.required,
       this.urlValidator.bind(this)
@@ -22,8 +29,17 @@ export class UrlInputComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  updateCheckboxStatus(): void {
+    this.noCheckboxSelected = !(this.executeACT || this.executeHTML || this.executeCSS || this.executeBP);
+  }
   submit(e): void {
     e.preventDefault();
+    this.data.setModulesToRun({
+      act: this.executeACT,
+      html: this.executeHTML,
+      css: this.executeCSS,
+      bp: this.executeBP
+    });
 
     let url = this.urlForm.value;
     url = url.replace('https://', '');
@@ -63,4 +79,23 @@ export class UrlInputComponent implements OnInit {
 
     return {'url': true};
   }
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  // to close dropdownContent by clicking outside of it
+  @HostListener('document:click', ['$event.target'])
+  onClick(targetElement: any) {
+    if (!(targetElement.id.startsWith('dropdownIcon') || targetElement.id === 'dropdownButton' || targetElement.id === 'dropdownContent' ||
+      targetElement.classList.contains('mat-checkbox-layout') || targetElement.classList.contains('mat-checkbox-label') ||
+      targetElement.classList.contains('mat-checkbox') || targetElement.classList.contains('mat-checkbox-layout') ||
+      targetElement.classList.contains('mat-checkbox-inner-container'))) {
+      if (this.showDropdown) {
+        this.showDropdown = false;
+      }
+    }
+  }
+
+
 }
