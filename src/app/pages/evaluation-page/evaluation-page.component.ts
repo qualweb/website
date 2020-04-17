@@ -203,7 +203,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   private processData(data: any): void {
     this.json = clone(data);
-    console.log(this.json);
     let rulesOrTechniques, typeString, groupedResults, dataJson;
     let passedRes, failedRes, warningRes, inapplicableRes;
     const showRulesFilter = [];
