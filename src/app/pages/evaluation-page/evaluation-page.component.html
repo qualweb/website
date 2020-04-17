@@ -94,19 +94,19 @@
                 {{"EVALUATION_PAGE.filters.type" | translate}}
               </h2>
               <div fxLayout="column">
-                <mat-checkbox [(ngModel)]="showACT"
+                <mat-checkbox [(ngModel)]="showACT" [disabled]="!this.modulesToExecute['act']"
                               (click)="$event.stopPropagation()">
                   {{ "EVALUATION_PAGE.filters.show_act" | translate }}
                 </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showHTML"
+                <mat-checkbox [(ngModel)]="showHTML" [disabled]="!this.modulesToExecute['html']"
                               (click)="$event.stopPropagation()">
                   {{ "EVALUATION_PAGE.filters.show_html" | translate }}
                 </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showCSS"
+                <mat-checkbox [(ngModel)]="showCSS" [disabled]="!this.modulesToExecute['css']"
                               (click)="$event.stopPropagation()">
                   {{ "EVALUATION_PAGE.filters.show_css" | translate }}
                 </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showBP"
+                <mat-checkbox [(ngModel)]="showBP" [disabled]="!this.modulesToExecute['bp']"
                               (click)="$event.stopPropagation()">
                   {{ "EVALUATION_PAGE.filters.show_bp" | translate }}
                 </mat-checkbox>
@@ -291,7 +291,7 @@
                 </div>
               </div>
 
-              <div *ngIf="rule['success-criterias']" fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap="2">
+              <div *ngIf="rule['success-criterias'] && rule['success-criterias'].length" fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap="2">
                 <!-- SUCCESS CRITERIA -->
                 <div class="rule_criteria" fxFlex fxFlexOrder.gt-sm="2">
                   <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.report.criteria.title" | translate}}</h2>
