@@ -68,7 +68,8 @@
       "html-techniques": "Evaluating WCAG 2.1 HTML techniques...",
       "css-techniques": "Evaluating WCAG 2.1 CSS techniques...",
       "best-practices": "Checking for best practices...",
-      "preparing-data": "Preparing data..."
+      "preparing-data": "Preparing data...",
+      "data-prepared": "Data prepared!"
     }
   },
   "RESULT_CODE_DIALOG": {
