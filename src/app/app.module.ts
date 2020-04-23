@@ -37,7 +37,9 @@ export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
-const config: SocketIoConfig = { url: 'http://localhost:3000/', options: {}};
+const host = location.hostname;
+
+const config: SocketIoConfig = { url: host === 'localhost' ? 'http://localhost:3000/' : '/', options: {}};
 
 export function getHighlightLanguages() {
   return {
