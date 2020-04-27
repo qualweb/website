@@ -14,9 +14,9 @@ export class UrlInputComponent implements OnInit {
   urlForm: FormControl;
   showDropdown = false;
   executeACT = true;
-  executeHTML = true;
-  executeCSS = true;
-  executeBP = true;
+  executeHTML = false;
+  executeCSS = false;
+  executeBP = false;
   noCheckboxSelected = false;
 
   constructor(private router: Router, private data: ModulesService) {

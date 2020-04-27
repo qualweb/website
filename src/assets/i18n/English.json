@@ -84,13 +84,18 @@
     "English": "English"
   },
   "HOMEPAGE": {
-    "title": "Validate a webpage:",
+    "title": "Validate a webpage",
     "about": "About QualWeb"
   },
   "INPUT_URL": {
     "placeholder": "Insert url here",
     "invalid_url": "The inserted url is invalid",
-    "submit": "Check"
+    "settings": "Settings",
+    "modules": "Module execution",
+    "submit": "Check",
+    "ERROR": {
+      "modules": "You need to execute at least one module!"
+    }
   },
   "MISC": {
     "go_to_top": "Go to top"
