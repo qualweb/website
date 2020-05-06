@@ -17,13 +17,13 @@ export class AppComponent implements OnInit, OnDestroy {
   selectedLang: string;
 
   langs: any = {
-    'pt': 'Portuguese',
+    //'pt': 'Portuguese',
     'en': 'English'
   };
 
   langCodes: any = {
-    'English': 'en',
-    'Portuguese': 'pt'
+    'English': 'en'
+    //'Portuguese': 'pt'
   };
 
   showGoToTop: boolean;
