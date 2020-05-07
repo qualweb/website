@@ -41,22 +41,22 @@ export class UrlInputComponent implements OnInit {
       bp: this.executeBP
     });
 
-    let url = this.urlForm.value;
+    /*let url = this.urlForm.value;
     url = url.replace('https://', '');
     url = url.replace('http://', '');
-    url = url.replace('www.', '');
+    url = url.replace('www.', '');*/
 
-    this.router.navigate(['/', url]);
+    this.router.navigate(['/', this.urlForm.value]);
   }
 
   urlValidator(control: AbstractControl): any {
-    let url = control.value;
+    const url = control.value;
 
     if (url === '' || url === null) {
       return null;
     }
 
-    if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('www.')) {
+    /*if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('www.')) {
       if (url.includes('.') && url[url.length - 1] !== '.') {
         return null;
       }
@@ -72,6 +72,12 @@ export class UrlInputComponent implements OnInit {
       }
     } else if (url.startsWith('www.')) {
       url = url.replace('www.', '');
+      if (url.includes('.') && url[url.length - 1] !== '.') {
+        return null;
+      }
+    }*/
+
+    if (url.startsWith('http://') || url.startsWith('https://')) {
       if (url.includes('.') && url[url.length - 1] !== '.') {
         return null;
       }

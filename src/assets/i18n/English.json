@@ -89,7 +89,9 @@
   },
   "INPUT_URL": {
     "placeholder": "Insert url here",
-    "invalid_url": "The inserted url is invalid",
+    "example_url": "Example of url: https://www.google.pt",
+    "invalid_url": "The inserted url is invalid!\nMake sure the protocol (e.g. http://) is included!",
+    "invalid_url_below": "Make sure the protocol (e.g. http://) is included in the URL",
     "settings": "Settings",
     "modules": "Module execution",
     "submit": "Check",

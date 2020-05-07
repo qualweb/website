@@ -2,11 +2,25 @@
   <form (submit)="submit($event)" novalidate fxLayout="row">
     <input type="url" placeholder="{{ 'INPUT_URL.placeholder' | translate }}" [formControl]="urlForm" autofocus fxFlex="70" fxFlex.gt-sm="80">
     <div fxLayout="row" fxLayoutAlign="center center" fxFlex="10" fxFlex.gt-sm="5">
-      <mat-icon class="info" *ngIf="urlForm.hasError('required')" matTooltip="Ex.: www.google.pt" matTooltipClass="info-tooltip">
+      <mat-icon class="info" *ngIf="urlForm.hasError('required')"
+                aria-hidden="false"
+                tabindex="0"
+                #tooltipInfo="matTooltip"
+                (focus)="tooltipInfo.show()"
+                aria-label="{{ 'INPUT_URL.example_url' | translate }}"
+                matTooltip="{{ 'INPUT_URL.example_url' | translate }}"
+                matTooltipClass="info-tooltip">
         info
       </mat-icon>
-      <mat-icon class="error" *ngIf="urlForm.hasError('url')" matTooltip="{{ 'INPUT_URL.invalid_url' | translate }}" matTooltipClass="error-tooltip">
-        error
+      <mat-icon class="error" *ngIf="urlForm.hasError('url')"
+                aria-hidden="false"
+                tabindex="0"
+                #tooltipError="matTooltip"
+                (focus)="tooltipError.show()"
+                aria-label="{{ 'INPUT_URL.invalid_url' | translate }}"
+                matTooltip="{{ 'INPUT_URL.invalid_url' | translate }}"
+                matTooltipClass="error-tooltip">
+        error_outline
       </mat-icon>
     </div>
     <button mat-button type="submit" [disabled]="urlForm.invalid || noCheckboxSelected" fxFlex>
