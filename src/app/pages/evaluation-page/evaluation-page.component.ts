@@ -198,7 +198,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.showFilters = window.innerWidth > 599 ? true : this.showFilters;
+    this.showFilters = window.innerWidth > 599;
   }
 
   private processData(data: any): void {
