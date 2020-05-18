@@ -209,22 +209,22 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     const result = [];
 
     forEach(this.json['modules'], function(value, key) {
-      rulesOrTechniques = value['assertions'];
+      //rulesOrTechniques = value['assertions'];
       switch (key) {
         case 'act-rules':
-          //rulesOrTechniques = value['rules'];
+          rulesOrTechniques = value['rules'];
           typeString = 'ACT Rule';
           break;
         case 'html-techniques':
-          //rulesOrTechniques = value['techniques'];
+          rulesOrTechniques = value['techniques'];
           typeString = 'HTML Technique';
           break;
         case 'css-techniques':
-          //rulesOrTechniques = value['techniques'];
+          rulesOrTechniques = value['techniques'];
           typeString = 'CSS Technique';
           break;
         case 'best-practices':
-          //rulesOrTechniques = value['best-practices'];
+          rulesOrTechniques = value['best-practices'];
           typeString = 'Best Practice';
           break;
       }
