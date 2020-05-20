@@ -241,7 +241,7 @@
             <ng-template matExpansionPanelContent>
               <div fxLayout.gt-sm="row" fxLayout="column">
                 <!-- TYPE -->
-                <div class="rule_type" fxFlexOrder.gt-sm="2">
+                <div class="rule_type" fxFlex fxFlexOrder.gt-sm="2">
                   <h2 class="rule_subtitle">{{"EVALUATION_PAGE.report.type" | translate}}</h2>
                   <h3 class="type">{{ rule['type'] }}</h3>
                 </div>
@@ -263,38 +263,36 @@
                       </li>
                     </ul>
                   </ng-container>
-                  <div fxLayout="column">
-                    <p *ngIf="rule['targets']['parent']">
-                      {{"EVALUATION_PAGE.report.target_parent" | translate}}
-                      <code>{{ rule['targets']['parent'] }}</code>
-                    </p>
-                    <p *ngIf="rule['targets']['parent-sibling']">
-                      {{"EVALUATION_PAGE.report.target_parent_sibling" | translate}}
-                      <code>{{ rule['targets']['parent-sibling'] }}</code>
-                    </p>
-                    <p *ngIf="rule['targets']['element']">
-                      {{"EVALUATION_PAGE.report.target_elem" | translate}}
-                      <code>{{ rule['targets']['element'] }}</code>
-                    </p>
-                    <p *ngIf="rule['targets']['attributes']">
-                      {{"EVALUATION_PAGE.report.target_attr" | translate}}
-                      <code>{{ rule['targets']['attributes'] }}</code>
-                    </p>
-                    <p *ngIf="rule['targets']['css']">
-                      {{"EVALUATION_PAGE.report.target_css" | translate}}
-                      <code>{{ rule['targets']['css'] }}</code>
-                    </p>
-                    <p *ngIf="rule['targets']['children']">
-                      {{"EVALUATION_PAGE.report.target_children" | translate}}
-                      <code>{{ rule['targets']['children'] }}</code>
-                    </p>
-                  </div>
+                  <p *ngIf="rule['targets']['parent']">
+                    {{"EVALUATION_PAGE.report.target_parent" | translate}}
+                    <code>{{ rule['targets']['parent'] }}</code>
+                  </p>
+                  <p *ngIf="rule['targets']['parent-sibling']">
+                    {{"EVALUATION_PAGE.report.target_parent_sibling" | translate}}
+                    <code>{{ rule['targets']['parent-sibling'] }}</code>
+                  </p>
+                  <p *ngIf="rule['targets']['element']">
+                    {{"EVALUATION_PAGE.report.target_elem" | translate}}
+                    <code>{{ rule['targets']['element'] }}</code>
+                  </p>
+                  <p *ngIf="rule['targets']['attributes']">
+                    {{"EVALUATION_PAGE.report.target_attr" | translate}}
+                    <code>{{ rule['targets']['attributes'] }}</code>
+                  </p>
+                  <p *ngIf="rule['targets']['css']">
+                    {{"EVALUATION_PAGE.report.target_css" | translate}}
+                    <code>{{ rule['targets']['css'] }}</code>
+                  </p>
+                  <p *ngIf="rule['targets']['children']">
+                    {{"EVALUATION_PAGE.report.target_children" | translate}}
+                    <code>{{ rule['targets']['children'] }}</code>
+                  </p>
                 </div>
               </div>
 
               <div *ngIf="rule['success-criterias'] && rule['success-criterias'].length" fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap="2">
                 <!-- SUCCESS CRITERIA -->
-                <div class="rule_criteria" fxFlexOrder.gt-sm="2">
+                <div class="rule_criteria" fxFlex fxFlexOrder.gt-sm="2">
                   <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.report.criteria.title" | translate}}</h2>
                   <ul>
                     <li *ngFor="let sc of rule['success-criterias']; trackBy: trackByIndex">
@@ -340,6 +338,12 @@
                     </mat-checkbox>
                     <mat-checkbox class="inapplicable__checkbox" [(ngModel)]="showRulesResults[rule['code']].inapplicable">
                       {{ "EVALUATION_PAGE.filters.show_not_applicable_result" | translate }}
+                      -
+                      <!--b>{{ getNumberResults(rule)[3] }}</b>
+                      <span
+                        *ngIf="getNumberResults(rule)[3] === 1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
+                      <span
+                        *ngIf="getNumberResults(rule)[3] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span-->
                       <b>{{ rule['numbers']['nInapplicable'] }}</b>
                       <ng-container [ngSwitch]="rule['numbers']['nInapplicable']">
                         <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
