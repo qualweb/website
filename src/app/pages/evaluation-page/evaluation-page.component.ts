@@ -12,7 +12,6 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { MatMenuTrigger } from '@angular/material/menu';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {Observable, Subscription, of} from 'rxjs';
 import clone from 'lodash.clone';
@@ -22,9 +21,6 @@ import { Socket } from 'ngx-socket-io';
 import Evaluation from './evaluation.object';
 
 import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code-dialog.component';
-import {group} from '@angular/animations';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
 import {ModulesService} from '@app/services/modules.service';
 
 @Component({
@@ -209,22 +205,22 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     const result = [];
 
     forEach(this.json['modules'], function(value, key) {
-      //rulesOrTechniques = value['assertions'];
+      rulesOrTechniques = value['assertions'];
       switch (key) {
         case 'act-rules':
-          rulesOrTechniques = value['rules'];
+          //rulesOrTechniques = value['rules'];
           typeString = 'ACT Rule';
           break;
         case 'html-techniques':
-          rulesOrTechniques = value['techniques'];
+          //rulesOrTechniques = value['techniques'];
           typeString = 'HTML Technique';
           break;
         case 'css-techniques':
-          rulesOrTechniques = value['techniques'];
+          //rulesOrTechniques = value['techniques'];
           typeString = 'CSS Technique';
           break;
         case 'best-practices':
-          rulesOrTechniques = value['best-practices'];
+          //rulesOrTechniques = value['best-practices'];
           typeString = 'Best Practice';
           break;
       }

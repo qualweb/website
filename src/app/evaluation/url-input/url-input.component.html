@@ -9,7 +9,8 @@
                 (focus)="tooltipInfo.show()"
                 aria-label="{{ 'INPUT_URL.example_url' | translate }}"
                 matTooltip="{{ 'INPUT_URL.example_url' | translate }}"
-                matTooltipClass="info-tooltip">
+                matTooltipClass="info-tooltip"
+                role="presentation">
         info
       </mat-icon>
       <mat-icon class="error" *ngIf="urlForm.hasError('url')"
@@ -19,7 +20,8 @@
                 (focus)="tooltipError.show()"
                 aria-label="{{ 'INPUT_URL.invalid_url' | translate }}"
                 matTooltip="{{ 'INPUT_URL.invalid_url' | translate }}"
-                matTooltipClass="error-tooltip">
+                matTooltipClass="error-tooltip"
+                role="presentation">
         error_outline
       </mat-icon>
     </div>
