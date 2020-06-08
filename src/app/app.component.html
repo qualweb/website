@@ -10,8 +10,8 @@
 
     <button *ngIf="showGoToTop" class="go-to-top" mat-fab color="primary"
             matTooltip="{{ 'MISC.go_to_top' | translate }}"
-            (click)="goToTop()">
-      <mat-icon>arrow_upward</mat-icon>
+            (click)="goToTop()" aria-label="Go to top button">
+      <mat-icon aria-hidden="true">arrow_upward</mat-icon>
     </button>
   </div>
 </div>

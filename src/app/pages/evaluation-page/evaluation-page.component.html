@@ -25,22 +25,22 @@
         <div class="summary_icons flow row" fxLayoutGap="3%" fxLayoutAlign="center">
           <div>
             <span class="screenreader">{{"EVALUATION_PAGE.summary.passed" | translate}}</span>
-            <mat-icon class="passed">check_circle_outline</mat-icon>
+            <mat-icon aria-hidden="true" class="passed">check_circle_outline</mat-icon>
             {{ json.metadata.passed }}
           </div>
           <div>
             <span class="screenreader">{{"EVALUATION_PAGE.summary.failed" | translate}}</span>
-            <mat-icon class="failed">highlight_off</mat-icon>
+            <mat-icon aria-hidden="true" class="failed">highlight_off</mat-icon>
             {{ json.metadata.failed }}
           </div>
           <div>
             <span class="screenreader">{{"EVALUATION_PAGE.summary.warning" | translate}}</span>
-            <mat-icon class="warning">warning</mat-icon>
+            <mat-icon aria-hidden="true" class="warning">warning</mat-icon>
             {{ json.metadata.warning }}
           </div>
           <div>
             <span class="screenreader">{{"EVALUATION_PAGE.summary.inapplicable" | translate}}</span>
-            <mat-icon class="inapplicable">not_interested</mat-icon>
+            <mat-icon aria-hidden="true" class="inapplicable">not_interested</mat-icon>
             {{ json.metadata.inapplicable }}
           </div>
         </div>
@@ -212,8 +212,8 @@
           <mat-form-field class="search_bar" floatLabel="never" appearance="outline" fxFlex>
             <mat-label>Search</mat-label>
             <input matInput type="text" [(ngModel)]="term">
-            <button mat-button *ngIf="term" matSuffix mat-icon-button aria-label="Clear" (click)="term=''">
-              <mat-icon>close</mat-icon>
+            <button mat-button *ngIf="term" matSuffix mat-icon-button aria-label="Clear search" (click)="term=''">
+              <mat-icon aria-hidden="true">close</mat-icon>
             </button>
             <mat-icon *ngIf="!term" matSuffix>search</mat-icon>
           </mat-form-field>
@@ -225,10 +225,10 @@
             <mat-expansion-panel-header [collapsedHeight]="'55px'" [expandedHeight]="'55px'">
               <mat-panel-title fxLayout="row">
                 <div fxLayout="row" class="around_title">
-                  <mat-icon *ngIf="rule['outcome'] === 'passed'" class="final-outcome">check_circle_outline</mat-icon>
-                  <mat-icon *ngIf="rule['outcome'] === 'failed'" class="final-outcome">highlight_off</mat-icon>
-                  <mat-icon *ngIf="rule['outcome'] === 'warning'" class="final-outcome">warning</mat-icon>
-                  <mat-icon *ngIf="rule['outcome'] === 'inapplicable'" class="final-outcome">not_interested</mat-icon>
+                  <mat-icon aria-hidden="true" *ngIf="rule['outcome'] === 'passed'" class="final-outcome">check_circle_outline</mat-icon>
+                  <mat-icon aria-hidden="true" *ngIf="rule['outcome'] === 'failed'" class="final-outcome">highlight_off</mat-icon>
+                  <mat-icon aria-hidden="true" *ngIf="rule['outcome'] === 'warning'" class="final-outcome">warning</mat-icon>
+                  <mat-icon aria-hidden="true" *ngIf="rule['outcome'] === 'inapplicable'" class="final-outcome">not_interested</mat-icon>
                   <h2 class="final-outcome rule_title">
                     <!--{{ "RULES." + rule + ".name" | translate}}-->
                     {{ rule['name'] }}
@@ -406,8 +406,8 @@
                                 <div class="code_block">
                                   <pre fxFlex="95" fxFlex.lt-md="90"><code [highlight]="test.htmlCode.toString()"></code></pre>
                                   <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
-                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
-                                    <mat-icon class="eyeicon">visibility</mat-icon>
+                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
+                                    <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
                                   </button>
                                 </div>
                                 <p>Element selector: <code>{{test.pointer}}</code></p>
@@ -455,8 +455,8 @@
                                 <div fxLayout="row" class="code_block">
                                   <pre fxFlex="95" fxFlex.lt-md="90"><code [highlight]="test.htmlCode.toString()"></code></pre>
                                   <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
-                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
-                                    <mat-icon class="eyeicon">visibility</mat-icon>
+                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
+                                    <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
                                   </button>
                                 </div>
                                 <p>Element selector: <code>{{test.pointer}}</code></p>
@@ -504,8 +504,8 @@
                                 <div fxLayout="row" class="code_block">
                                   <pre fxFlex="95" fxFlex.lt-md="90"><code [highlight]="test.htmlCode.toString()"></code></pre>
                                   <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
-                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
-                                    <mat-icon class="eyeicon">visibility</mat-icon>
+                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
+                                    <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
                                   </button>
                                 </div>
                                 <p>Element selector: <code>{{test.pointer}}</code></p>
@@ -553,8 +553,8 @@
                                 <div fxLayout="row" class="code_block">
                                   <pre fxFlex="95" fxFlex.lt-md="90"><code [highlight]="test.htmlCode.toString()"></code></pre>
                                   <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
-                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}">
-                                    <mat-icon class="eyeicon">visibility</mat-icon>
+                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
+                                    <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
                                   </button>
                                 </div>
                                 <p>Element selector: <code>{{test.pointer}}</code></p>
