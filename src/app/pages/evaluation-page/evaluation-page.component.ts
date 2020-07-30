@@ -22,6 +22,7 @@ import Evaluation from './evaluation.object';
 
 import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code-dialog.component';
 import {ModulesService} from '@app/services/modules.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-evaluation-page',
@@ -85,13 +86,16 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   term: any;
 
+  subtitle: string;
+
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private cd: ChangeDetectorRef,
     private router: Router,
     private readonly socket: Socket,
-    private modulesService: ModulesService
+    private modulesService: ModulesService,
+    private translate: TranslateService
   ) {
     this.evaluateLoading = true;
     this.error = false;
@@ -204,7 +208,15 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     const showRulesFilter = [];
     const result = [];
 
+    let subtitlePossibilities = [];
+    let sub;
+
     forEach(this.json['modules'], function(value, key) {
+      
+      sub = key.split('-')[1];
+      if(!subtitlePossibilities.includes(sub))
+        subtitlePossibilities.push(sub);
+
       rulesOrTechniques = value['assertions'];
       switch (key) {
         case 'act-rules':
@@ -272,6 +284,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         }
       });
     });
+    
+    this.prepareSubtitle(subtitlePossibilities);
 
     this.rulesJson = orderBy(result, [rule => rule['name'].toLowerCase()], ['asc']);
     this.showRulesResults = showRulesFilter;
@@ -667,6 +681,23 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       }
     }
     return count <= 1;*/
+  }
+
+  prepareSubtitle(subPoss: string[]){
+    for(let i = 0; i < subPoss.length; i++){
+      subPoss[i] = this.translate.instant('EVALUATION_PAGE.summary.'+subPoss[i]);
+    }
+    let and = this.translate.instant('EVALUATION_PAGE.summary.and');
+    if(subPoss.length > 1){
+      this.subtitle = subPoss.slice(0, -1).join(', ') + ' ' + and + ' ' + subPoss.slice(-1);
+    } else {
+      this.subtitle = subPoss[0];
+    }
+    if(this.translate.currentLang === 'English'){
+      this.subtitle = this.translate.instant('EVALUATION_PAGE.summary.tested') + ' ' + this.subtitle;
+    } else {
+      this.subtitle = this.subtitle + ' ' + this.translate.instant('EVALUATION_PAGE.summary.tested');
+    }
   }
 
 }

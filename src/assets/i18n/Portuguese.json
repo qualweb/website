@@ -12,7 +12,11 @@
     },
     "summary": {
       "title": "Sumário",
-      "rules": "regras e técnicas testadas",
+      "rules": "regras",
+      "techniques": "técnicas",
+      "practices": "boas práticas",
+      "tested": "testadas",
+      "and": "e",
       "tests": "testes",
       "passed": "Número de regras e técnicas passadas",
       "failed": "Número de regras e técnicas falhadas",

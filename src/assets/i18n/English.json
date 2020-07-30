@@ -12,7 +12,11 @@
     },
     "summary": {
       "title": "Summary",
-      "rules": "tested rules and techniques",
+      "rules": "rules",
+      "techniques": "techniques",
+      "practices": "best practices",
+      "tested": "tested",
+      "and": "and",
       "tests": "tests",
       "passed": "Number of passed rules and techniques",
       "failed": "Number of failed rules and techniques",

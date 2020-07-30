@@ -14,11 +14,11 @@
 
         <div class="summary_info" fxLayout="column" fxLayoutAlign="space-around center">
           <span class="url">
-            <a class="hidden_link" href="{{ json.system.url.inputUrl }}"
-               target="_blank">{{ json.system.url.inputUrl }}</a>
+            <a class="hidden_link" href="{{ json.system.url.completeUrl }}"
+               target="_blank">{{ json.system.url.completeUrl }}</a>
           </span>
           <span>
-            {{json.metadata.passed + json.metadata.failed + json.metadata.inapplicable + json.metadata.warning}} {{"EVALUATION_PAGE.summary.rules" | translate}}
+            {{json.metadata.passed + json.metadata.failed + json.metadata.inapplicable + json.metadata.warning}} {{subtitle}}
           </span>
         </div>
 
