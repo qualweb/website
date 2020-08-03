@@ -203,7 +203,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   private processData(data: any): void {
     this.json = clone(data);
-    console.log(this.json);
     let rulesOrTechniques, typeString, groupedResults, dataJson;
     let passedRes, failedRes, warningRes, inapplicableRes;
     const showRulesFilter = [];
@@ -238,7 +237,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           break;
       }
       forEach(rulesOrTechniques, function(val, key) {
-        console.log(val['code']);
         // Extra step in act-rules because theres an element field instead of htmlCode and pointer
         if(typeString === 'ACT Rule' && val['results'].length){
           forEach(val['results'], function(v, k) {
