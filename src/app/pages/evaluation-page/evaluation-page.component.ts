@@ -203,6 +203,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   private processData(data: any): void {
     this.json = clone(data);
+    console.log(this.json);
     let rulesOrTechniques, typeString, groupedResults, dataJson;
     let passedRes, failedRes, warningRes, inapplicableRes;
     const showRulesFilter = [];
@@ -236,7 +237,17 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           typeString = 'Best Practice';
           break;
       }
-      forEach(rulesOrTechniques, function(val, k) {
+      forEach(rulesOrTechniques, function(val, key) {
+        console.log(val['code']);
+        // Extra step in act-rules because theres an element field instead of htmlCode and pointer
+        if(typeString === 'ACT Rule' && val['results'].length){
+          forEach(val['results'], function(v, k) {
+            if(v['elements'].length){
+              v['htmlCode'] = v['elements'][0]['htmlCode'];
+              v['pointer'] = v['elements'][0]['pointer'];
+            }
+          });
+        }
         groupedResults = groupBy(val['results'], res => res['verdict']);
         passedRes = groupedResults.get('passed');
         failedRes = groupedResults.get('failed');

@@ -387,17 +387,17 @@
                     <ng-container *ngFor="let test of rule['passedResults']; trackBy: trackByIndex">
                       <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
                         <mat-card-header>
-                          <mat-card-title [class.with-code]="test.htmlCode || test.cssCode">
+                          <mat-card-title [class.with-code]="test.htmlCode">
                             {{ test.description }}
                           </mat-card-title>
                         </mat-card-header>
-                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
+                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode"
                                           fxLayout="row" fxLayoutGap="2">
                           <ng-container [ngSwitch]="rule['type']">
 
                             <ng-container *ngSwitchCase="'CSS Technique'">
                               <div fxLayout="row" class="code_block">
-                                <pre fxFlex><code [highlight]="test.cssCode.toString()"></code></pre>
+                                <pre fxFlex><code [highlight]="test.htmlCode.toString()"></code></pre>
                               </div>
                             </ng-container>
 
@@ -436,17 +436,17 @@
                     <ng-container *ngFor="let test of rule['failedResults']; trackBy: trackByIndex">
                       <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
                         <mat-card-header>
-                          <mat-card-title [class.with-code]="test.htmlCode || test.cssCode">
+                          <mat-card-title [class.with-code]="test.htmlCode">
                             {{ test.description }}
                           </mat-card-title>
                         </mat-card-header>
-                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
+                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode"
                                           fxLayout="row">
                           <ng-container [ngSwitch]="rule['type']">
 
                             <ng-container *ngSwitchCase="'CSS Technique'">
                               <div fxLayout="row" class="code_block" >
-                                <pre fxFlex><code [highlight]="test.cssCode.toString()"></code></pre>
+                                <pre fxFlex><code [highlight]="test.htmlCode.toString()"></code></pre>
                               </div>
                             </ng-container>
 
@@ -485,17 +485,17 @@
                     <ng-container *ngFor="let test of rule['warningResults']; trackBy: trackByIndex">
                       <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
                         <mat-card-header>
-                          <mat-card-title [class.with-code]="test.htmlCode || test.cssCode">
+                          <mat-card-title [class.with-code]="test.htmlCode">
                             {{ test.description }}
                           </mat-card-title>
                         </mat-card-header>
-                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
+                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode"
                                           fxLayout="row" fxLayoutGap="2" >
                           <ng-container [ngSwitch]="rule['type']">
 
                             <ng-container *ngSwitchCase="'CSS Technique'">
                               <div fxLayout="row" class="code_block" >
-                                <pre fxFlex><code [highlight]="test.cssCode.toString()"></code></pre>
+                                <pre fxFlex><code [highlight]="test.htmlCode.toString()"></code></pre>
                               </div>
                             </ng-container>
 
@@ -534,17 +534,17 @@
                     <ng-container *ngFor="let test of rule['inapplicableResults']; trackBy: trackByIndex">
                       <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
                         <mat-card-header>
-                          <mat-card-title [class.with-code]="test.htmlCode || test.cssCode">
+                          <mat-card-title [class.with-code]="test.htmlCode">
                             {{ test.description }}
                           </mat-card-title>
                         </mat-card-header>
-                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode || test.cssCode"
+                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode"
                                           fxLayout="row" fxLayoutGap="2" >
                           <ng-container [ngSwitch]="rule['type']">
 
                             <ng-container *ngSwitchCase="'CSS Technique'">
                               <div fxLayout="row" class="code_block" >
-                                <pre fxFlex><code [highlight]="test.cssCode.toString()"></code></pre>
+                                <pre fxFlex><code [highlight]="test.htmlCode.toString()"></code></pre>
                               </div>
                             </ng-container>
 
