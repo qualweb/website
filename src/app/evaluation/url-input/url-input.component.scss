@@ -18,6 +18,7 @@
     font-size: 1.2em;
     outline: none;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+    cursor: pointer;
   }
 
   mat-icon {
@@ -30,6 +31,23 @@
 
   .error {
     color: red;
+  }
+
+  input:disabled {
+    -webkit-text-fill-color: grey;
+    opacity: 1;
+    cursor: default;
+  }
+  
+  .input_button {
+    border: 1px solid #636363;
+    border-radius: 3px;
+    input {
+      width: 100%;
+    }
+    input:focus {
+      background-color: #545454;
+    }
   }
 }
 
@@ -101,11 +119,11 @@ h2 {
   display: grid !important;
   grid-gap: 0.5em;
 }
-@media (min-width: 400px) {
+/*@media (min-width: 400px) {
   .div-checkbox {
     grid-template-columns: repeat(2, 1fr);
   }
-}
+}*/
 @media (min-width: 700px) {
   .div-checkbox {
     display: flex !important;
