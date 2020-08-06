@@ -41,14 +41,6 @@ const host = location.hostname;
 
 const config: SocketIoConfig = { url: host === 'localhost' ? 'http://localhost:3000/' : '/', options: {}};
 
-export function getHighlightLanguages() {
-  return {
-    typescript: () => import('highlight.js/lib/languages/typescript'),
-    css: () => import('highlight.js/lib/languages/css'),
-    xml: () => import('highlight.js/lib/languages/xml')
-  };
-}
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -86,7 +78,12 @@ export function getHighlightLanguages() {
     {
       provide: HIGHLIGHT_OPTIONS,
       useValue: {
-        languages: getHighlightLanguages()
+        coreLibraryLoader: () => import('highlight.js/lib/highlight'),
+        languages: {
+          typescript: () => import('highlight.js/lib/languages/typescript'),
+          css: () => import('highlight.js/lib/languages/css'),
+          xml: () => import('highlight.js/lib/languages/xml')
+        }
       }
     },
     CustomBreakPointsProvider

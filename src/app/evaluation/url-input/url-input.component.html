@@ -36,11 +36,11 @@
     <h2 *ngIf="!noCheckboxSelected">{{ 'INPUT_URL.modules' | translate }}</h2>
     <h2 *ngIf="noCheckboxSelected" class="error">{{ 'INPUT_URL.ERROR.modules' | translate }}</h2>
   </div>
-  <div fxLayout="row wrap" fxLayoutAlign="space-between center" class="div-checkbox">
+  <div fxLayout="column wrap" class="div-checkbox">
     <mat-checkbox [(ngModel)]="executeACT" (change)="updateCheckboxStatus()">ACT Rules</mat-checkbox>
     <mat-checkbox [(ngModel)]="executeHTML" (change)="updateCheckboxStatus()">HTML Techniques</mat-checkbox>
     <mat-checkbox [(ngModel)]="executeCSS" (change)="updateCheckboxStatus()">CSS Techniques</mat-checkbox>
-    <mat-checkbox [(ngModel)]="executeBP" (change)="updateCheckboxStatus()">Best Practices</mat-checkbox>
+    <!--mat-checkbox [(ngModel)]="executeBP" (change)="updateCheckboxStatus()">Best Practices</mat-checkbox-->
   </div>
 </div>
 

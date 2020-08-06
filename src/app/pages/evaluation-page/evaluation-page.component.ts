@@ -191,6 +191,10 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.cd.detectChanges();
   }
 
+  onHighlighted(e: any) {
+    console.log(e);
+  }
+
   ngOnDestroy(): void {
     this.paramsSub.unsubscribe();
     // this.evaluationSub.unsubscribe();
@@ -231,10 +235,10 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           //rulesOrTechniques = value['techniques'];
           typeString = 'CSS Technique';
           break;
-        case 'best-practices':
+        /*case 'best-practices':
           //rulesOrTechniques = value['best-practices'];
           typeString = 'Best Practice';
-          break;
+          break;*/
       }
       forEach(rulesOrTechniques, function(val, key) {
         // Extra step in act-rules because theres an element field instead of htmlCode and pointer
@@ -501,9 +505,9 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         case 'CSS Technique':
           show = this.showCSS;
           break;
-        case 'Best Practice':
+        /*case 'Best Practice':
           show = this.showBP;
-          break;
+          break;*/
       }
     }
 

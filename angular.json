@@ -33,6 +33,12 @@
               "src/styles.scss"
             ],
             "scripts": [
+            ],
+            "allowedCommonJsDependencies": [
+              "highlight.js",
+              "debug",
+              "socket.io-parser",
+              "socket.io-client"
             ]
           },
           "configurations": {
