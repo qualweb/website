@@ -62,7 +62,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   showACT: boolean;
   showHTML: boolean;
   showCSS: boolean;
-  showBP: boolean;
+  //showBP: boolean;
 
   showPerceivable: boolean;
   showOperable: boolean;
@@ -143,7 +143,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.showACT = this.modulesToExecute['act'];
     this.showHTML = this.modulesToExecute['html'];
     this.showCSS = this.modulesToExecute['css'];
-    this.showBP = this.modulesToExecute['bp'];
+    //this.showBP = this.modulesToExecute['bp'];
 
     this.paramsSub = this.route.params.subscribe(params => {
       this.url = params.url;
@@ -189,10 +189,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     console.log(this.json);*/
 
     this.cd.detectChanges();
-  }
-
-  onHighlighted(e: any) {
-    console.log(e);
   }
 
   ngOnDestroy(): void {
