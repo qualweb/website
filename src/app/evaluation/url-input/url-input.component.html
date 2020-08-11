@@ -2,7 +2,7 @@
   <form (submit)="submit($event)" novalidate fxLayout="row">
     <div fxFlex fxLayout.xs="column" fxLayout="row">
       <div fxFlex.xs fxFlex.gt-xs="85">
-        <input type="url" placeholder="{{ 'INPUT_URL.placeholder' | translate }}" [formControl]="urlForm" autofocus fxFlex="85">
+        <input type="url" placeholder="{{ 'INPUT_URL.placeholder' | translate }}" [formControl]="urlForm" autofocus fxFlex>
         <div fxLayoutAlign="center center" fxFlex="10">
           <mat-icon class="info" *ngIf="urlForm.hasError('required')"
                     aria-hidden="false"
@@ -41,8 +41,8 @@
 <div fxLayout="column">
   <h1>{{ 'INPUT_URL.settings' | translate }}</h1>
   <div fxLayout="row" aria-live="polite">
-    <h2 *ngIf="!noCheckboxSelected">{{ 'INPUT_URL.modules' | translate }}</h2>
-    <h2 *ngIf="noCheckboxSelected" class="error">{{ 'INPUT_URL.ERROR.modules' | translate }}</h2>
+    <h2 *ngIf="!noCheckboxSelected" class="subtitle">{{ 'INPUT_URL.modules' | translate }}</h2>
+    <h2 *ngIf="noCheckboxSelected" class="subtitle error">{{ 'INPUT_URL.ERROR.modules' | translate }}</h2>
   </div>
   <div fxLayout="column wrap" class="div-checkbox">
     <mat-checkbox [(ngModel)]="executeACT" (change)="updateCheckboxStatus()">ACT Rules</mat-checkbox>

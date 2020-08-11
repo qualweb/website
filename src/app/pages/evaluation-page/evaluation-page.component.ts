@@ -88,6 +88,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   subtitle: string;
 
+  skipLinkPath: string;
+
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -123,6 +125,13 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.filterShow = false;
     this.filterPrinciples = false;
     this.filterLevels = false;
+
+    this.skipLinkPath = `${this.router.url}#main`;
+
+    // to remove existent hashes
+    if(window.location.hash){
+      window.location.hash = '';
+    }
 
     this.router.events.subscribe(s => {
       if (s instanceof NavigationEnd) {

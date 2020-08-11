@@ -4,6 +4,8 @@
 
 <div id="evaluation-content" *ngIf="!evaluateLoading && !error" fxLayoutAlign="center" [@.disabled]="true">
 
+  <a class="skip_content" [href]="skipLinkPath" tabindex="5">Skip to main content</a>
+
   <div fxFlex="80.5" fxLayout="column">
     <hr class="combo_breaker">
     <section fxLayoutAlign="start center">
@@ -219,6 +221,7 @@
           </mat-form-field>
         </div>
 
+        <div id="main">
         <ng-container *ngFor="let rule of rulesJson|filter:term; trackBy: trackByIndex">
           <mat-expansion-panel *ngIf="showRuleCard(rule)" #panel [ngClass]="rule['outcome']"
                                [class.sticky]="panel.expanded" class="line_breaker">
@@ -251,18 +254,20 @@
                   <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.report.description" | translate}}</h2>
                   <!--<p>{{ "RULES." + rule + ".description" | translate }}</p>-->
                   <p>{{ rule['description'] }}</p>
-                  <ng-container [ngSwitch]="rule['urlType']">
-                    <a *ngSwitchCase="'string'" class="hidden_link" href="{{ rule['url'] }}" target="_blank">
-                      <code>{{ rule['url'] }}</code>
-                    </a>
-                    <ul class="links" *ngSwitchDefault>
-                      <li *ngFor="let link of rule['url']; trackBy: trackByIndex">
-                        <a class="hidden_link" href="{{ link }}" target="_blank">
-                          <code>{{ link }}</code>
-                        </a>
-                      </li>
-                    </ul>
-                  </ng-container>
+                  <p>
+                    <ng-container [ngSwitch]="rule['urlType']">
+                      <a *ngSwitchCase="'string'" class="hidden_link" href="{{ rule['url'] }}" target="_blank">
+                        {{ rule['url'] }}
+                      </a>
+                      <ul class="links" *ngSwitchDefault>
+                        <li *ngFor="let link of rule['url']; trackBy: trackByIndex">
+                          <a class="hidden_link" href="{{ link }}" target="_blank">
+                            <code>{{ link }}</code>
+                          </a>
+                        </li>
+                      </ul>
+                    </ng-container>
+                  </p>
                   <p *ngIf="rule['targets']['parent']">
                     {{"EVALUATION_PAGE.report.target_parent" | translate}}
                     <code>{{ rule['targets']['parent'] }}</code>
@@ -568,13 +573,12 @@
                   </div>
                 </ng-container>
 
-
               </div>
             </ng-template>
 
           </mat-expansion-panel>
 
-        </ng-container>
+        </ng-container></div>
 
       </div>
     </section>
