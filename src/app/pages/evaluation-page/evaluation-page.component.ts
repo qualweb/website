@@ -89,6 +89,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   subtitle: string;
 
   skipLinkPath: string;
+  navigationEnd: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -126,14 +127,15 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.filterPrinciples = false;
     this.filterLevels = false;
 
-    this.skipLinkPath = `${this.router.url}#main`;
+    this.skipLinkPath = `${window.location.href}#main`;
 
     // to remove existent hashes
     if(window.location.hash){
       window.location.hash = '';
     }
 
-    this.router.events.subscribe(s => {
+    // the following code does not work yet! (thats why we remove hashes - to not trick anyone)
+    /*this.navigationEnd = this.router.events.subscribe(s => {
       if (s instanceof NavigationEnd) {
         const tree = router.parseUrl(router.url);
         if (tree.fragment) {
@@ -143,10 +145,70 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           }
         }
       }
-    });
+    });*/
   }
 
   ngOnInit(): void {
+    this.modulesService.modules.subscribe(modules => this.modulesToExecute = modules);
+
+    this.showACT = this.modulesToExecute['act'];
+    this.showHTML = this.modulesToExecute['html'];
+    this.showCSS = this.modulesToExecute['css'];
+    //this.showBP = this.modulesToExecute['bp'];
+
+    this.paramsSub = this.route.params.subscribe(params => {
+      this.url = decodeURIComponent(params.url);
+      this.socket.connect();
+      this.socket.emit('evaluate', {url: encodeURIComponent(this.url), modules: this.modulesToExecute});
+      this.socket.on('evaluator', data => {
+        this.data = new Evaluation(data);
+      });
+      this.socket.on('moduleStart', (module: any) => {
+        this.currentModule = module;
+        this.cd.detectChanges();
+      });
+      this.socket.on('moduleEnd', (report: any) => {
+        this.data.addModuleEvaluation(report.module, report.report);
+      });
+      this.socket.on('prepare-data', () => {
+        this.currentModule = 'preparing-data';
+        this.processData(this.data.getFinalReport());
+        this.cd.detectChanges();
+      });
+      this.socket.on('evaluationEnd', () => {
+        setTimeout(() => {
+          this.evaluateLoading = false;
+          this.cd.detectChanges();
+          this.socket.disconnect();
+        }, 100);
+      });
+      this.socket.on('errorHandle', error => {
+        this.error = true;
+        this.evaluateLoading = false;
+        this.cd.detectChanges();
+        this.socket.disconnect();
+      });
+    });
+
+    /*this.earl = JSON.parse(sessionStorage.getItem('earl'));
+    this.json = JSON.parse(sessionStorage.getItem('json'));
+    this.html = sessionStorage.getItem('postProcessingHTML');
+    this.evaluateLoading = false;
+    this.rules = keys(this.json.modules.evaluation.act.data);
+    this.processData();
+    console.log(this.earl);
+    console.log(this.json);*/
+
+    this.cd.detectChanges();
+  }
+
+  ngOnDestroy(): void {
+    this.paramsSub.unsubscribe();
+    this.navigationEnd.unsubscribe();
+    // this.evaluationSub.unsubscribe();
+  }
+
+  initializeData(): void {
     this.modulesService.modules.subscribe(modules => this.modulesToExecute = modules);
 
     this.showACT = this.modulesToExecute['act'];
@@ -198,11 +260,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     console.log(this.json);*/
 
     this.cd.detectChanges();
-  }
-
-  ngOnDestroy(): void {
-    this.paramsSub.unsubscribe();
-    // this.evaluationSub.unsubscribe();
   }
 
   @HostListener('window:resize', ['$event'])

@@ -15,10 +15,8 @@
         </h1>
 
         <div class="summary_info" fxLayout="column" fxLayoutAlign="space-around center">
-          <span class="url">
-            <a class="hidden_link" href="{{ json.system.url.completeUrl }}"
-               target="_blank">{{ json.system.url.completeUrl }}</a>
-          </span>
+          <a class="hidden_link summary_url" href="{{ json.system.url.completeUrl }}"
+              target="_blank">{{ json.system.url.completeUrl }}</a>
           <span>
             {{json.metadata.passed + json.metadata.failed + json.metadata.inapplicable + json.metadata.warning}} {{subtitle}}
           </span>
@@ -221,7 +219,7 @@
           </mat-form-field>
         </div>
 
-        <div id="main">
+        <div id="main" tabindex="-1">
         <ng-container *ngFor="let rule of rulesJson|filter:term; trackBy: trackByIndex">
           <mat-expansion-panel *ngIf="showRuleCard(rule)" #panel [ngClass]="rule['outcome']"
                                [class.sticky]="panel.expanded" class="line_breaker">

@@ -171,7 +171,12 @@ section {
   //text-decoration: none;
   color: whitesmoke;
   &:hover, &:focus{
-    text-decoration-color: $orange-deep;
+    text-decoration: underline !important;
+    text-decoration-color: $orange-deep !important;
+  }
+  &.summary_url {
+    font-weight: bold;
+    text-decoration: none;
   }
 }
 
@@ -189,14 +194,6 @@ h1 {
 }
 
 /// SUMMARY ///
-
-.url {
-  //font-family: 'Raleway', sans-serif;
-  font-weight: bold;
-  a {
-    text-decoration: none;
-  }
-}
 
 .summary_info {
   text-align: center;

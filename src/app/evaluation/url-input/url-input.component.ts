@@ -46,7 +46,7 @@ export class UrlInputComponent implements OnInit {
     url = url.replace('http://', '');
     url = url.replace('www.', '');*/
 
-    this.router.navigate(['/', this.urlForm.value]);
+    this.router.navigate(['/', encodeURIComponent(this.urlForm.value)]);
   }
 
   urlValidator(control: AbstractControl): any {
