@@ -89,7 +89,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   subtitle: string;
 
   skipLinkPath: string;
-  navigationEnd: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -204,7 +203,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.paramsSub.unsubscribe();
-    this.navigationEnd.unsubscribe();
+    // this.navigationEnd.unsubscribe();
     // this.evaluationSub.unsubscribe();
   }
 
