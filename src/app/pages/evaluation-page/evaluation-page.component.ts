@@ -129,9 +129,18 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.skipLinkPath = `${window.location.href}#main`;
 
     // to remove existent hashes
-    if(window.location.hash){
+    /*if(window.location.hash){
       window.location.hash = '';
+    }*/
+    if(window.location.hash){
+      location.hash = '';
+      location.reload();
     }
+
+    // slice off the remaining '#' in HTML5:    
+    /*if (typeof window.history.replaceState == 'function') {
+      history.replaceState({}, '', window.location.href.slice(0, -1));
+    }*/
 
     // the following code does not work yet! (thats why we remove hashes - to not trick anyone)
     /*this.navigationEnd = this.router.events.subscribe(s => {
