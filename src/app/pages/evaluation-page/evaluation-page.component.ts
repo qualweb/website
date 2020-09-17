@@ -310,8 +310,9 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           typeString = 'Best Practice';
           break;*/
       }
+      console.log(rulesOrTechniques);
       forEach(rulesOrTechniques, function(val, key) {
-        // Extra step in act-rules because theres an element field instead of htmlCode and pointer
+        /*/ Extra step in act-rules because theres an element field instead of htmlCode and pointer
         if(typeString === 'ACT Rule' && val['results'].length){
           forEach(val['results'], function(v, k) {
             if(v['elements'].length){
@@ -319,7 +320,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
               v['pointer'] = v['elements'][0]['pointer'];
             }
           });
-        }
+        }*/
         groupedResults = groupBy(val['results'], res => res['verdict']);
         passedRes = groupedResults.get('passed');
         failedRes = groupedResults.get('failed');
@@ -372,107 +373,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
     this.rulesJson = orderBy(result, [rule => rule['name'].toLowerCase()], ['asc']);
     this.showRulesResults = showRulesFilter;
-    // this.groupedResults = this.groupBy(this.rulesJson, rule => rule['outcome']);
-    /*const actRulesKeys = this.json.modules['act-rules'] ? Object.keys(this.json.modules['act-rules'].rules) : [];
-    const htmlTechniquesKeys = this.json.modules['html-techniques'] ? Object.keys(this.json.modules['html-techniques'].techniques) : [];
-    const cssTechniquesKeys = this.json.modules['css-techniques'] ? Object.keys(this.json.modules['css-techniques'].techniques) : [];
-    const bestPracticesKeys = this.json.modules['best-practices'] ? Object.keys(this.json.modules['best-practices']['best-practices']) : [];
-
-    const rulesAndTechniquesJSON = [];
-
-    for (const r of actRulesKeys || []) {
-      const obj = {
-        'code': r,
-        'title': this.json.modules['act-rules'].rules[r].name,
-        'outcome': this.json.modules['act-rules'].rules[r].metadata.outcome
-      };
-      rulesAndTechniquesJSON.push(obj);
-    }
-
-    for (const r of htmlTechniquesKeys || []) {
-      const obj = {
-        'code': r,
-        'title': this.json.modules['html-techniques'].techniques[r].name,
-        'outcome': this.json.modules['html-techniques'].techniques[r].metadata.outcome
-      };
-      rulesAndTechniquesJSON.push(obj);
-    }
-
-    for (const r of cssTechniquesKeys || []) {
-      const obj = {
-        'code': r,
-        'title': this.json.modules['css-techniques'].techniques[r].name,
-        'outcome': this.json.modules['css-techniques'].techniques[r].metadata.outcome
-      };
-      rulesAndTechniquesJSON.push(obj);
-    }
-
-    for (const r of bestPracticesKeys || []) {
-      const obj = {
-        'code': r,
-        'title': this.json.modules['best-practices']['best-practices'][r].name,
-        'outcome': this.json.modules['best-practices']['best-practices'][r].metadata.outcome
-      };
-      rulesAndTechniquesJSON.push(obj);
-    }
-
-    for (const r of result || []) {
-      if (r['outcome'] === 'inapplicable') {
-        this.showRulesResults[r['code']] = {
-          passed: true,
-          failed: true,
-          warning: true,
-          inapplicable: true
-        };
-      } else {
-        this.showRulesResults[r['code']] = {
-          passed: true,
-          failed: true,
-          warning: true,
-          inapplicable: false
-        };
-      }
-    }*/
   }
-
-  /*onInViewportChange(inViewport: boolean, section: string): void {
-    switch (section) {
-      case 'summary':
-        if (inViewport) {
-          this.summary.nativeElement.classList.add('active');
-          this.filters.nativeElement.classList.remove('active');
-          this.report.nativeElement.classList.remove('active');
-        } else {
-          this.report.nativeElement.classList.remove('active');
-          this.summary.nativeElement.classList.remove('active');
-          this.filters.nativeElement.classList.add('active');
-        }
-        break;
-
-      case 'filters':
-        if (inViewport) {
-          this.summary.nativeElement.classList.remove('active');
-          this.filters.nativeElement.classList.add('active');
-          this.report.nativeElement.classList.remove('active');
-        } else {
-          this.summary.nativeElement.classList.remove('active');
-          this.filters.nativeElement.classList.remove('active');
-          this.report.nativeElement.classList.add('active');
-        }
-        break;
-
-      case 'report':
-        if (inViewport) {
-          this.summary.nativeElement.classList.remove('active');
-          this.filters.nativeElement.classList.remove('active');
-          this.report.nativeElement.classList.add('active');
-        }
-        break;
-
-      default:
-        break;
-    }
-  }*/
 
   openCodeDialog(code: string): void {
     this.dialog.open(ResultCodeDialogComponent, {
@@ -490,48 +391,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.viewPanels.forEach(p => p.close());
     this.cd.detectChanges();
   }
-
-  /*formatCode(code: string): string {
-    let parsedCode;
-    const handler = new htmlparser.DomHandler((error, dom) => {
-      if (error) {
-        throw new Error();
-      } else {
-        const format = elem => {
-          delete elem.attribs['computed-style'];
-          delete elem.attribs['w-scrollx'];
-          delete elem.attribs['w-scrolly'];
-          delete elem.attribs['b-right'];
-          delete elem.attribs['b-bottom'];
-          delete elem.attribs['css'];
-
-          for (let i = 0; i < elem['children'].length; i++) {
-            if (elem['children'][i]['type'] === 'tag') {
-
-              format(elem['children'][i]);
-            }
-          }
-        };
-
-        /*for (let i = 0 ; i < size(dom) ; i++) {
-          if (dom[i]['type'] === 'tag') {
-            format(dom[i]);
-          }
-        }
-        format(dom[0]);
-        // console.log(dom[0]);
-        parsedCode = dom;
-      }
-    });
-
-    const parser = new htmlparser.Parser(handler);
-    parser.write(code.replace(/(\r\n|\n|\r|\t)/gm, ''));
-    parser.end();
-    //console.log(html(parsedCode[0]));
-
-    return formatter.render(html(parsedCode[0]));
-    return code;
-  }*/
 
   showRuleCard(rule: object): boolean {
     const outcome = rule['outcome'];
@@ -657,89 +516,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   trackByIndex(index: number, rule: {}): number {
     return rule['code'];
   }
-
-  /*getType(rule: string): string {
-    if (rule.includes('ACT')) {
-      return 'act';
-    } else if (rule.includes('HTML')) {
-      return 'html';
-    } else if (rule.includes('CSS')) {
-      return 'css';
-    } else if (rule.includes('BP')) {
-      return 'bp';
-    }
-  }
-
-  getTypeString(rule: string): string {
-    switch (this.getType(rule)) {
-      case 'act':
-        return 'ACT Rule';
-      case 'html':
-        return 'HTML Technique';
-      case 'css':
-        return 'CSS Technique';
-      case 'bp':
-        return 'Best Practice';
-    }
-  }
-
-  getValue(rule: string, value: string) {
-    switch (this.getType(rule)) {
-      case 'act':
-        return this.json.modules['act-rules'].rules[rule][value];
-      case 'html':
-        return this.json.modules['html-techniques'].techniques[rule][value];
-      case 'css':
-        return this.json.modules['css-techniques'].techniques[rule][value];
-      case 'bp':
-        return this.json.modules['best-practices']['best-practices'][rule][value];
-    }
-  }
-
-  getOutcome(rule: string): string {
-    return this.getValue(rule, 'metadata').outcome;
-  }
-
-  getSuccessCriteria(rule: string): any {
-    return this.getValue(rule, 'metadata')['success-criteria'];
-  }
-
-  getNumberResults(rule: string): number[] {
-    const metadata = this.getValue(rule, 'metadata');
-    // console.log(rule, [metadata['passed'], metadata['failed'], metadata['warning'], metadata['inapplicable']]);
-    return [metadata['passed'], metadata['failed'], metadata['warning'], metadata['inapplicable']];
-  }
-
-
-  getUrl(rule: string): string | string[] {
-    if (this.getUrlType(rule) === 'string') {
-      return this.getValue(rule, 'metadata').url;
-    } else {
-      return Object.values(this.getValue(rule, 'metadata').url);
-    }
-  }
-  getUrlType(rule: string): string {
-    return typeof this.getValue(rule, 'metadata').url;
-  }
-
-  getTarget(rule: string, type: string) {
-    let result = '';
-    if (this.getValue(rule, 'metadata').target[type] === undefined) {
-      return '';
-    } else {
-      const elements = this.getValue(rule, 'metadata').target[type];
-      if (typeof elements === 'string') {
-        return elements;
-      } else {
-        for (const elem of elements) {
-          result += elem;
-          result += ', ';
-        }
-        return result.substring(0, result.length - 2);
-      }
-    }
-  }
-  */
 
   noResults(numbers: any): boolean {
     return (Object.values(numbers)).reduce((a: number, b: number) => a + b, 0) === 0;

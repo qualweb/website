@@ -508,11 +508,18 @@ h1 {
 
 .code_block {
   align-items: center;
+  code {
+    max-height: 10rem;
+    overflow: auto;
+  }
 }
 
-  code {
-    overflow-x: auto;
+// to add spacing between multiple results in act-rules
+.act_code_block {
+  .act_code_element:not(:last-of-type){
+    margin-bottom: 1em;
   }
+}
 
 
 img {

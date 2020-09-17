@@ -390,17 +390,32 @@
                     <ng-container *ngFor="let test of rule['passedResults']; trackBy: trackByIndex">
                       <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
                         <mat-card-header>
-                          <mat-card-title [class.with-code]="test.htmlCode">
+                          <mat-card-title [class.with-code]="test.elements || test.htmlCode">
                             {{ test.description }}
                           </mat-card-title>
                         </mat-card-header>
-                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.htmlCode"
+                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.elements || test.htmlCode"
                                           fxLayout="row" fxLayoutGap="2">
                           <ng-container [ngSwitch]="rule['type']">
 
                             <ng-container *ngSwitchCase="'CSS Technique'">
                               <div fxLayout="row" class="code_block">
                                 <pre fxFlex><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
+                              </div>
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'ACT Rule'">
+                              <div fxLayout="column" class="act_code_block">
+                                <div *ngFor="let elem of test.elements" fxLayout="column" class="act_code_element">
+                                  <div class="code_block">
+                                    <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="elem.htmlCode.toString()"></code></pre>
+                                    <button mat-icon-button fxFlex (click)="openCodeDialog(elem.htmlCode)"
+                                            matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
+                                      <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
+                                    </button>
+                                  </div>
+                                  <p>Element selector: <code>{{elem.pointer}}</code></p>
+                                </div>
                               </div>
                             </ng-container>
 
@@ -448,14 +463,29 @@
                           <ng-container [ngSwitch]="rule['type']">
 
                             <ng-container *ngSwitchCase="'CSS Technique'">
-                              <div fxLayout="row" class="code_block" >
+                              <div fxLayout="row" class="code_block">
                                 <pre fxFlex><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
                               </div>
                             </ng-container>
 
+                            <ng-container *ngSwitchCase="'ACT Rule'">
+                              <div fxLayout="column" class="act_code_block">
+                                <div *ngFor="let elem of test.elements" fxLayout="column" class="act_code_element">
+                                  <div class="code_block">
+                                    <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="elem.htmlCode.toString()"></code></pre>
+                                    <button mat-icon-button fxFlex (click)="openCodeDialog(elem.htmlCode)"
+                                            matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
+                                      <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
+                                    </button>
+                                  </div>
+                                  <p>Element selector: <code>{{elem.pointer}}</code></p>
+                                </div>
+                              </div>
+                            </ng-container>
+
                             <ng-container *ngSwitchDefault>
-                              <div fxLayout="column" >
-                                <div fxLayout="row" class="code_block">
+                              <div fxLayout="column">
+                                <div class="code_block">
                                   <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
                                   <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
                                           matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
@@ -464,8 +494,8 @@
                                 </div>
                                 <p>Element selector: <code>{{test.pointer}}</code></p>
                               </div>
-
                             </ng-container>
+
                           </ng-container>
                         </mat-card-content>
                       </mat-card>
@@ -497,14 +527,29 @@
                           <ng-container [ngSwitch]="rule['type']">
 
                             <ng-container *ngSwitchCase="'CSS Technique'">
-                              <div fxLayout="row" class="code_block" >
+                              <div fxLayout="row" class="code_block">
                                 <pre fxFlex><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
                               </div>
                             </ng-container>
 
+                            <ng-container *ngSwitchCase="'ACT Rule'">
+                              <div fxLayout="column" class="act_code_block">
+                                <div *ngFor="let elem of test.elements" fxLayout="column" class="act_code_element">
+                                  <div class="code_block">
+                                    <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="elem.htmlCode.toString()"></code></pre>
+                                    <button mat-icon-button fxFlex (click)="openCodeDialog(elem.htmlCode)"
+                                            matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
+                                      <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
+                                    </button>
+                                  </div>
+                                  <p>Element selector: <code>{{elem.pointer}}</code></p>
+                                </div>
+                              </div>
+                            </ng-container>
+
                             <ng-container *ngSwitchDefault>
-                              <div fxLayout="column" >
-                                <div fxLayout="row" class="code_block">
+                              <div fxLayout="column">
+                                <div class="code_block">
                                   <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
                                   <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
                                           matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
@@ -546,14 +591,29 @@
                           <ng-container [ngSwitch]="rule['type']">
 
                             <ng-container *ngSwitchCase="'CSS Technique'">
-                              <div fxLayout="row" class="code_block" >
+                              <div fxLayout="row" class="code_block">
                                 <pre fxFlex><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
                               </div>
                             </ng-container>
 
+                            <ng-container *ngSwitchCase="'ACT Rule'">
+                              <div fxLayout="column" class="act_code_block">
+                                <div *ngFor="let elem of test.elements" fxLayout="column" class="act_code_element">
+                                  <div class="code_block">
+                                    <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="elem.htmlCode.toString()"></code></pre>
+                                    <button mat-icon-button fxFlex (click)="openCodeDialog(elem.htmlCode)"
+                                            matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
+                                      <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
+                                    </button>
+                                  </div>
+                                  <p>Element selector: <code>{{elem.pointer}}</code></p>
+                                </div>
+                              </div>
+                            </ng-container>
+
                             <ng-container *ngSwitchDefault>
-                              <div fxLayout="column" >
-                                <div fxLayout="row" class="code_block">
+                              <div fxLayout="column">
+                                <div class="code_block">
                                   <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
                                   <button mat-icon-button fxFlex (click)="openCodeDialog(test.htmlCode)"
                                           matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
