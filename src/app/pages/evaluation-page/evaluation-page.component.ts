@@ -310,7 +310,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           typeString = 'Best Practice';
           break;*/
       }
-      console.log(rulesOrTechniques);
       forEach(rulesOrTechniques, function(val, key) {
         /*/ Extra step in act-rules because theres an element field instead of htmlCode and pointer
         if(typeString === 'ACT Rule' && val['results'].length){
