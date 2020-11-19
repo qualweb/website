@@ -60,8 +60,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   showInapplicable: boolean;
 
   showACT: boolean;
-  showHTML: boolean;
-  showCSS: boolean;
+  showWCAG: boolean;
+  //showCSS: boolean;
   //showBP: boolean;
 
   showPerceivable: boolean;
@@ -160,8 +160,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.modulesService.modules.subscribe(modules => this.modulesToExecute = modules);
 
     this.showACT = this.modulesToExecute['act'];
-    this.showHTML = this.modulesToExecute['html'];
-    this.showCSS = this.modulesToExecute['css'];
+    this.showWCAG = this.modulesToExecute['wcag'];
+    //this.showCSS = this.modulesToExecute['css'];
     //this.showBP = this.modulesToExecute['bp'];
 
     this.paramsSub = this.route.params.subscribe(params => {
@@ -220,8 +220,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.modulesService.modules.subscribe(modules => this.modulesToExecute = modules);
 
     this.showACT = this.modulesToExecute['act'];
-    this.showHTML = this.modulesToExecute['html'];
-    this.showCSS = this.modulesToExecute['css'];
+    this.showWCAG = this.modulesToExecute['wcag'];
+    //this.showCSS = this.modulesToExecute['css'];
     //this.showBP = this.modulesToExecute['bp'];
 
     this.paramsSub = this.route.params.subscribe(params => {
@@ -297,15 +297,15 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           //rulesOrTechniques = value['rules'];
           typeString = 'ACT Rule';
           break;
-        case 'html-techniques':
+        case 'wcag-techniques':
           //rulesOrTechniques = value['techniques'];
-          typeString = 'HTML Technique';
+          typeString = 'WCAG Technique';
           break;
-        case 'css-techniques':
+        /*case 'css-techniques':
           //rulesOrTechniques = value['techniques'];
           typeString = 'CSS Technique';
           break;
-        /*case 'best-practices':
+        case 'best-practices':
           //rulesOrTechniques = value['best-practices'];
           typeString = 'Best Practice';
           break;*/
@@ -427,13 +427,13 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         case 'ACT Rule':
           show = this.showACT;
           break;
-        case 'HTML Technique':
-          show = this.showHTML;
+        case 'WCAG Technique':
+          show = this.showWCAG;
           break;
-        case 'CSS Technique':
+        /*case 'CSS Technique':
           show = this.showCSS;
           break;
-        /*case 'Best Practice':
+        case 'Best Practice':
           show = this.showBP;
           break;*/
       }

@@ -32,6 +32,7 @@
       "show_warning_rule": "Aviso",
       "type": "Tipo",
       "show_act": "Regras ACT",
+      "show_wcag": "Técnicas WCAG",
       "show_html": "Técnicas HTML",
       "show_css": "Técnicas CSS",
       "show_bp": "Melhores Práticas",
@@ -67,6 +68,7 @@
       "starting": "A começar a avaliação...",
       "act-rules": "A avaliar regras ACT...",
       "html-techniques": "A avaliar técnicas HTML (WCAG 2.1)...",
+      "wcag-techniques": "A avaliar técnicas WCAG 2.1...",
       "css-techniques": "A avaliar técnicas CSS (WCAG 2.1)...",
       "best-practices": "A verificar por boas práticas...",
       "preparing-data": "A preparar os dados..."

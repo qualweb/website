@@ -7,9 +7,7 @@ import {BehaviorSubject} from 'rxjs';
 export class ModulesService {
   private modulesToRun = new BehaviorSubject<{}>({
     act: true,
-    html: true,
-    css: true,
-    bp: true
+    wcag: true,
   });
   modules = this.modulesToRun.asObservable();
 

@@ -14,9 +14,10 @@ export class UrlInputComponent implements OnInit {
   urlForm: FormControl;
   showDropdown = false;
   executeACT = true;
-  executeHTML = false;
+  executeWCAG = false;
+  /*executeHTML = false;
   executeCSS = false;
-  executeBP = false;
+  executeBP = false;*/
   noCheckboxSelected = false;
 
   constructor(private router: Router, private data: ModulesService) {
@@ -30,15 +31,16 @@ export class UrlInputComponent implements OnInit {
   }
 
   updateCheckboxStatus(): void {
-    this.noCheckboxSelected = !(this.executeACT || this.executeHTML || this.executeCSS || this.executeBP);
+    this.noCheckboxSelected = !(this.executeACT || this.executeWCAG);
   }
   submit(e): void {
     e.preventDefault();
     this.data.setModulesToRun({
       act: this.executeACT,
-      html: this.executeHTML,
+      wcag: this.executeWCAG
+      /*html: this.executeHTML,
       css: this.executeCSS,
-      bp: this.executeBP
+      bp: this.executeBP*/
     });
 
     /*let url = this.urlForm.value;
