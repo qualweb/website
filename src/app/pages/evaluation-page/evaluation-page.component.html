@@ -374,201 +374,56 @@
 
                 <!-- the results are now split up by outcome -->
                 <!-- because this way it's only needed to make one verification per outcome (first *ngIf) -->
-
-                <!------ Passed results ------>
-                <ng-container *ngIf="showRulesResults[rule['code']]['passed'] && rule['numbers']['nPassed']">
-                  <h3>
-                    <span class="passed">{{ "EVALUATION_PAGE.filters.show_passed_result" | translate }}</span>
-                    -
-                    {{ rule['numbers']['nPassed'] }}
-                    <ng-container [ngSwitch]="rule['numbers']['nPassed']">
-                      <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                      <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
-                    </ng-container>
-                  </h3>
-                  <div [class.results_box]="rule['numbers']['nPassed'] > 3">
-                    <ng-container *ngFor="let test of rule['passedResults']; trackBy: trackByIndex">
-                      <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
-                        <mat-card-header>
-                          <mat-card-title [class.with-code]="test.elements || test.htmlCode">
-                            {{ test.description }}
-                          </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.elements || test.htmlCode"
-                                          fxLayout="row" fxLayoutGap="2">
-                          <ng-container [ngSwitch]="rule['type']">
-
-                            <!--ng-container *ngSwitchCase="'CSS Technique'">
-                              <div fxLayout="row" class="code_block">
-                                <pre fxFlex><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
-                              </div>
-                            </ng-container-->
-
-                            <div fxLayout="column" class="act_code_block">
-                              <div *ngFor="let elem of test.elements" fxLayout="column" class="act_code_element">
-                                <div class="code_block">
-                                  <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="elem.htmlCode.toString()"></code></pre>
-                                  <button mat-icon-button fxFlex (click)="openCodeDialog(elem.htmlCode)"
-                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
-                                    <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
-                                  </button>
+                
+                <div *ngFor="let res of possibleResults">
+                  <ng-container *ngIf="showRulesResults[rule['code']][res[0]] && rule['numbers'][res[1]]">
+                    <h3>
+                      <span [ngClass]="res[0]">{{ "EVALUATION_PAGE.filters." + res[2] | translate }}</span>
+                      -
+                      {{ rule['numbers'][res[1]] }}
+                      <ng-container [ngSwitch]="rule['numbers'][res[1]]">
+                        <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
+                        <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
+                      </ng-container>
+                    </h3>
+                    <div [class.results_box]="rule['numbers'][res[1]] > 3">
+                      <ng-container *ngFor="let test of rule[res[3]]; trackBy: trackByIndex">
+                        <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
+                          <mat-card-header>
+                            <mat-card-title [class.with-code]="test.elements || test.htmlCode">
+                              {{ test.description }}
+                            </mat-card-title>
+                          </mat-card-header>
+                          <mat-card-content fxLayoutAlign="start center" *ngIf="test.elements || test.htmlCode"
+                                            fxLayout="row" fxLayoutGap="2">
+                            <ng-container [ngSwitch]="rule['type']">
+  
+                              <!--ng-container *ngSwitchCase="'CSS Technique'">
+                                <div fxLayout="row" class="code_block">
+                                  <pre fxFlex><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
                                 </div>
-                                <p>Element selector: <code>{{elem.pointer}}</code></p>
-                              </div>
-                            </div>
-
-                          </ng-container>
-                        </mat-card-content>
-                      </mat-card>
-                    </ng-container>
-                  </div>
-                </ng-container>
-
-                <!------ Failed results ------>
-                <ng-container *ngIf="showRulesResults[rule['code']]['failed'] && rule['numbers']['nFailed']">
-                  <h3>
-                    <span class="failed">{{ "EVALUATION_PAGE.filters.show_failed_result" | translate }}</span>
-                    -
-                    {{ rule['numbers']['nFailed'] }}
-                    <ng-container [ngSwitch]="rule['numbers']['nFailed']">
-                      <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                      <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
-                    </ng-container>
-                  </h3>
-                  <div [class.results_box]="rule['numbers']['nFailed'] > 3">
-                    <ng-container *ngFor="let test of rule['failedResults']; trackBy: trackByIndex">
-                      <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
-                        <mat-card-header>
-                          <mat-card-title [class.with-code]="test.elements || test.htmlCode">
-                            {{ test.description }}
-                          </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.elements || test.htmlCode"
-                                          fxLayout="row">
-                          <ng-container [ngSwitch]="rule['type']">
-
-                            <!--ng-container *ngSwitchCase="'CSS Technique'">
-                              <div fxLayout="row" class="code_block">
-                                <pre fxFlex><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
-                              </div>
-                            </ng-container-->
-                            <div fxLayout="column" class="act_code_block">
-                              <div *ngFor="let elem of test.elements" fxLayout="column" class="act_code_element">
-                                <div class="code_block">
-                                  <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="elem.htmlCode.toString()"></code></pre>
-                                  <button mat-icon-button fxFlex (click)="openCodeDialog(elem.htmlCode)"
-                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
-                                    <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
-                                  </button>
+                              </ng-container-->
+  
+                              <div fxLayout="column" class="act_code_block">
+                                <div *ngFor="let elem of test.elements" fxLayout="column" class="act_code_element">
+                                  <div class="code_block">
+                                    <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="elem.htmlCode.toString()"></code></pre>
+                                    <button mat-icon-button fxFlex (click)="openCodeDialog(elem.htmlCode)"
+                                            matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
+                                      <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
+                                    </button>
+                                  </div>
+                                  <p>Element selector: <code>{{elem.pointer}}</code></p>
                                 </div>
-                                <p>Element selector: <code>{{elem.pointer}}</code></p>
                               </div>
-                            </div>
-
-                          </ng-container>
-                        </mat-card-content>
-                      </mat-card>
-                    </ng-container>
-                  </div>
-                </ng-container>
-
-                <!------ Warning results ------>
-                <ng-container *ngIf="showRulesResults[rule['code']]['warning'] && rule['numbers']['nWarning']">
-                  <h3>
-                    <span class="warning">{{ "EVALUATION_PAGE.filters.show_warning_result" | translate }}</span>
-                    -
-                    {{ rule['numbers']['nWarning'] }}
-                    <ng-container [ngSwitch]="rule['numbers']['nWarning']">
-                      <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                      <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
-                    </ng-container>
-                  </h3>
-                  <div [class.results_box]="rule['numbers']['nWarning'] > 3">
-                    <ng-container *ngFor="let test of rule['warningResults']; trackBy: trackByIndex">
-                      <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
-                        <mat-card-header>
-                          <mat-card-title [class.with-code]="test.elements || test.htmlCode">
-                            {{ test.description }}
-                          </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.elements || test.htmlCode"
-                                          fxLayout="row" fxLayoutGap="2" >
-                          <ng-container [ngSwitch]="rule['type']">
-
-                            <!--ng-container *ngSwitchCase="'CSS Technique'">
-                              <div fxLayout="row" class="code_block">
-                                <pre fxFlex><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
-                              </div>
-                            </ng-container-->
-
-                            <div fxLayout="column" class="act_code_block">
-                              <div *ngFor="let elem of test.elements" fxLayout="column" class="act_code_element">
-                                <div class="code_block">
-                                  <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="elem.htmlCode.toString()"></code></pre>
-                                  <button mat-icon-button fxFlex (click)="openCodeDialog(elem.htmlCode)"
-                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
-                                    <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
-                                  </button>
-                                </div>
-                                <p>Element selector: <code>{{elem.pointer}}</code></p>
-                              </div>
-                            </div>
-
-                          </ng-container>
-                        </mat-card-content>
-                      </mat-card>
-                    </ng-container>
-                  </div>
-                </ng-container>
-
-                <!------ Inapplicable results ------>
-                <ng-container *ngIf="showRulesResults[rule['code']]['inapplicable'] && rule['numbers']['nInapplicable']">
-                  <h3>
-                    <span class="inapplicable">{{ "EVALUATION_PAGE.filters.show_inapplicable_result" | translate }}</span>
-                    -
-                    {{ rule['numbers']['nInapplicable'] }}
-                    <ng-container [ngSwitch]="rule['numbers']['nInapplicable']">
-                      <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                      <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
-                    </ng-container>
-                  </h3>
-                  <div [class.results_box]="rule['numbers']['nInapplicable'] > 3">
-                    <ng-container *ngFor="let test of rule['inapplicableResults']; trackBy: trackByIndex">
-                      <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
-                        <mat-card-header>
-                          <mat-card-title [class.with-code]="test.elements || test.htmlCode">
-                            {{ test.description }}
-                          </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content fxLayoutAlign="start center" *ngIf="test.elements || test.htmlCode"
-                                          fxLayout="row" fxLayoutGap="2" >
-                          <ng-container [ngSwitch]="rule['type']">
-
-                            <!--ng-container *ngSwitchCase="'CSS Technique'">
-                              <div fxLayout="row" class="code_block">
-                                <pre fxFlex><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
-                              </div>
-                            </ng-container-->
-
-                            <div fxLayout="column" class="act_code_block">
-                              <div *ngFor="let elem of test.elements" fxLayout="column" class="act_code_element">
-                                <div class="code_block">
-                                  <pre fxFlex="95" fxFlex.lt-md="90"><code tabindex="0" [highlight]="elem.htmlCode.toString()"></code></pre>
-                                  <button mat-icon-button fxFlex (click)="openCodeDialog(elem.htmlCode)"
-                                          matTooltip="{{'EVALUATION_PAGE.report.result_code' | translate}}" aria-label="Open code dialog button">
-                                    <mat-icon class="eyeicon" aria-hidden="true">visibility</mat-icon>
-                                  </button>
-                                </div>
-                                <p>Element selector: <code>{{elem.pointer}}</code></p>
-                              </div>
-                            </div>
-
-                          </ng-container>
-                        </mat-card-content>
-                      </mat-card>
-                    </ng-container>
-                  </div>
-                </ng-container>
+  
+                            </ng-container>
+                          </mat-card-content>
+                        </mat-card>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                </div>
 
               </div>
             </ng-template>

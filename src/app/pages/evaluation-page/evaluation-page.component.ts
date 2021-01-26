@@ -90,6 +90,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   skipLinkPath: string;
 
+  possibleResults: string[][];
+
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
@@ -127,6 +129,12 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.filterLevels = false;
 
     this.skipLinkPath = `${window.location.href}#main`;
+
+    // name, nName, i18n, nameResults
+    this.possibleResults = [['passed', 'nPassed', 'show_passed_result', 'passedResults'],
+                            ['failed', 'nFailed', 'show_failed_result', 'failedResults'],
+                            ['warning', 'nWarning', 'show_warning_result', 'warningResults'],
+                            ['inapplicable', 'nInapplicable', 'show_inapplicable_result', 'inapplicableResults']];
 
     // to remove existent hashes
     /*if(window.location.hash){
