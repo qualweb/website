@@ -2,7 +2,6 @@ import {Component, OnInit, OnDestroy, ElementRef, HostListener} from '@angular/c
 import {TranslateService} from '@ngx-translate/core';
 import {Observable, Subscription} from 'rxjs';
 import {Router, NavigationEnd} from '@angular/router';
-import {values, includes, keys} from 'lodash';
 import {ThemeService} from '@app/services/theme.service';
 
 @Component({
@@ -18,13 +17,13 @@ export class AppComponent implements OnInit, OnDestroy {
   selectedLang: string;
 
   langs: any = {
-    'pt': 'Portuguese',
+    //'pt': 'Portuguese',
     'en': 'English'
   };
 
   langCodes: any = {
-    'English': 'en',
-    'Portuguese': 'pt'
+    'English': 'en'
+    //'Portuguese': 'pt'
   };
 
   showGoToTop: boolean;
@@ -37,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private themeService: ThemeService
   ) {
-    this.translate.addLangs(values(this.langs));
+    this.translate.addLangs(Object.values(this.langs));
     this.translate.setDefaultLang('English');
 
     const lang = localStorage.getItem('language');

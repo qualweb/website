@@ -1,6 +1,6 @@
 import {Component, OnInit, AfterViewInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material';
-import {clone} from 'lodash';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import clone from 'lodash.clone';
 
 @Component({
   selector: 'app-result-code-dialog',

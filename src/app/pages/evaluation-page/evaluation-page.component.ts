@@ -8,20 +8,21 @@ import {
   ElementRef,
   HostListener,
   ChangeDetectionStrategy,
-  ChangeDetectorRef, AfterViewInit
+  ChangeDetectorRef
 } from '@angular/core';
-import {MatDialog, MatExpansionPanel, MatMenuTrigger} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatExpansionPanel } from '@angular/material/expansion';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {Subscription} from 'rxjs';
-import formatter from 'html-formatter';
-import htmlparser from 'htmlparser2';
-import html from 'htmlparser-to-html';
-import {clone, keys, orderBy, size, replace, includes, sum} from 'lodash';
+import {Observable, Subscription, of} from 'rxjs';
+import clone from 'lodash.clone';
+import orderBy from 'lodash.orderby';
+import forEach from 'lodash.foreach';
+import { Socket } from 'ngx-socket-io';
+import Evaluation from './evaluation.object';
 
-import {EvaluateService} from '@evaluation/evaluate.service';
 import {ResultCodeDialogComponent} from '@dialogs/result-code-dialog/result-code-dialog.component';
-
-import {NgxPrettifyService} from '@smartcodelab/ngx-prettify';
+import {ModulesService} from '@app/services/modules.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-evaluation-page',
@@ -34,22 +35,22 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   @ViewChild('summary', {static: true}) summary: ElementRef;
   @ViewChild('filters', {static: true}) filters: ElementRef;
   @ViewChild('report', {static: true}) report: ElementRef;
-  @ViewChild(MatMenuTrigger, {static: true}) trigger: MatMenuTrigger;
+  // @ViewChild(MatMenuTrigger, {static: true}) trigger: MatMenuTrigger;
   @ViewChildren(MatExpansionPanel) viewPanels: QueryList<MatExpansionPanel>;
 
   paramsSub: Subscription;
-  evaluationSub: Subscription;
+  // evaluationSub: Subscription;
 
   evaluateLoading: boolean;
   error: boolean;
 
   url: string;
-  earl: any;
+  // earl: any;
   json: any;
   html: string;
 
-  rules: Array<string>;
-  rulesAndTechniquesNames: any;
+  rules: {}[];
+  rulesJson: {}[];
 
   showFilters: boolean;
 
@@ -59,9 +60,9 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   showInapplicable: boolean;
 
   showACT: boolean;
-  showHTML: boolean;
-  showCSS: boolean;
-  showBP: boolean;
+  showWCAG: boolean;
+  //showCSS: boolean;
+  //showBP: boolean;
 
   showPerceivable: boolean;
   showOperable: boolean;
@@ -72,29 +73,31 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   showAA: boolean;
   showAAA: boolean;
 
-  // sidenav_stop_moving: boolean;
   showRulesResults: object;
-
-  expandRules: boolean;
 
   filterShow: boolean;
   filterPrinciples: boolean;
   filterLevels: boolean;
 
-  expandedFilters: boolean;
-  clickedOutside: boolean;
+  modulesToExecute: {};
 
-  passedTitle: number;
-  failedTitle: number;
-  warningTitle: number;
-  inapplicableTitle: number;
+  currentModule = 'starting';
+  data: Evaluation;
+
+  term: any;
+
+  subtitle: string;
+
+  skipLinkPath: string;
 
   constructor(
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private evaluate: EvaluateService,
     private cd: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private readonly socket: Socket,
+    private modulesService: ModulesService,
+    private translate: TranslateService
   ) {
     this.evaluateLoading = true;
     this.error = false;
@@ -106,11 +109,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.showWarning = true;
     this.showInapplicable = false;
 
-    this.showACT = true;
-    this.showHTML = true;
-    this.showCSS = true;
-    this.showBP = true;
-
     this.showPerceivable = true;
     this.showOperable = true;
     this.showUnderstandable = true;
@@ -121,24 +119,31 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.showAAA = true;
 
     this.showRulesResults = {};
-    this.expandRules = false;
-    // this.sidenav_stop_moving = false;
     this.rules = [];
-    this.rulesAndTechniquesNames = {};
 
+    this.filterShow = false;
     this.filterShow = false;
     this.filterPrinciples = false;
     this.filterLevels = false;
 
-    this.expandedFilters = false;
-    this.clickedOutside = false;
+    this.skipLinkPath = `${window.location.href}#main`;
 
-    this.passedTitle = 0;
-    this.failedTitle = 0;
-    this.warningTitle = 0;
-    this.inapplicableTitle = 0;
+    // to remove existent hashes
+    /*if(window.location.hash){
+      window.location.hash = '';
+    }*/
+    if(window.location.hash){
+      location.hash = '';
+      location.reload();
+    }
 
-    router.events.subscribe(s => {
+    // slice off the remaining '#' in HTML5:    
+    /*if (typeof window.history.replaceState == 'function') {
+      history.replaceState({}, '', window.location.href.slice(0, -1));
+    }*/
+
+    // the following code does not work yet! (thats why we remove hashes - to not trick anyone)
+    /*this.navigationEnd = this.router.events.subscribe(s => {
       if (s instanceof NavigationEnd) {
         const tree = router.parseUrl(router.url);
         if (tree.fragment) {
@@ -148,24 +153,49 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           }
         }
       }
-    });
-
+    });*/
   }
 
   ngOnInit(): void {
-    this.paramsSub = this.route.params.subscribe(params => {
-      this.url = params.url;
-      this.evaluationSub = this.evaluate.url(this.url)
-        .subscribe(data => {
-          if (data) {
-            this.processData(data);
-          } else {
-            this.error = true;
-          }
+    this.modulesService.modules.subscribe(modules => this.modulesToExecute = modules);
 
+    this.showACT = this.modulesToExecute['act'];
+    this.showWCAG = this.modulesToExecute['wcag'];
+    //this.showCSS = this.modulesToExecute['css'];
+    //this.showBP = this.modulesToExecute['bp'];
+
+    this.paramsSub = this.route.params.subscribe(params => {
+      this.url = decodeURIComponent(params.url);
+      this.socket.connect();
+      this.socket.emit('evaluate', {url: encodeURIComponent(this.url), modules: this.modulesToExecute});
+      this.socket.on('evaluator', data => {
+        this.data = new Evaluation(data);
+      });
+      this.socket.on('moduleStart', (module: any) => {
+        this.currentModule = module;
+        this.cd.detectChanges();
+      });
+      this.socket.on('moduleEnd', (report: any) => {
+        this.data.addModuleEvaluation(report.module, report.report);
+      });
+      this.socket.on('prepare-data', () => {
+        this.currentModule = 'preparing-data';
+        this.processData(this.data.getFinalReport());
+        this.cd.detectChanges();
+      });
+      this.socket.on('evaluationEnd', () => {
+        setTimeout(() => {
           this.evaluateLoading = false;
           this.cd.detectChanges();
-        });
+          this.socket.disconnect();
+        }, 100);
+      });
+      this.socket.on('errorHandle', error => {
+        this.error = true;
+        this.evaluateLoading = false;
+        this.cd.detectChanges();
+        this.socket.disconnect();
+      });
     });
 
     /*this.earl = JSON.parse(sessionStorage.getItem('earl'));
@@ -176,151 +206,172 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.processData();
     console.log(this.earl);
     console.log(this.json);*/
-  }
 
+    this.cd.detectChanges();
+  }
 
   ngOnDestroy(): void {
     this.paramsSub.unsubscribe();
+    // this.navigationEnd.unsubscribe();
     // this.evaluationSub.unsubscribe();
   }
 
-  @HostListener('document:click', ['$event']) clickout(event) {
-    if (this.expandedFilters && !(event.target.id.toString().includes('Filter') ||
-      event.target.parentNode.id.toString().includes('Filter'))) {
-      this.clickedOutside = true;
-    }
+  initializeData(): void {
+    this.modulesService.modules.subscribe(modules => this.modulesToExecute = modules);
+
+    this.showACT = this.modulesToExecute['act'];
+    this.showWCAG = this.modulesToExecute['wcag'];
+    //this.showCSS = this.modulesToExecute['css'];
+    //this.showBP = this.modulesToExecute['bp'];
+
+    this.paramsSub = this.route.params.subscribe(params => {
+      this.url = params.url;
+      this.socket.connect();
+      this.socket.emit('evaluate', {url: encodeURIComponent(this.url), modules: this.modulesToExecute});
+      this.socket.on('evaluator', data => {
+        this.data = new Evaluation(data);
+      });
+      this.socket.on('moduleStart', (module: any) => {
+        this.currentModule = module;
+        this.cd.detectChanges();
+      });
+      this.socket.on('moduleEnd', (report: any) => {
+        this.data.addModuleEvaluation(report.module, report.report);
+      });
+      this.socket.on('prepare-data', () => {
+        this.currentModule = 'preparing-data';
+        this.processData(this.data.getFinalReport());
+        this.cd.detectChanges();
+      });
+      this.socket.on('evaluationEnd', () => {
+        setTimeout(() => {
+          this.evaluateLoading = false;
+          this.cd.detectChanges();
+          this.socket.disconnect();
+        }, 100);
+      });
+      this.socket.on('errorHandle', error => {
+        this.error = true;
+        this.evaluateLoading = false;
+        this.cd.detectChanges();
+        this.socket.disconnect();
+      });
+    });
+
+    /*this.earl = JSON.parse(sessionStorage.getItem('earl'));
+    this.json = JSON.parse(sessionStorage.getItem('json'));
+    this.html = sessionStorage.getItem('postProcessingHTML');
+    this.evaluateLoading = false;
+    this.rules = keys(this.json.modules.evaluation.act.data);
+    this.processData();
+    console.log(this.earl);
+    console.log(this.json);*/
+
+    this.cd.detectChanges();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.showFilters = window.innerWidth > 599 ? true : this.showFilters;
+    this.showFilters = window.innerWidth > 599;
   }
-
-  /*@HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event) {
-    if (this.expandedFilters) {
-      this.expandedFilters = false;
-    }
-  } */
-
-  /*  @HostListener('window:scroll', ['$event'])
-    onScroll(e): void {
-      if (!this.evaluateLoading) {
-        const footer = document.getElementById('footer');
-        const sidenav = document.getElementById('sidenav');
-
-        if (sidenav.getBoundingClientRect()['top'] + 120 >= footer.getBoundingClientRect()['top']) {
-          this.sidenav_stop_moving = true;
-        } else {
-          this.sidenav_stop_moving = false;
-        }
-      }
-    }*/
 
   private processData(data: any): void {
     this.json = clone(data);
-    //console.log(this.json);
-    const actRulesKeys = keys(this.json.modules['act-rules'].rules);
-    const htmlTechniquesKeys = keys(this.json.modules['html-techniques'].techniques);
-    const cssTechniquesKeys = keys(this.json.modules['css-techniques'].techniques);
-    const bestPracticesKeys = keys(this.json.modules['best-practices']['best-practices']);
+    let rulesOrTechniques, typeString, groupedResults, dataJson;
+    let passedRes, failedRes, warningRes, inapplicableRes;
+    const showRulesFilter = [];
+    const result = [];
 
-    const rulesAndTechniquesJSON = [];
+    let subtitlePossibilities = [];
+    let sub;
 
-    for (const r of actRulesKeys) {
-      const obj = {
-        'code': r,
-        'title': this.json.modules['act-rules'].rules[r].name,
-        'outcome': this.json.modules['act-rules'].rules[r].metadata.outcome
-      };
-      rulesAndTechniquesJSON.push(obj);
-    }
+    forEach(this.json['modules'], function(value, key) {
+      
+      sub = key.split('-')[1];
+      if(!subtitlePossibilities.includes(sub))
+        subtitlePossibilities.push(sub);
 
-    for (const r of htmlTechniquesKeys) {
-      const obj = {
-        'code': r,
-        'title': this.json.modules['html-techniques'].techniques[r].name,
-        'outcome': this.json.modules['html-techniques'].techniques[r].metadata.outcome
-      };
-      rulesAndTechniquesJSON.push(obj);
-    }
-
-    for (const r of cssTechniquesKeys) {
-      const obj = {
-        'code': r,
-        'title': this.json.modules['css-techniques'].techniques[r].name,
-        'outcome': this.json.modules['css-techniques'].techniques[r].metadata.outcome
-      };
-      rulesAndTechniquesJSON.push(obj);
-    }
-
-    for (const r of bestPracticesKeys) {
-      const obj = {
-        'code': r,
-        'title': this.json.modules['best-practices']['best-practices'][r].name,
-        'outcome': this.json.modules['best-practices']['best-practices'][r].metadata.outcome
-      };
-      rulesAndTechniquesJSON.push(obj);
-    }
-
-    this.rulesAndTechniquesNames = orderBy(rulesAndTechniquesJSON, [rule => rule['title'].toLowerCase()], ['asc']);
-    // console.log(this.rulesAndTechniquesNames);
-    for (const r of this.rulesAndTechniquesNames) {
-      this.rules.push(r['code']);
-      if (r['outcome'] === 'inapplicable') {
-        this.showRulesResults[r['code']] = {
-          passed: true,
-          failed: true,
-          warning: true,
-          inapplicable: true
-        };
-      } else {
-        this.showRulesResults[r['code']] = {
-          passed: true,
-          failed: true,
-          warning: true,
-          inapplicable: false
-        };
+      rulesOrTechniques = value['assertions'];
+      switch (key) {
+        case 'act-rules':
+          //rulesOrTechniques = value['rules'];
+          typeString = 'ACT Rule';
+          break;
+        case 'wcag-techniques':
+          //rulesOrTechniques = value['techniques'];
+          typeString = 'WCAG Technique';
+          break;
+        /*case 'css-techniques':
+          //rulesOrTechniques = value['techniques'];
+          typeString = 'CSS Technique';
+          break;
+        case 'best-practices':
+          //rulesOrTechniques = value['best-practices'];
+          typeString = 'Best Practice';
+          break;*/
       }
-    }
-  }
-
-  onInViewportChange(inViewport: boolean, section: string): void {
-    switch (section) {
-      case 'summary':
-        if (inViewport) {
-          this.summary.nativeElement.classList.add('active');
-          this.filters.nativeElement.classList.remove('active');
-          this.report.nativeElement.classList.remove('active');
+      forEach(rulesOrTechniques, function(val, key) {
+        /*/ Extra step in act-rules because theres an element field instead of htmlCode and pointer
+        if(typeString === 'ACT Rule' && val['results'].length){
+          forEach(val['results'], function(v, k) {
+            if(v['elements'].length){
+              v['htmlCode'] = v['elements'][0]['htmlCode'];
+              v['pointer'] = v['elements'][0]['pointer'];
+            }
+          });
+        }*/
+        groupedResults = groupBy(val['results'], res => res['verdict']);
+        passedRes = groupedResults.get('passed');
+        failedRes = groupedResults.get('failed');
+        warningRes = groupedResults.get('warning');
+        inapplicableRes = groupedResults.get('inapplicable');
+        dataJson = {
+          'code': val['code'],
+          'name': val['name'],
+          'type': typeString,
+          'mapping': val['mapping'],
+          'description': val['description'],
+          'url': typeof val['metadata']['url'] === 'object' ? Object.values(val['metadata']['url']) : val['metadata']['url'],
+          'urlType': typeof val['metadata']['url'],
+          'outcome': val['metadata']['outcome'],
+          'targets': val['metadata']['target'],
+          'success-criterias': val['metadata']['success-criteria'],
+          'relateds': val['metadata']['related'],
+          'results': val['results'],
+          'passedResults': passedRes ? passedRes : [],
+          'failedResults': failedRes ? failedRes : [],
+          'warningResults': warningRes ? warningRes : [],
+          'inapplicableResults': inapplicableRes ? inapplicableRes : [],
+          'numbers': {
+            'nPassed': val['metadata']['passed'],
+            'nFailed': val['metadata']['failed'],
+            'nWarning': val['metadata']['warning'],
+            'nInapplicable': val['metadata']['inapplicable'] ? val['metadata']['inapplicable'] : 0
+          }
+        };
+        result.push(dataJson);
+        if (val['outcome'] === 'inapplicable') {
+          showRulesFilter[val['code']] = {
+            passed: true,
+            failed: true,
+            warning: true,
+            inapplicable: true
+          };
         } else {
-          this.report.nativeElement.classList.remove('active');
-          this.summary.nativeElement.classList.remove('active');
-          this.filters.nativeElement.classList.add('active');
+          showRulesFilter[val['code']] = {
+            passed: true,
+            failed: true,
+            warning: true,
+            inapplicable: false
+          };
         }
-        break;
+      });
+    });
+    
+    this.prepareSubtitle(subtitlePossibilities);
 
-      case 'filters':
-        if (inViewport) {
-          this.summary.nativeElement.classList.remove('active');
-          this.filters.nativeElement.classList.add('active');
-          this.report.nativeElement.classList.remove('active');
-        } else {
-          this.summary.nativeElement.classList.remove('active');
-          this.filters.nativeElement.classList.remove('active');
-          this.report.nativeElement.classList.add('active');
-        }
-        break;
-
-      case 'report':
-        if (inViewport) {
-          this.summary.nativeElement.classList.remove('active');
-          this.filters.nativeElement.classList.remove('active');
-          this.report.nativeElement.classList.add('active');
-        }
-        break;
-
-      default:
-        break;
-    }
+    this.rulesJson = orderBy(result, [rule => rule['name'].toLowerCase()], ['asc']);
+    this.showRulesResults = showRulesFilter;
   }
 
   openCodeDialog(code: string): void {
@@ -332,62 +383,23 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   expandAllRules(): void {
     this.viewPanels.forEach(p => p.open());
+    this.cd.detectChanges();
   }
 
   closeAllRules(): void {
     this.viewPanels.forEach(p => p.close());
+    this.cd.detectChanges();
   }
 
-  formatCode(code: string): string {
-    let parsedCode;
-    const handler = new htmlparser.DomHandler((error, dom) => {
-      if (error) {
-        throw new Error();
-      } else {
-        const format = elem => {
-          delete elem.attribs['computed-style'];
-          delete elem.attribs['w-scrollx'];
-          delete elem.attribs['w-scrolly'];
-          delete elem.attribs['b-right'];
-          delete elem.attribs['b-bottom'];
-          delete elem.attribs['css'];
-
-          for (let i = 0; i < size(elem['children']); i++) {
-            if (elem['children'][i]['type'] === 'tag') {
-
-              format(elem['children'][i]);
-            }
-          }
-        };
-
-        /*for (let i = 0 ; i < size(dom) ; i++) {
-          if (dom[i]['type'] === 'tag') {
-            format(dom[i]);
-          }
-        }*/
-        format(dom[0]);
-        // console.log(dom[0]);
-        parsedCode = dom;
-      }
-    });
-
-    const parser = new htmlparser.Parser(handler);
-    parser.write(replace(code, /(\r\n|\n|\r|\t)/gm, ''));
-    parser.end();
-    //console.log(html(parsedCode[0]));
-
-    return formatter.render(html(parsedCode[0]));
-  }
-
-  showRuleCard(rule: string): boolean {
-    const outcome = this.getOutcome(rule);
+  showRuleCard(rule: object): boolean {
+    const outcome = rule['outcome'];
     const levels = new Array<string>();
     const principles = new Array<string>();
 
-    const sucessCriterias = this.getSuccessCriteria(rule);
+    const sucessCriterias = rule['success-criterias'];
 
     if (sucessCriterias !== undefined) {
-      for (const sc of this.getSuccessCriteria(rule)) {
+      for (const sc of sucessCriterias) {
         levels.push(sc.level);
         principles.push(sc.principle);
       }
@@ -411,53 +423,53 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     }
 
     if (show) {
-      switch (this.getType(rule)) {
-        case 'act':
+      switch (rule['type']) {
+        case 'ACT Rule':
           show = this.showACT;
           break;
-        case 'html':
-          show = this.showHTML;
+        case 'WCAG Technique':
+          show = this.showWCAG;
           break;
-        case 'css':
+        /*case 'CSS Technique':
           show = this.showCSS;
           break;
-        case 'bp':
+        case 'Best Practice':
           show = this.showBP;
-          break;
+          break;*/
       }
     }
 
     if (show) {
-      if (includes(levels, 'A')) {
+      if (levels.includes('A')) {
         show = this.showA;
       }
-      if (includes(levels, 'AA')) {
+      if (levels.includes('AA')) {
         show = this.showAA;
       }
-      if (!show && includes(levels, 'AAA')) {
+      if (levels.includes('AAA')) {
         show = this.showAAA;
       }
     }
 
     if (show) {
-      if (includes(principles, 'Perceivable')) {
+      if (principles.includes('Perceivable')) {
         show = this.showPerceivable;
       }
-      if (includes(principles, 'Operable')) {
+      if (principles.includes('Operable')) {
         show = this.showOperable;
       }
-      if (includes(principles, 'Understandable')) {
+      if (principles.includes('Understandable')) {
         show = this.showUnderstandable;
       }
-      if (includes(principles, 'Robust')) {
+      if (principles.includes('Robust')) {
         show = this.showRobust;
       }
     }
     return show;
   }
 
-  orderRuleResult(rule: string): any[] {
-    let dataRule;
+  orderRuleResult(dataRule: any): any[] {
+    /*let dataRule;
     switch (this.getType(rule)) {
       case 'act':
         dataRule = this.json.modules['act-rules'].rules[rule].results;
@@ -472,8 +484,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         dataRule = this.json.modules['best-practices']['best-practices'][rule].results;
         break;
     }
-
-    /*const ordering = {};
+    const ordering = {};
     const sortOrder = ['passed', 'failed', 'warning', 'inapplicable'];
     for (let i = 0; i < sortOrder.length; i++) {
       ordering[sortOrder[i]] = i;
@@ -501,95 +512,63 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  trackByIndex(index: number): number {
-    return index;
+  trackByIndex(index: number, rule: {}): number {
+    return rule['code'];
   }
 
-  getType(rule: string): string {
-    if (rule.includes('ACT')) {
-      return 'act';
-    } else if (rule.includes('HTML')) {
-      return 'html';
-    } else if (rule.includes('CSS')) {
-      return 'css';
-    } else if (rule.includes('BP')) {
-      return 'bp';
+  noResults(numbers: any): boolean {
+    return (Object.values(numbers)).reduce((a: number, b: number) => a + b, 0) === 0;
+    // rule: string
+    // return this.getNumberResults(rule).reduce((a, b) => a + b, 0) === 0;
+  }
+
+  areAllTheSameTypeOfResults(numbers: any): boolean {
+    let count = 0;
+    for (const results of Object.values(numbers)) {
+      if (results > 0) {
+        count++;
+      }
     }
-  }
-
-  getTypeString(rule: string): string {
-    switch (this.getType(rule)) {
-      case 'act':
-        return 'ACT Rule';
-      case 'html':
-        return 'HTML Technique';
-      case 'css':
-        return 'CSS Technique';
-      case 'bp':
-        return 'Best Practice';
-    }
-  }
-
-  getValue(rule: string, value: string) {
-    switch (this.getType(rule)) {
-      case 'act':
-        return this.json.modules['act-rules'].rules[rule][value];
-      case 'html':
-        return this.json.modules['html-techniques'].techniques[rule][value];
-      case 'css':
-        return this.json.modules['css-techniques'].techniques[rule][value];
-      case 'bp':
-        return this.json.modules['best-practices']['best-practices'][rule][value];
-    }
-  }
-
-  getOutcome(rule: string): string {
-    return this.getValue(rule, 'metadata').outcome;
-  }
-
-  getSuccessCriteria(rule: string): any {
-    return this.getValue(rule, 'metadata')['success-criteria'];
-  }
-
-  getNumberResults(rule: string): number[] {
-    const metadata = this.getValue(rule, 'metadata');
-    return [metadata['passed'], metadata['failed'], metadata['warning'], metadata['inapplicable']];
-  }
-
-  noResults(rule: string): boolean {
-    return sum(this.getNumberResults(rule)) === 0;
-  }
-
-  areAllTheSameTypeOfResults(rule: string): boolean {
+    return count <= 1;
+    /*
+    rule: string
     let count = 0;
     for (const results of this.getNumberResults(rule)) {
       if (results > 0) {
         count++;
       }
     }
-    return count <= 1;
+    return count <= 1;*/
   }
 
-  getUrl(rule: string): string {
-    return this.getValue(rule, 'metadata').url;
-  }
-
-  getTarget(rule: string, type: string) {
-    let result = '';
-    if (this.getValue(rule, 'metadata').target[type] === undefined) {
-      return '';
+  prepareSubtitle(subPoss: string[]){
+    for(let i = 0; i < subPoss.length; i++){
+      subPoss[i] = this.translate.instant('EVALUATION_PAGE.summary.'+subPoss[i]);
+    }
+    let and = this.translate.instant('EVALUATION_PAGE.summary.and');
+    if(subPoss.length > 1){
+      this.subtitle = subPoss.slice(0, -1).join(', ') + ' ' + and + ' ' + subPoss.slice(-1);
     } else {
-      const elements = this.getValue(rule, 'metadata').target[type];
-      if (typeof elements === 'string') {
-        return elements;
-      } else {
-        for (const elem of elements) {
-          result += elem;
-          result += ', ';
-        }
-        return result.substring(0, result.length - 2);
-      }
+      this.subtitle = subPoss[0];
+    }
+    if(this.translate.currentLang === 'English'){
+      this.subtitle = this.translate.instant('EVALUATION_PAGE.summary.tested') + ' ' + this.subtitle;
+    } else {
+      this.subtitle = this.subtitle + ' ' + this.translate.instant('EVALUATION_PAGE.summary.tested');
     }
   }
 
+}
+function groupBy(list, keyGetter) {
+  const map = new Map();
+  list.forEach((item) => {
+    const key = keyGetter(item);
+    const collection = map.get(key);
+    if (!collection) {
+      map.set(key, [item]);
+    } else {
+      collection.push(item);
+    }
+  });
+  return map;
 }
