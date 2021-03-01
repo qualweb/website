@@ -1,10 +1,22 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 
-const routes: Routes = [];
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { EvaluationPageComponent } from './pages/evaluation-page/evaluation-page.component';
+import { AboutPageComponent } from './pages/about-page/about-page.component';
+
+const routes: Routes = [
+  { path: '', component: HomePageComponent },
+  { path: 'about', component: AboutPageComponent },
+  { path: ':url', component: EvaluationPageComponent },
+];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes, {
+      scrollPositionRestoration: 'top',
+    }),
+  ],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

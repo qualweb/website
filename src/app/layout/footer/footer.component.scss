@@ -1,0 +1,28 @@
+footer {
+  padding: 5px 0;
+  height: 50px;
+}
+
+.first_img {
+  margin-left: 1vw;
+}
+
+.last_img{
+  margin-right: 1vw;
+  // img {
+  svg {
+    padding-top: 0.20em;
+    height: 85%;
+  }
+}
+
+.fifth_container{
+  display: flex;
+  vertical-align: middle;
+}
+
+img, svg {
+  height: 100%;
+  width: 100%;
+  object-fit: contain !important;
+}

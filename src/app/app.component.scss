@@ -1,0 +1,13 @@
+@import 'themes.scss';
+
+.main {
+  min-height: 100vh;
+}
+
+.go-to-top {
+  display: block;
+  position: fixed;
+  bottom: 12vh;
+  right: 5vw;
+  z-index: 100;
+}

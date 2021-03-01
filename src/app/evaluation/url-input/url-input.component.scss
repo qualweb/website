@@ -1,0 +1,131 @@
+@use "sass:selector";
+@mixin unify-parent($child) {
+  @at-root #{selector.unify(&, $child)} {
+    @content;
+  }
+}
+
+.input_url {
+  padding: 0 !important;
+  margin: 0;
+  color: whitesmoke;
+
+  input {
+    border: none;
+    padding: 1em;
+    background-color: transparent;
+    color: whitesmoke;
+    font-size: 1.2em;
+    outline: none;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  }
+
+  mat-icon {
+    cursor: default ;
+  }
+
+  .info {
+    color: #78ade6;
+  }
+
+  .error {
+    color: red;
+  }
+
+  input:disabled {
+    -webkit-text-fill-color: grey;
+    opacity: 1;
+    cursor: default !important;
+  }
+  
+  .input_button {
+    border: 1px solid #636363;
+    border-radius: 3px;
+    input {
+      width: 100%;
+      cursor: pointer;
+    }
+    input:focus, input:active {
+      background-color: #545454;
+    }
+  }
+}
+
+.info-tooltip {
+  font-size: 1em;
+  color: whitesmoke;
+  background-color: #1c5d95;
+  text-align: center;
+  white-space: pre-line;
+}
+
+.error-tooltip {
+  font-size: 1em;
+  color: whitesmoke;
+  background-color: #680000;
+  text-align: center;
+  white-space: pre-line;
+}
+/*
+.dropdown {
+  position: relative;
+  display: inline-block;
+  min-height: 100%;
+  button {
+    margin-top: 10px;
+  }
+
+  .error {
+    color: #ff766e;
+    @include unify-parent("p"){
+      margin-bottom: 0;
+    }
+  }
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  padding: 0 1em 1em 1em;
+  right: 0;
+  min-width: 200px;
+  border-radius: 5px;
+  background-color: #383838;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  z-index: 1;
+
+}
+
+.dropdown-content-open {
+  display: block;
+}*/
+
+.error {
+  color: #ff766e;
+}
+
+h1 {
+  margin-bottom: 0;
+}
+
+.subtitle{
+  font-size: 1.25em;
+  font-weight: normal;
+  margin: 0.5em 0 0.25em 0;
+}
+
+.div-checkbox {
+  max-width: 100%;
+  display: grid !important;
+  grid-gap: 0.5em;
+}
+/*@media (min-width: 400px) {
+  .div-checkbox {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}*/
+@media (min-width: 700px) {
+  .div-checkbox {
+    display: flex !important;
+  }
+}

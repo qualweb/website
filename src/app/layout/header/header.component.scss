@@ -1,0 +1,10 @@
+mat-toolbar {
+  background-color: transparent;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  pointer-events: none;
+  margin-bottom: -70px;
+}

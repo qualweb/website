@@ -1,0 +1,68 @@
+<mat-card class="input_url">
+  <form (submit)="submit($event)" novalidate fxLayout="row">
+    <div fxFlex fxLayout.xs="column" fxLayout="row">
+      <div fxFlex.xs fxFlex.gt-xs="85">
+        <input type="url" placeholder="{{ 'INPUT_URL.placeholder' | translate }}" [formControl]="urlForm" autofocus fxFlex>
+        <div fxLayoutAlign="center center" fxFlex="10">
+          <mat-icon class="info" *ngIf="urlForm.hasError('required')"
+                    aria-hidden="false"
+                    tabindex="0"
+                    #tooltipInfo="matTooltip"
+                    (focus)="tooltipInfo.show()"
+                    attr.aria-label="{{ 'INPUT_URL.example_url' | translate }}"
+                    matTooltip="{{ 'INPUT_URL.example_url' | translate }}"
+                    matTooltipClass="info-tooltip">
+            info
+          </mat-icon>
+          <mat-icon class="error" *ngIf="urlForm.hasError('url')"
+                    aria-hidden="false"
+                    tabindex="0"
+                    #tooltipError="matTooltip"
+                    (focus)="tooltipError.show()"
+                    attr.aria-label="{{ 'INPUT_URL.invalid_url' | translate }}"
+                    matTooltip="{{ 'INPUT_URL.invalid_url' | translate }}"
+                    matTooltipClass="error-tooltip">
+            error_outline
+          </mat-icon>
+        </div>
+        
+      </div>
+      <div fxFlex fxLayout.xs="row" fxLayout="column" fxLayoutAlign="center center" class="input_button">
+        <input type="submit" [disabled]="urlForm.invalid || noCheckboxSelected" fxFlex value="{{ 'INPUT_URL.submit' | translate }}"/>
+      </div>
+    </div>
+
+    
+
+  </form>
+</mat-card>
+<div fxLayout="column">
+  <h1>{{ 'INPUT_URL.settings' | translate }}</h1>
+  <div fxLayout="row" aria-live="polite">
+    <h2 *ngIf="!noCheckboxSelected" class="subtitle">{{ 'INPUT_URL.modules' | translate }}</h2>
+    <h2 *ngIf="noCheckboxSelected" class="subtitle error">{{ 'INPUT_URL.ERROR.modules' | translate }}</h2>
+  </div>
+  <div fxLayout="column wrap" class="div-checkbox">
+    <mat-checkbox [(ngModel)]="executeACT" (change)="updateCheckboxStatus()">ACT Rules</mat-checkbox>
+    <mat-checkbox [(ngModel)]="executeWCAG" (change)="updateCheckboxStatus()">WCAG Techniques</mat-checkbox>
+    <!--mat-checkbox [(ngModel)]="executeCSS" (change)="updateCheckboxStatus()">CSS Techniques</mat-checkbox-->
+    <!--mat-checkbox [(ngModel)]="executeBP" (change)="updateCheckboxStatus()">Best Practices</mat-checkbox-->
+  </div>
+</div>
+
+<!--div class="dropdown" fxFlex>
+  <button mat-icon-button (click)="toggleDropdown()" id="dropdownButton" aria-label="dropdown to choose which modules to execute">
+    <mat-icon id="dropdownIconError" *ngIf="noCheckboxSelected" [class.error]="noCheckboxSelected">assignment_late</mat-icon>
+    <mat-icon id="dropdownIcon" *ngIf="!noCheckboxSelected">assignment</mat-icon>
+  </button>
+  <div id="dropdownContent" class="dropdown-content" [class.dropdown-content-open]="showDropdown">
+    <div fxLayout="column">
+      <p>Choose which modules you want to execute</p>
+      <mat-checkbox [(ngModel)]="executeACT" (change)="updateCheckboxStatus()">ACT Rules</mat-checkbox>
+      <mat-checkbox [(ngModel)]="executeHTML" (change)="updateCheckboxStatus()">HTML Techniques</mat-checkbox>
+      <mat-checkbox [(ngModel)]="executeCSS" (change)="updateCheckboxStatus()">CSS Techniques</mat-checkbox>
+      <mat-checkbox [(ngModel)]="executeBP" (change)="updateCheckboxStatus()">Best Practices</mat-checkbox>
+      <p *ngIf="noCheckboxSelected" class="error">You need to execute at least one module</p>
+    </div>
+  </div>
+</div-->
