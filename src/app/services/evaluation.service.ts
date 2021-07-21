@@ -21,7 +21,7 @@ export class EvaluationService {
       .pipe(
         map((res) => {
           const response = res.body;
-
+          
           if (
             !res.status.toString().startsWith('20') ||
             !response ||
