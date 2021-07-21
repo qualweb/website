@@ -1,7 +1,7 @@
 {
   "HEADER": {
-      "homepage": "Homepage",
-      "language": "Language"
+    "homepage": "Homepage",
+    "language": "Language"
   },
   "EVALUATION_PAGE": {
     "sidenav": {
@@ -45,8 +45,8 @@
       "toggle": "Toggle filters",
       "expand_all": "Expand all rules and techniques",
       "close_all": "Close all rules and techniques",
-      "result":  "result",
-      "results":  "results"
+      "result": "result",
+      "results": "results"
     },
     "report": {
       "title": "Evaluation Report",
@@ -211,7 +211,7 @@
     "understandable": "Understandable",
     "robust": "Robust"
   },
-  "SUCCESS_CRITERIA":  {
+  "SUCCESS_CRITERIA": {
     "1.1.1": "Non-text Content",
     "1.2.1": "Audio-only and Video-only (Prerecorded)",
     "1.2.2": "Captions (Prerecorded)",
@@ -300,9 +300,13 @@
     "about_act": "ACT Rules",
     "about_3": "QualWeb will also make available, from time to time, experimental modules that come out of specific research projects, and which might improve different aspects of web accessibility evaluation (for example, a module to assess the quality of text alternatives). You will always have the option to use QualWeb without these modules.",
     "about_4": "QualWeb is open-source and available at ",
-    "about_5": "You can use QualWeb online at this website, or as a ",
+    "about_5": "You can use QualWeb online at this website, as a ",
     "about_cli": "command line tool",
-    "about_6": ", integrate in your javascript projects or as a browser extension (soon).",
+    "about_6": ", as a ",
+    "about_extension": "browser extension",
+    "about_7": ", or you can ",
+    "about_core": "integrate it in your javascript projects",
+    "about_8": ".",
     "about_projects": "The following projects have contributed to QualWeb's development:",
     "title_accessibility": "Accessibility",
     "access_1": "Accessibility is an important topic for us. For that reason we try to make QualWeb as accessible as possible. Conformance wise we aim to meet the ",
