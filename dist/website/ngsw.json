@@ -1,0 +1,115 @@
+{
+  "configVersion": 1,
+  "timestamp": 1642008469262,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/4.6bb86fd106b46d38f528.js",
+        "/5.45f63c98fca179a1e369.js",
+        "/6.6156d41130f83caa9106.js",
+        "/7.13711dbea88616d28077.js",
+        "/favicon.ico",
+        "/index.html",
+        "/main.73e021f0c9084f9e3f03.js",
+        "/manifest.webmanifest",
+        "/polyfills.00096ed7d93ed26ee6df.js",
+        "/runtime.b78195e3439f12ce71db.js",
+        "/styles.cdbf7f2ec0075c852bbe.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/assets/bootstrap/bootstrap-theme.css",
+        "/assets/bootstrap/bootstrap-theme.min.css",
+        "/assets/bootstrap/bootstrap.css",
+        "/assets/bootstrap/bootstrap.min.css",
+        "/assets/i18n/English.json",
+        "/assets/i18n/Portuguese.json",
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-96x96.png",
+        "/assets/images/ciencias_ulisboa_marca_horizontal_rgb_branco.png",
+        "/assets/images/fct_logo.png",
+        "/assets/images/lasige_logo.png",
+        "/assets/images/logo.png",
+        "/assets/images/logo2.png",
+        "/assets/images/w3clogo.png",
+        "/assets/postinstall.sh"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/4.6bb86fd106b46d38f528.js": "dbfa077ab57668538c9ab355d040964844804807",
+    "/5.45f63c98fca179a1e369.js": "c1b3e99b958b745b7b3653ba952d7f73f6d0f42e",
+    "/6.6156d41130f83caa9106.js": "cbe4c37a2c4bbd474d2fa8054e8564ae7cba7ec0",
+    "/7.13711dbea88616d28077.js": "82f536199708b107c5d9d9eea8aa21b002bc892c",
+    "/assets/bootstrap/bootstrap-theme.css": "cfc548571e8d125ee7564cdbda350d7a31c10bce",
+    "/assets/bootstrap/bootstrap-theme.min.css": "087cd025a701560e49d30a974f1d97335f11637b",
+    "/assets/bootstrap/bootstrap.css": "f197c2c43c340ae0c20f69c988b7d2c8784d7e79",
+    "/assets/bootstrap/bootstrap.min.css": "6329c2ca8005486c1e1c51bbd0c3766c6b78ae17",
+    "/assets/i18n/English.json": "81f5ba3fa8d685819c9c5de0824328aadc46b5cb",
+    "/assets/i18n/Portuguese.json": "70f2e6b7754d64966863b89fa5eed19a801fd649",
+    "/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
+    "/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
+    "/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
+    "/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
+    "/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
+    "/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "/assets/images/ciencias_ulisboa_marca_horizontal_rgb_branco.png": "1ecc684fb6774529ab7bdfd580d8c1824d03940d",
+    "/assets/images/fct_logo.png": "095347bf95bfc3961765b0a5a0f44c2e11f2f6ae",
+    "/assets/images/lasige_logo.png": "0d550c7dde10e94a46ca8c0b41291b94bdbe6018",
+    "/assets/images/logo.png": "c0ab0b1e1377923a517b260f63d9b2bffbd60bd9",
+    "/assets/images/logo2.png": "c11d08eae5c60626736dbf33857c86b77e4dcc96",
+    "/assets/images/w3clogo.png": "caadb39ff55c5cac838aa5be9a35a03e73a8fdf8",
+    "/assets/postinstall.sh": "229e6c110050af211c96a0d37fc91c16fa7b576b",
+    "/favicon.ico": "d16c17fd761448673f55e28663a9386072c9047a",
+    "/index.html": "1dec4e5c36826a27251eecc6f659af334c588669",
+    "/main.73e021f0c9084f9e3f03.js": "4b002f82ff4ecdb82ddb3beb8a535d6bc36bd88e",
+    "/manifest.webmanifest": "bcb80908ddbf6db6dff72cdee266593ad8bc40f2",
+    "/polyfills.00096ed7d93ed26ee6df.js": "cfe7b0b53e96bff9ba384b4d497c08475a617d62",
+    "/runtime.b78195e3439f12ce71db.js": "890c218903a5a82fcf7ab96e8e4bf2c6b21f6f4a",
+    "/styles.cdbf7f2ec0075c852bbe.css": "5185af52d8477abd22ccf1ac6f127d20a7ea0dbe"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
