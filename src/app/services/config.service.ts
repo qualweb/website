@@ -8,12 +8,14 @@ export class ConfigService {
 
   constructor() {
     const port = location.port;
-
+    console.log('Host port: ' + port);
     if (port !== '' && location.port !== '80') {
       this.server = 'http://localhost:3000';
     } else {
       this.server = '/api';
     }
+
+    console.log('Using server: ' + this.server);
   }
 
   getServer(service: string): string {
