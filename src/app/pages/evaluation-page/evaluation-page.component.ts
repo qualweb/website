@@ -12,12 +12,10 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Observable, Subscription, of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import cloneDeep from 'lodash.clonedeep';
 import orderBy from 'lodash.orderby';
-import forEach from 'lodash.foreach';
-//import { Socket } from "ngx-socket-io";
 import Evaluation from './evaluation.object';
 
 import { ResultCodeDialogComponent } from '../../dialogs/result-code-dialog/result-code-dialog.component';
@@ -349,7 +347,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     let subtitlePossibilities: any[] = [];
     let sub;
 
-    forEach(this.json['modules'], function (value, key) {
+    this.json['modules'].forEach((value: any, key: string) => {
       sub = key.split('-')[1];
       if (!subtitlePossibilities.includes(sub)) subtitlePossibilities.push(sub);
 
@@ -373,7 +371,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           typeString = 'Best Practice';
           break;*/
       }
-      forEach(rulesOrTechniques, function (val, key) {
+      rulesOrTechniques.forEach((val: any) => {
         /*/ Extra step in act-rules because theres an element field instead of htmlCode and pointer
         if(typeString === 'ACT Rule' && val['results'].length){
           forEach(val['results'], function(v, k) {

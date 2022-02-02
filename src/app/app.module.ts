@@ -38,54 +38,53 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    HomePageComponent,
-    EvaluationPageComponent,
-    BreadcrumbsComponent,
-    ResultCodeDialogComponent,
-    AboutPageComponent,
-    ErrorPageComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
-    HttpClientModule,
-    MaterialModule,
-    FlexLayoutModule,
-    EvaluationModule,
-    FormsModule,
-    HighlightModule,
-    Ng2SearchPipeModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-    }),
-  ],
-  providers: [
-    {
-      provide: HIGHLIGHT_OPTIONS,
-      useValue: {
-        coreLibraryLoader: () => import('highlight.js/lib/core'),
-        languages: {
-          typescript: () => import('highlight.js/lib/languages/typescript'),
-          css: () => import('highlight.js/lib/languages/css'),
-          xml: () => import('highlight.js/lib/languages/xml'),
+    declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent,
+        HomePageComponent,
+        EvaluationPageComponent,
+        BreadcrumbsComponent,
+        ResultCodeDialogComponent,
+        AboutPageComponent,
+        ErrorPageComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient],
+            },
+        }),
+        HttpClientModule,
+        MaterialModule,
+        FlexLayoutModule,
+        EvaluationModule,
+        FormsModule,
+        HighlightModule,
+        Ng2SearchPipeModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {
+            enabled: environment.production,
+        }),
+    ],
+    providers: [
+        {
+            provide: HIGHLIGHT_OPTIONS,
+            useValue: {
+                coreLibraryLoader: () => import('highlight.js/lib/core'),
+                languages: {
+                    typescript: () => import('highlight.js/lib/languages/typescript'),
+                    css: () => import('highlight.js/lib/languages/css'),
+                    xml: () => import('highlight.js/lib/languages/xml'),
+                },
+            },
         },
-      },
-    },
-    CustomBreakPointsProvider,
-  ],
-  entryComponents: [],
-  bootstrap: [AppComponent],
+        CustomBreakPointsProvider,
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

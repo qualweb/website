@@ -1,13 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
 
-@import '~@angular/material/theming';
 @import 'app/themes.scss';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans|Oswald|Roboto|Rubik|Raleway&display=swap');
 @import '~highlight.js/styles/github.css';
 
 // Be sure that you only ever include 'mat-core' mixin once!
 // it should not be included for each theme.
-@include mat-core();
+@include mat.core();
 
 $md-qualwebprimary: (50 : #fefefe,
   100 : #fcfcfc,
@@ -70,14 +70,14 @@ $md-qualwebaccent: (50 : #e6e6e6,
   ));
 
 // mandatory stuff for theming
-$bv-palette-primary: mat-palette($md-qualwebprimary);
-$bv-palette-accent: mat-palette($md-qualwebaccent);
+$bv-palette-primary: mat.define-palette($md-qualwebprimary);
+$bv-palette-accent: mat.define-palette($md-qualwebaccent);
 
 // include the custom theme components into a theme object
-$bv-theme: mat-dark-theme($bv-palette-primary, $bv-palette-accent);
+$bv-theme: mat.define-dark-theme($bv-palette-primary, $bv-palette-accent);
 
 // include the custom theme object into the angular material theme
-@include angular-material-theme($bv-theme);
+@include mat.all-component-themes($bv-theme);
 
 @import '~highlight.js/styles/atom-one-dark.css';
 

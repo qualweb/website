@@ -8,7 +8,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import clone from 'lodash.clone';
+import clone from 'lodash.clonedeep';
 
 @Component({
   selector: 'app-result-code-dialog',
