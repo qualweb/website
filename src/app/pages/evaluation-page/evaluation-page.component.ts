@@ -339,7 +339,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   private processData(data: any): void {
     this.json = cloneDeep(data);
-    let rulesOrTechniques, typeString: string, groupedResults, dataJson;
+    let rulesOrTechniques, typeString = '', groupedResults, dataJson;
     let passedRes, failedRes, warningRes, inapplicableRes;
     const showRulesFilter: any[] = [];
     const result: any[] = [];
@@ -347,7 +347,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     let subtitlePossibilities: any[] = [];
     let sub;
 
-    this.json['modules'].forEach((value: any, key: string) => {
+    for (const key in this.json['modules'] ?? {}) {
+      const value = this.json['modules'][key];
       sub = key.split('-')[1];
       if (!subtitlePossibilities.includes(sub)) subtitlePossibilities.push(sub);
 
@@ -371,7 +372,9 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
           typeString = 'Best Practice';
           break;*/
       }
-      rulesOrTechniques.forEach((val: any) => {
+
+      for (const key in rulesOrTechniques ?? {}) {
+        const val = rulesOrTechniques[key];
         /*/ Extra step in act-rules because theres an element field instead of htmlCode and pointer
         if(typeString === 'ACT Rule' && val['results'].length){
           forEach(val['results'], function(v, k) {
@@ -432,8 +435,8 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
             inapplicable: false,
           };
         }
-      });
-    });
+      }
+    }
 
     this.prepareSubtitle(subtitlePossibilities);
 
