@@ -25,7 +25,7 @@ jobs:
     - uses: mr-smithers-excellent/docker-build-push@v5
       name: Update & Push Docker image
       with:
-        image: qualweb/backend
+        image: qualweb/website
         tags: latest
         registry: docker.io
         dockerfile: Dockerfile
