@@ -81,9 +81,9 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   modulesToExecute:
     | {
-        act: boolean;
-        wcag: boolean;
-      }
+      act: boolean;
+      wcag: boolean;
+    }
     | undefined;
 
   currentModule = 'starting';
@@ -513,16 +513,21 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (show) {
-      if (levels.includes('A')) {
-        show = this.showA;
-      }
-      if (levels.includes('AA')) {
-        show = this.showAA;
-      }
-      if (levels.includes('AAA')) {
-        show = this.showAAA;
-      }
+    if (show && levels.length > 0) {
+      show = levels.reduce<boolean>((acumulator, currentLevels) => {
+        if (currentLevels.includes('A')) {
+          acumulator = acumulator || this.showA;
+        }
+        if (currentLevels.includes('AA')) {
+          acumulator = acumulator || this.showAA;
+        }
+        if (currentLevels.includes('AAA')) {
+          acumulator = acumulator || this.showAAA;
+        }
+
+        return acumulator;
+      }, false)
+
     }
 
     if (show) {
@@ -542,49 +547,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     return show;
   }
 
-  orderRuleResult(dataRule: any): any[] {
-    /*let dataRule;
-    switch (this.getType(rule)) {
-      case 'act':
-        dataRule = this.json.modules['act-rules'].rules[rule].results;
-        break;
-      case 'html':
-        dataRule = this.json.modules['html-techniques'].techniques[rule].results;
-        break;
-      case 'css':
-        dataRule = this.json.modules['css-techniques'].techniques[rule].results;
-        break;
-      case 'bp':
-        dataRule = this.json.modules['best-practices']['best-practices'][rule].results;
-        break;
-    }
-    const ordering = {};
-    const sortOrder = ['passed', 'failed', 'warning', 'inapplicable'];
-    for (let i = 0; i < sortOrder.length; i++) {
-      ordering[sortOrder[i]] = i;
-    }
-    dataRule.sort(function (a, b) {
-      return (ordering[a.verdict] - ordering[b.verdict]);
-    });*/
-    const result: any = [[], [], [], []];
-    let counter = 0;
-    for (const data of dataRule) {
-      if (data['verdict'] === 'passed') {
-        result[0].push(data);
-        counter++;
-      } else if (data['verdict'] === 'failed') {
-        result[1].push(data);
-        counter++;
-      } else if (data['verdict'] === 'warning') {
-        result[2].push(data);
-        counter++;
-      } else if (data['verdict'] === 'inapplicable') {
-        result[3].push(data);
-        counter++;
-      }
-    }
-    return result;
-  }
+
 
   trackByIndex(index: number, rule: any): number {
     return rule['code'];
