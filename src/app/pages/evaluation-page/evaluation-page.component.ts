@@ -72,6 +72,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   showA: boolean;
   showAA: boolean;
   showAAA: boolean;
+  showBeyond: boolean;
 
   showRulesResults: any;
 
@@ -523,6 +524,9 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         }
         if (currentLevels.includes('AAA')) {
           acumulator = acumulator || this.showAAA;
+        }
+        if (!currentLevels.includes('A') && !currentLevels.includes('AA') && !currentLevels.includes('AAA')) {
+          acumulator = acumulator || this.showBeyond;
         }
 
         return acumulator;
