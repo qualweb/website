@@ -126,6 +126,7 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
     this.showA = true;
     this.showAA = true;
     this.showAAA = true;
+    this.showBeyond = false;
 
     this.showRulesResults = {};
     this.rules = [];
