@@ -31,6 +31,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { CustomBreakPointsProvider } from './services/custom-breakpoints';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -50,6 +51,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         ErrorPageComponent,
     ],
     imports: [
+        ScrollingModule,
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,

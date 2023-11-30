@@ -13,6 +13,22 @@ $inapplicable: white;
 $inapplicable-card: #595959;
 $orange-deep: #F4511E;
 
+
+.viewport { 
+min-height: 20em;
+max-height: 45rem;
+  border: 1px solid #909090;
+  border-radius: 3px;
+  padding: 1em;
+  .line_breaker:first-child {
+    margin-top: 0;
+  }
+}
+::ng-deep .cdk-virtual-scroll-content-wrapper{
+max-width: 90rem;
+
+}
+
 .column {
   flex-direction: column;
   -webkit-box-orient: vertical;
@@ -452,8 +468,6 @@ h1 {
 }
 
 .results_box {
-  max-height: 20em;
-  overflow-y: auto;
   border: 1px solid #909090;
   border-radius: 3px;
   padding: 1em;
