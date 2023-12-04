@@ -515,23 +515,24 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (show && levels.length > 0) {
-      show = levels.reduce<boolean>((accumulator, currentLevels) => {
-        if (currentLevels.includes('A')) {
-          accumulator = accumulator || this.showA;
-        }
-        if (currentLevels.includes('AA')) {
-          accumulator = accumulator || this.showAA;
-        }
-        if (currentLevels.includes('AAA')) {
-          accumulator = accumulator || this.showAAA;
-        }
-        if (!currentLevels.includes('A') && !currentLevels.includes('AA') && !currentLevels.includes('AAA')) {
-          accumulator = accumulator || this.showBeyond;
-        }
+    if (show) {
+      if (levels.length === 0) {
+        show = this.showBeyond;
+      } else {
 
-        return accumulator;
-      }, false)
+        show = levels.reduce<boolean>((accumulator, currentLevels) => {
+          if (currentLevels.includes('A')) {
+            accumulator = accumulator || this.showA;
+          }
+          if (currentLevels.includes('AA')) {
+            accumulator = accumulator || this.showAA;
+          }
+          if (currentLevels.includes('AAA')) {
+            accumulator = accumulator || this.showAAA;
+          }
+          return accumulator;
+        }, false)
+      }
 
     }
 
