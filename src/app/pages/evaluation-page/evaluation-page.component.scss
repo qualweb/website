@@ -13,20 +13,18 @@ $inapplicable: white;
 $inapplicable-card: #595959;
 $orange-deep: #F4511E;
 
-
+.marginCard{
+  margin: 0 1em;
+}
 .viewport { 
-min-height: 20em;
+min-height: 10em;
 max-height: 45rem;
   border: 1px solid #909090;
   border-radius: 3px;
   padding: 1em;
-  .line_breaker:first-child {
-    margin-top: 0;
-  }
 }
 ::ng-deep .cdk-virtual-scroll-content-wrapper{
-max-width: 90rem;
-
+max-width: 88rem;
 }
 
 .column {
@@ -471,10 +469,12 @@ h1 {
   border: 1px solid #909090;
   border-radius: 3px;
   padding: 1em;
-  .line_breaker:first-child {
-    margin-top: 0;
-  }
+  min-height: 20em;
+  max-height: 45rem;
+  border: 1px solid #909090;
+  border-radius: 3px;
 }
+
 
 .mat-checkbox {
   font-size: 1.1em;

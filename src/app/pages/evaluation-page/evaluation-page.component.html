@@ -386,9 +386,9 @@
                         <span *ngSwitchDefault> {{"EVALUATION_PAGE.filters.results" | translate}}</span>
                       </ng-container>
                     </h3>
-                    <cdk-virtual-scroll-viewport itemSize="50" class="viewport" [class.results_box]="rule['numbers'][res[1]] > 3">
+                    <cdk-virtual-scroll-viewport itemSize="2" [class.viewport]="rule['numbers'][res[1]] === 1" [class.results_box]="rule['numbers'][res[1]] > 1">
                       <ng-container *cdkVirtualFor="let test of rule[res[3]]; trackBy: trackByIndex">
-                        <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker">
+                        <mat-card [ngClass]="test.verdict" fxLayout="column" class="line_breaker marginCard">
                           <mat-card-header>
                             <mat-card-title [class.with-code]="test.elements || test.htmlCode">
                               {{ test.description }}
