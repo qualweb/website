@@ -1,3 +1,18 @@
+<div fxLayout="column">
+  <h2>{{ 'INPUT_URL.settings' | translate }}</h2>
+  <div fxLayout="row" aria-live="polite">
+    <h3 *ngIf="!noCheckboxSelected" class="subtitle">{{ 'INPUT_URL.modules' | translate }}</h3>
+    <h3 *ngIf="noCheckboxSelected" class="subtitle error">{{ 'INPUT_URL.ERROR.modules' | translate }}</h3>
+  </div>
+  <div fxLayout="column wrap" class="div-checkbox">
+    <mat-checkbox [(ngModel)]="executeACT" (change)="updateCheckboxStatus()">ACT Rules</mat-checkbox>
+    <mat-checkbox [(ngModel)]="executeWCAG" (change)="updateCheckboxStatus()">WCAG Techniques</mat-checkbox>
+    <!--mat-checkbox [(ngModel)]="executeCSS" (change)="updateCheckboxStatus()">CSS Techniques</mat-checkbox-->
+    <!--mat-checkbox [(ngModel)]="executeBP" (change)="updateCheckboxStatus()">Best Practices</mat-checkbox-->
+  </div>
+</div>
+
+<h2>{{ 'INPUT_URL.label' | translate }}</h2>
 <mat-card class="input_url">
   <form (submit)="submit($event)" novalidate fxLayout="row">
     <div fxFlex fxLayout.xs="column" fxLayout="row">
@@ -36,19 +51,6 @@
 
   </form>
 </mat-card>
-<div fxLayout="column">
-  <h1>{{ 'INPUT_URL.settings' | translate }}</h1>
-  <div fxLayout="row" aria-live="polite">
-    <h2 *ngIf="!noCheckboxSelected" class="subtitle">{{ 'INPUT_URL.modules' | translate }}</h2>
-    <h2 *ngIf="noCheckboxSelected" class="subtitle error">{{ 'INPUT_URL.ERROR.modules' | translate }}</h2>
-  </div>
-  <div fxLayout="column wrap" class="div-checkbox">
-    <mat-checkbox [(ngModel)]="executeACT" (change)="updateCheckboxStatus()">ACT Rules</mat-checkbox>
-    <mat-checkbox [(ngModel)]="executeWCAG" (change)="updateCheckboxStatus()">WCAG Techniques</mat-checkbox>
-    <!--mat-checkbox [(ngModel)]="executeCSS" (change)="updateCheckboxStatus()">CSS Techniques</mat-checkbox-->
-    <!--mat-checkbox [(ngModel)]="executeBP" (change)="updateCheckboxStatus()">Best Practices</mat-checkbox-->
-  </div>
-</div>
 
 <!--div class="dropdown" fxFlex>
   <button mat-icon-button (click)="toggleDropdown()" id="dropdownButton" aria-label="dropdown to choose which modules to execute">

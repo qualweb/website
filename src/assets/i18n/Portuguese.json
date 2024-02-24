@@ -86,10 +86,11 @@
     "English": "English"
   },
   "HOMEPAGE": {
-    "title": "Valide uma página web:",
+    "title": "Avalie uma página web:",
     "about": "Acerca do QualWeb"
   },
   "INPUT_URL": {
+    "label": "Insira o url da página web",
     "placeholder": "Insira o url aqui",
     "invalid_url": "O url inserido é inválido",
     "submit": "Verificar"
