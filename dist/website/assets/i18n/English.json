@@ -90,10 +90,11 @@
     "English": "English"
   },
   "HOMEPAGE": {
-    "title": "Validate a webpage",
+    "title": "Evaluate a webpage",
     "about": "About QualWeb"
   },
   "INPUT_URL": {
+    "label": "Insert the URL of the webpage",
     "placeholder": "Insert url here",
     "example_url": "Example of url: https://www.google.pt",
     "invalid_url": "The inserted url is invalid!\nMake sure the protocol (e.g. http://) is included!",

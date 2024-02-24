@@ -105,7 +105,15 @@
 }
 
 h1 {
+  font-size: 2em;
+}
+
+h1, h2 {
   margin-bottom: 0;
+}
+
+h3 {
+  margin-top: 0 !important;
 }
 
 .subtitle{
@@ -129,3 +137,5 @@ h1 {
     display: flex !important;
   }
 }
+
+
