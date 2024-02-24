@@ -4,6 +4,7 @@
 
 <div id="evaluation-content" *ngIf="!evaluateLoading && !error" fxLayoutAlign="center" [@.disabled]="true">
 
+  <span class="sr-only" aria-live="assertive">Evaluation done</span>
   <a class="skip_content" [href]="skipLinkPath" tabindex="5">Skip to main content</a>
 
   <div fxFlex="80.5" fxLayout="column">
