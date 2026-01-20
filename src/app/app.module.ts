@@ -14,6 +14,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { HeaderComponent } from './layout/header/header.component';
 import { FooterComponent } from './layout/footer/footer.component';
+import { NewFooterComponent } from './layout/new-footer/new-footer.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { EvaluationModule } from './evaluation/evaluation.module';
 import { EvaluationPageComponent } from './pages/evaluation-page/evaluation-page.component';
@@ -43,6 +44,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         AppComponent,
         HeaderComponent,
         FooterComponent,
+        NewFooterComponent,
         HomePageComponent,
         EvaluationPageComponent,
         BreadcrumbsComponent,
