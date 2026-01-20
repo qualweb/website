@@ -1,0 +1,206 @@
+// Variables
+$footer-bg-color: #943709;
+$footer-text-color: #ffffff;
+$footer-padding-desktop: 1.5rem 2rem;
+$footer-padding-mobile: 1.25rem 1rem;
+$logo-gap-desktop: 2rem;
+$logo-gap-mobile: 1.25rem;
+$logo-max-height: 60px;
+$transition-duration: 0.3s;
+
+// Breakpoints
+$breakpoint-md: 960px;
+$breakpoint-sm: 600px;
+
+.app-footer {
+  background-color: $footer-bg-color;
+  width: 100%;
+  color: $footer-text-color;
+  margin-top: 48px;
+}
+
+.footer {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  a {
+    color: white;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    text-decoration: none;
+    text-align: center;
+    width: 100%;
+    transition: transform $transition-duration ease, opacity $transition-duration ease;
+
+
+      &:hover,
+      &:focus {
+        transform: translateY(-2px);
+        opacity: 0.85;
+        outline-offset: 4px;
+        border-radius: 4px;
+      }
+  }
+}
+
+.footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: $footer-padding-desktop;
+
+  @media (max-width: $breakpoint-sm) {
+    gap: 1.25rem;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: $footer-padding-mobile;
+  }
+}
+
+.footer-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $logo-gap-desktop;
+  padding: 0.5rem 0;
+
+  @media (max-width: $breakpoint-md) {
+    gap: $logo-gap-mobile;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    gap: 1rem;
+  }
+}
+
+.footer-logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: $logo-max-height;
+  transition: transform $transition-duration ease, opacity $transition-duration ease;
+
+  &:hover,
+  &:focus {
+    transform: translateY(-2px);
+    opacity: 0.85;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    height: 50px;
+  }
+}
+
+.footer-logo {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+
+  &--svg {
+    height: 100%;
+    width: auto;
+    min-width: 80px;
+
+    @media (max-width: $breakpoint-sm) {
+      min-width: 70px;
+    }
+  }
+}
+
+
+.footer-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+
+  @media (max-width: $breakpoint-md) {
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  &__text {
+    flex: 1;
+
+    p {
+      margin: 0;
+      line-height: 1.6;
+      font-size: 0.9rem;
+
+      @media (max-width: $breakpoint-sm) {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  &__institution,
+  &__university {
+    margin-bottom: 0.25rem;
+  }
+
+  &__full {
+    display: inline;
+
+    @media (max-width: $breakpoint-md) {
+      display: none;
+    }
+  }
+
+  &__short {
+    display: none;
+
+    @media (max-width: $breakpoint-md) {
+      display: inline;
+    }
+  }
+
+  &__contact-site {
+    color: whitesmoke;
+  }
+}
+
+.footer-logo-link:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+.footer-info__text p {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+
+@media print {
+  .app-footer {
+    background-color: transparent;
+    color: #000000;
+    border-top: 2px solid #000000;
+    padding: 1rem;
+
+    .footer-logo-link {
+      &:hover,
+      &:focus {
+        transform: none;
+        opacity: 1;
+      }
+    }
+
+    .footer-info__language {
+      display: none;
+    }
+  }
+}
