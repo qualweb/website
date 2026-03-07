@@ -83,7 +83,21 @@
     "close": "Close"
   },
   "FOOTER": {
-    "language": "Language"
+    "language": "Language",
+    "partners_nav": "Partners and funders",
+    "visit_lasige": "Visit LASIGE website (opens in new tab)",
+    "visit_fcul": "Visit Faculty of Sciences of the University of Lisbon website (opens in new tab)",
+    "visit_fct": "Visit Foundation for Science and Technology website (opens in new tab)",
+    "visit_w3c": "Visit W3C WAI-Tools project website (opens in new tab)",
+    "logo_lasige": "LASIGE logo",
+    "logo_fcul": "FCUL logo",
+    "logo_fct": "FCT logo",
+    "logo_w3c": "W3C logo",
+    "institution_full": "LASIGE - Department of Informatics",
+    "institution_short": "LASIGE - DI",
+    "university_full": "Faculty of Sciences of the University of Lisbon",
+    "university_short": "FCUL",
+    "email_label": "E-mail:"
   },
   "LANGUAGES": {
     "Portuguese": "Português",
