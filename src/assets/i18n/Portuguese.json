@@ -79,7 +79,21 @@
     "close": "Fechar"
   },
   "FOOTER": {
-    "language": "Língua"
+    "language": "Língua",
+    "partners_nav": "Parceiros e financiadores",
+    "visit_lasige": "Visitar site do LASIGE (abre em nova aba)",
+    "visit_fcul": "Visitar site da Faculdade de Ciências da Universidade de Lisboa (abre em nova aba)",
+    "visit_fct": "Visitar site da Fundação para a Ciência e Tecnologia (abre em nova aba)",
+    "visit_w3c": "Visitar site do projeto W3C WAI-Tools (abre em nova aba)",
+    "logo_lasige": "Logo LASIGE",
+    "logo_fcul": "Logo FCUL",
+    "logo_fct": "Logo FCT",
+    "logo_w3c": "Logo W3C",
+    "institution_full": "LASIGE - Departamento de Informática",
+    "institution_short": "LASIGE - DI",
+    "university_full": "Faculdade de Ciências da Universidade de Lisboa",
+    "university_short": "FCUL",
+    "email_label": "E-mail:"
   },
   "LANGUAGES": {
     "Portuguese": "Português",

@@ -5,15 +5,15 @@
       <a routerLink="about" title="About page"> {{ 'HOMEPAGE.about' | translate }} </a>
     </div>
     <!-- Logos Section -->
-    <nav class="footer-logos" aria-label="Parceiros e financiadores">
+    <nav class="footer-logos" [attr.aria-label]="'FOOTER.partners_nav' | translate">
       <a
         href="https://lasige.pt/"
         target="_blank"
         rel="noopener noreferrer"
         class="footer-logo-link"
-        aria-label="Visitar site do LASIGE (abre em nova aba)">
+        [attr.aria-label]="'FOOTER.visit_lasige' | translate">
         <img
-          alt="Logo LASIGE"
+          [alt]="'FOOTER.logo_lasige' | translate"
           src="assets/images/lasige_logo.png"
           class="footer-logo">
       </a>
@@ -23,9 +23,9 @@
         target="_blank"
         rel="noopener noreferrer"
         class="footer-logo-link"
-        aria-label="Visitar site da Faculdade de Ciências da Universidade de Lisboa (abre em nova aba)">
+        [attr.aria-label]="'FOOTER.visit_fcul' | translate">
         <img
-          alt="Logo FCUL"
+          [alt]="'FOOTER.logo_fcul' | translate"
           src="assets/images/ciencias_ulisboa_marca_horizontal_rgb_branco.png"
           class="footer-logo">
       </a>
@@ -35,9 +35,9 @@
         target="_blank"
         rel="noopener noreferrer"
         class="footer-logo-link"
-        aria-label="Visitar site da Fundação para a Ciência e Tecnologia (abre em nova aba)">
+        [attr.aria-label]="'FOOTER.visit_fct' | translate">
         <img
-          alt="Logo FCT"
+          [alt]="'FOOTER.logo_fct' | translate"
           src="assets/images/fct_logo.png"
           class="footer-logo">
       </a>
@@ -47,14 +47,14 @@
         target="_blank"
         rel="noopener noreferrer"
         class="footer-logo-link footer-logo-link--w3c"
-        aria-label="Visitar site do projeto W3C WAI-Tools (abre em nova aba)">
+        [attr.aria-label]="'FOOTER.visit_w3c' | translate">
         <svg
           role="img"
           viewBox="0 0 68 34"
           xmlns="http://www.w3.org/2000/svg"
           fill="white"
           class="footer-logo footer-logo--svg"
-          aria-label="Logo W3C">
+          [attr.aria-label]="'FOOTER.logo_w3c' | translate">
           <title>W3C WAI-Tools</title>
           <g>
             <path d="m16.117 1.006 5.759 19.58 5.759-19.58h4.17 11.444v1.946l-5.879 10.128c2.065.663 3.627 1.868 4.686 3.615 1.059 1.748 1.589 3.799 1.589 6.155 0 2.914-.775 5.363-2.324 7.348s-3.555 2.978-6.017 2.978c-1.854 0-3.469-.589-4.845-1.767-1.377-1.178-2.396-2.773-3.058-4.786l3.256-1.35c.477 1.218 1.106 2.178 1.887 2.879.781.702 1.701 1.052 2.76 1.052 1.112 0 2.052-.622 2.82-1.866.768-1.245 1.152-2.74 1.152-4.489 0-1.933-.411-3.429-1.231-4.488-.954-1.244-2.45-1.867-4.489-1.867h-1.588v-1.906l5.56-9.612h-6.712l-.382.65-8.163 27.548h-.397l-5.958-19.937-5.957 19.937h-.397l-9.53-32.168h4.17l5.759 19.58 3.892-13.185-1.906-6.395z"></path>
@@ -70,18 +70,18 @@
     <div class="footer-info">
       <div class="footer-info__text">
         <p class="footer-info__institution">
-          <span class="footer-info__full">LASIGE - Departamento de Informática</span>
-          <span class="footer-info__short">LASIGE - DI</span>
+          <span class="footer-info__full">{{ 'FOOTER.institution_full' | translate }}</span>
+          <span class="footer-info__short">{{ 'FOOTER.institution_short' | translate }}</span>
         </p>
         <p class="footer-info__university">
-          <span class="footer-info__full">Faculdade de Ciências da Universidade de Lisboa</span>
-          <span class="footer-info__short">FCUL</span>
+          <span class="footer-info__full">{{ 'FOOTER.university_full' | translate }}</span>
+          <span class="footer-info__short">{{ 'FOOTER.university_short' | translate }}</span>
         </p>
       </div>
 
       <!-- Contact Section -->
       <div class="footer-info__contact">
-        <div class="footer-info__title">E-mail:</div>
+        <div class="footer-info__title">{{ 'FOOTER.email_label' | translate }}</div>
         <div class="footer-info__contact-email">qualweb@fc.ul.pt</div>
       </div>
     </div>
