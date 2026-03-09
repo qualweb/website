@@ -113,20 +113,29 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
     this.showFilters = true;
 
-    this.showPassed = true;
-    this.showFailed = true;
-    this.showWarning = true;
-    this.showInapplicable = false;
+    const queryParams = this.route.snapshot.queryParams;
 
-    this.showPerceivable = true;
-    this.showOperable = true;
-    this.showUnderstandable = true;
-    this.showRobust = true;
+    // Outcome
+    this.showPassed         = this.parseFilterCheckboxQueryParam(queryParams['outcome-passed'],           true);
+    this.showFailed         = this.parseFilterCheckboxQueryParam(queryParams['outcome-failed'],           true);
+    this.showWarning        = this.parseFilterCheckboxQueryParam(queryParams['outcome-warning'],          true);
+    this.showInapplicable   = this.parseFilterCheckboxQueryParam(queryParams['outcome-inapplicable'],     false);
 
-    this.showA = true;
-    this.showAA = true;
-    this.showAAA = true;
-    this.showBeyond = false;
+    // Type
+    this.showACT            = this.parseFilterCheckboxQueryParam(queryParams['type-act'],                 true);
+    this.showWCAG           = this.parseFilterCheckboxQueryParam(queryParams['type-wcag'],                true);
+
+    // Principle
+    this.showPerceivable    = this.parseFilterCheckboxQueryParam(queryParams['principle-perceivable'],    true);
+    this.showOperable       = this.parseFilterCheckboxQueryParam(queryParams['principle-operable'],       true);
+    this.showUnderstandable = this.parseFilterCheckboxQueryParam(queryParams['principle-understandable'], true);
+    this.showRobust         = this.parseFilterCheckboxQueryParam(queryParams['principle-robust'],         true);
+
+    // Level
+    this.showA              = this.parseFilterCheckboxQueryParam(queryParams['level-a'],                  true);
+    this.showAA             = this.parseFilterCheckboxQueryParam(queryParams['level-aa'],                 true);
+    this.showAAA            = this.parseFilterCheckboxQueryParam(queryParams['level-aaa'],                true);
+    this.showBeyond         = this.parseFilterCheckboxQueryParam(queryParams['level-beyond'],             false);
 
     this.showRulesResults = {};
     this.rules = [];
@@ -337,6 +346,13 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     this.showFilters = window.innerWidth > 599;
+  }
+
+  private parseFilterCheckboxQueryParam(val: any, defaultVal: boolean): boolean {
+    // Trying to match https://www.w3.org/TR/wai-aria/#aria-checked
+    if (val === "checked") return true
+    if (val === "unchecked") return false
+    return defaultVal
   }
 
   private processData(data: any): void {
