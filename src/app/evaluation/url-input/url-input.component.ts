@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 import { FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ModulesService } from '../../services/modules.service';
 
 @Component({
   selector: 'app-url-input',
@@ -24,7 +23,7 @@ export class UrlInputComponent implements OnInit {
   executeBP = false;*/
   noCheckboxSelected = false;
 
-  constructor(private router: Router, private data: ModulesService) {
+  constructor(private router: Router) {
     this.urlForm = new FormControl('', [
       Validators.required,
       this.urlValidator.bind(this),
@@ -38,20 +37,18 @@ export class UrlInputComponent implements OnInit {
   }
   submit(e: Event): void {
     e.preventDefault();
-    this.data.setModulesToRun({
-      act: this.executeACT,
-      wcag: this.executeWCAG,
-      /*html: this.executeHTML,
-      css: this.executeCSS,
-      bp: this.executeBP*/
-    });
 
     /*let url = this.urlForm.value;
     url = url.replace('https://', '');
     url = url.replace('http://', '');
     url = url.replace('www.', '');*/
 
-    this.router.navigate(['/', encodeURIComponent(this.urlForm.value)]);
+    this.router.navigate(['/', encodeURIComponent(this.urlForm.value)], {
+      queryParams: {
+        'type-act': this.executeACT ? 'checked' : 'unchecked',
+        'type-wcag': this.executeWCAG ? 'checked' : 'unchecked',
+      },
+    });
   }
 
   urlValidator(control: AbstractControl): any {

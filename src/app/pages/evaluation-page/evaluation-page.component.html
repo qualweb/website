@@ -70,20 +70,32 @@
                 {{"EVALUATION_PAGE.filters.outcome" | translate}}
               </h2>
               <div fxLayout="column">
-                <mat-checkbox class="passed__checkbox" [(ngModel)]="showPassed"
-                              (click)="$event.stopPropagation()">
+                <mat-checkbox
+                  class="passed__checkbox"
+                  [(ngModel)]="filters.outcome.passed"
+                  (change)="setQueryParam('outcome', 'passed')"
+                  (click)="$event.stopPropagation()">
                   {{ "EVALUATION_PAGE.filters.show_passed_rule" | translate }}
                 </mat-checkbox>
-                <mat-checkbox class="failed__checkbox" [(ngModel)]="showFailed"
-                              (click)="$event.stopPropagation()">
+                <mat-checkbox
+                  class="failed__checkbox"
+                  [(ngModel)]="filters.outcome.failed"
+                  (change)="setQueryParam('outcome', 'failed')"
+                  (click)="$event.stopPropagation()">
                   {{ "EVALUATION_PAGE.filters.show_failed_rule" | translate }}
                 </mat-checkbox>
-                <mat-checkbox class="warning__checkbox" [(ngModel)]="showWarning"
-                              (click)="$event.stopPropagation()">
+                <mat-checkbox
+                  class="warning__checkbox"
+                  [(ngModel)]="filters.outcome.warning"
+                  (change)="setQueryParam('outcome', 'warning')"
+                  (click)="$event.stopPropagation()">
                   {{ "EVALUATION_PAGE.filters.show_warning_rule" | translate }}
                 </mat-checkbox>
-                <mat-checkbox class="inapplicable__checkbox" [(ngModel)]="showInapplicable"
-                              (click)="$event.stopPropagation()">
+                <mat-checkbox
+                  class="inapplicable__checkbox"
+                  [(ngModel)]="filters.outcome.inapplicable"
+                  (change)="setQueryParam('outcome', 'inapplicable')"
+                  (click)="$event.stopPropagation()">
                   {{ "EVALUATION_PAGE.filters.show_not_applicable_rule" | translate }}
                 </mat-checkbox>
               </div>
@@ -95,22 +107,20 @@
                 {{"EVALUATION_PAGE.filters.type" | translate}}
               </h2>
               <div fxLayout="column">
-                <mat-checkbox [(ngModel)]="showACT" [disabled]="!!this.modulesToExecute?.act"
-                              (click)="$event.stopPropagation()">
+                <mat-checkbox
+                  [(ngModel)]="filters.type.act"
+                  [disabled]="!hasActRules"
+                  (change)="setQueryParam('type', 'act')"
+                  (click)="$event.stopPropagation()">
                   {{ "EVALUATION_PAGE.filters.show_act" | translate }}
                 </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showWCAG" [disabled]="!!this.modulesToExecute?.act"
-                              (click)="$event.stopPropagation()">
+                <mat-checkbox
+                  [(ngModel)]="filters.type.wcag"
+                  [disabled]="!hasWcagRules"
+                  (change)="setQueryParam('type', 'wcag')"
+                  (click)="$event.stopPropagation()">
                   {{ "EVALUATION_PAGE.filters.show_wcag" | translate }}
                 </mat-checkbox>
-                <!--mat-checkbox [(ngModel)]="showCSS" [disabled]="!this.modulesToExecute['css']"
-                              (click)="$event.stopPropagation()">
-                  {{ "EVALUATION_PAGE.filters.show_css" | translate }}
-                </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showBP" [disabled]="!this.modulesToExecute['bp']"
-                              (click)="$event.stopPropagation()">
-                  {{ "EVALUATION_PAGE.filters.show_bp" | translate }}
-                </mat-checkbox-->
               </div>
             </div>
             <div class="filter border" fxFlex.gt-xs="30"
@@ -120,17 +130,29 @@
               </h2>
 
               <div fxLayout="column">
-                <mat-checkbox [(ngModel)]="showPerceivable"
-                              (click)="$event.stopPropagation()">{{"PRINCIPLES.perceivable" | translate}}
+                <mat-checkbox
+                  [(ngModel)]="filters.principle.perceivable"
+                  (change)="setQueryParam('principle', 'perceivable')"
+                  (click)="$event.stopPropagation()">
+                  {{"PRINCIPLES.perceivable" | translate}}
                 </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showOperable"
-                              (click)="$event.stopPropagation()">{{"PRINCIPLES.operable" | translate}}
+                <mat-checkbox
+                  [(ngModel)]="filters.principle.operable"
+                  (change)="setQueryParam('principle', 'operable')"
+                  (click)="$event.stopPropagation()">
+                  {{"PRINCIPLES.operable" | translate}}
                 </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showUnderstandable"
-                              (click)="$event.stopPropagation()">{{"PRINCIPLES.understandable" | translate}}
+                <mat-checkbox
+                  [(ngModel)]="filters.principle.understandable"
+                  (change)="setQueryParam('principle', 'understandable')"
+                  (click)="$event.stopPropagation()">
+                  {{"PRINCIPLES.understandable" | translate}}
                 </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showRobust"
-                              (click)="$event.stopPropagation()">{{"PRINCIPLES.robust" | translate}}
+                <mat-checkbox
+                  [(ngModel)]="filters.principle.robust"
+                  (change)="setQueryParam('principle', 'robust')"
+                  (click)="$event.stopPropagation()">
+                  {{"PRINCIPLES.robust" | translate}}
                 </mat-checkbox>
               </div>
 
@@ -141,17 +163,29 @@
                 {{"EVALUATION_PAGE.filters.level" | translate}}
               </h2>
               <div fxLayout="column">
-                <mat-checkbox [(ngModel)]="showA"
-                              (click)="$event.stopPropagation()">A
+                <mat-checkbox
+                  [(ngModel)]="filters.level.a"
+                  (change)="setQueryParam('level', 'a')"
+                  (click)="$event.stopPropagation()">
+                  A
                 </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showAA"
-                              (click)="$event.stopPropagation()">AA
+                <mat-checkbox
+                  [(ngModel)]="filters.level.aa"
+                  (change)="setQueryParam('level', 'aa')"
+                  (click)="$event.stopPropagation()">
+                  AA
                 </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showAAA"
-                              (click)="$event.stopPropagation()">AAA
+                <mat-checkbox
+                  [(ngModel)]="filters.level.aaa"
+                  (change)="setQueryParam('level', 'aaa')"
+                  (click)="$event.stopPropagation()">
+                  AAA
                 </mat-checkbox>
-                <mat-checkbox [(ngModel)]="showBeyond"
-                              (click)="$event.stopPropagation()">Rules beyond WCAG
+                <mat-checkbox
+                  [(ngModel)]="filters.level.beyond"
+                  (change)="setQueryParam('level', 'beyond')"
+                  (click)="$event.stopPropagation()">
+                  Rules beyond WCAG
                 </mat-checkbox>
 
               </div>
