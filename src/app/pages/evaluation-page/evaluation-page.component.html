@@ -158,42 +158,6 @@
             </div>
           </div>
         </div>
-        <!--
-          <div fxLayout="row">
-            <mat-menu #rulesMenu1="matMenu" yPosition="below" fxLayout="column">
-              <mat-checkbox class="mat-menu-item" color="primary"
-                            (click)="$event.stopPropagation()">Language
-              </mat-checkbox>
-              <mat-checkbox class="mat-menu-item" color="primary"
-                            (click)="$event.stopPropagation()">Images
-              </mat-checkbox>
-              <mat-checkbox class="mat-menu-item" color="primary"
-                            (click)="$event.stopPropagation()">Headers
-              </mat-checkbox>
-            </mat-menu>
-            <mat-menu #rulesMenu2="matMenu" xPosition="after" fxLayout="column">
-              <mat-checkbox class="mat-menu-item" color="primary"
-                            (click)="$event.stopPropagation()">CSS
-              </mat-checkbox>
-              <mat-checkbox class="mat-menu-item" color="primary"
-                            (click)="$event.stopPropagation()">Links
-              </mat-checkbox>
-              <mat-checkbox class="mat-menu-item" color="primary"
-                            (click)="$event.stopPropagation()">Color
-              </mat-checkbox>
-            </mat-menu>
-            <mat-menu #rulesMenu3="matMenu" xPosition="after" fxLayout="column">
-              <mat-checkbox class="mat-menu-item" color="primary"
-                            (click)="$event.stopPropagation()">Title
-              </mat-checkbox>
-              <mat-checkbox class="mat-menu-item" color="primary"
-                            (click)="$event.stopPropagation()">Metadata
-              </mat-checkbox>
-              <mat-checkbox class="mat-menu-item" color="primary"
-                            (click)="$event.stopPropagation()">Markup
-              </mat-checkbox>
-            </mat-menu>
-          </div> -->
       </div>
     </section>
 
@@ -236,14 +200,12 @@
                   <mat-icon aria-hidden="true" *ngIf="rule['outcome'] === 'warning'" class="final-outcome">warning</mat-icon>
                   <mat-icon aria-hidden="true" *ngIf="rule['outcome'] === 'inapplicable'" class="final-outcome">not_interested</mat-icon>
                   <h2 class="final-outcome rule_title">
-                    <!--{{ "RULES." + rule + ".name" | translate}}-->
                     {{ rule['name'] }}
                   </h2>
                 </div>
                 <div class="rule_code">{{rule['code'].substring(3)}}</div>
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <!--div fxShow="panel.expanded" class="filler"></div-->
             <ng-template matExpansionPanelContent>
               <div fxLayout.gt-sm="row" fxLayout="column">
                 <!-- TYPE -->
@@ -255,7 +217,6 @@
                 <!-- DESCRIPTION -->
                 <div class="order1 rule_description" fxFlex fxFlexOrder.gt-sm="1">
                   <h2 class="rule_subtitle mobile">{{"EVALUATION_PAGE.report.description" | translate}}</h2>
-                  <!--<p>{{ "RULES." + rule + ".description" | translate }}</p>-->
                   <p>{{ rule['description'] }}</p>
                   <p>
                     <ng-container [ngSwitch]="rule['urlType']">
@@ -347,11 +308,6 @@
                     <mat-checkbox class="inapplicable__checkbox" [(ngModel)]="showRulesResults[rule['code']].inapplicable">
                       {{ "EVALUATION_PAGE.filters.show_not_applicable_result" | translate }}
                       -
-                      <!--b>{{ getNumberResults(rule)[3] }}</b>
-                      <span
-                        *ngIf="getNumberResults(rule)[3] === 1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
-                      <span
-                        *ngIf="getNumberResults(rule)[3] !== 1"> {{"EVALUATION_PAGE.filters.results" | translate}}</span-->
                       <b>{{ rule['numbers']['nInapplicable'] }}</b>
                       <ng-container [ngSwitch]="rule['numbers']['nInapplicable']">
                         <span *ngSwitchCase="1"> {{"EVALUATION_PAGE.filters.result" | translate}}</span>
@@ -402,13 +358,6 @@
                           <mat-card-content fxLayoutAlign="start center" *ngIf="test.elements || test.htmlCode"
                                             fxLayout="row" fxLayoutGap="2">
                             <ng-container [ngSwitch]="rule['type']">
-  
-                              <!--ng-container *ngSwitchCase="'CSS Technique'">
-                                <div fxLayout="row" class="code_block">
-                                  <pre fxFlex><code tabindex="0" [highlight]="test.htmlCode.toString()"></code></pre>
-                                </div>
-                              </ng-container-->
-
                               <div *ngIf="test.elements !== undefined" fxLayout="column" class="act_code_block">
                                 <div *ngFor="let elem of test.elements" fxLayout="column" class="act_code_element">
                                   <div class="code_block">
