@@ -621,10 +621,10 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       this.subtitle =
         this.translate.instant('EVALUATION_PAGE.summary.tested') +
         ' ' +
-        this.subtitle;
+        (this.subtitle || "");
     } else {
       this.subtitle =
-        this.subtitle +
+        (this.subtitle || "") +
         ' ' +
         this.translate.instant('EVALUATION_PAGE.summary.tested');
     }
