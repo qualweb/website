@@ -2,11 +2,8 @@ import {
   Component,
   OnInit,
   OnDestroy,
-  ViewChild,
   ViewChildren,
   QueryList,
-  ElementRef,
-  HostListener,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
@@ -19,9 +16,10 @@ import orderBy from 'lodash.orderby';
 import Evaluation from './evaluation.object';
 
 import { ResultCodeDialogComponent } from '../../dialogs/result-code-dialog/result-code-dialog.component';
-import { ModulesService } from '../../services/modules.service';
 import { TranslateService } from '@ngx-translate/core';
 import { EvaluationService } from '../../services/evaluation.service';
+
+type CheckboxFilter = boolean
 
 @Component({
   selector: 'app-evaluation-page',
@@ -30,22 +28,17 @@ import { EvaluationService } from '../../services/evaluation.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EvaluationPageComponent implements OnInit, OnDestroy {
-  @ViewChild('summary', { static: true }) summary: ElementRef | undefined;
-  @ViewChild('filters', { static: true }) filters: ElementRef | undefined;
-  @ViewChild('report', { static: true }) report: ElementRef | undefined;
-  // @ViewChild(MatMenuTrigger, {static: true}) trigger: MatMenuTrigger;
   @ViewChildren(MatExpansionPanel) viewPanels:
     | QueryList<MatExpansionPanel>
     | undefined;
 
   paramsSub: Subscription | undefined;
-  // evaluationSub: Subscription;
+  queryParamsSub: Subscription | undefined;
 
   evaluateLoading: boolean;
   error: boolean;
 
   url: string | undefined;
-  // earl: any;
   json: any;
   html: string | undefined;
 
@@ -54,41 +47,41 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
   showFilters: boolean;
 
-  showPassed: boolean;
-  showFailed: boolean;
-  showWarning: boolean;
-  showInapplicable: boolean;
-
-  showACT: boolean;
-  showWCAG: boolean;
-  //showCSS: boolean;
-  //showBP: boolean;
-
-  showPerceivable: boolean;
-  showOperable: boolean;
-  showUnderstandable: boolean;
-  showRobust: boolean;
-
-  showA: boolean;
-  showAA: boolean;
-  showAAA: boolean;
-  showBeyond: boolean;
+  filters: {
+    outcome: {
+      passed: CheckboxFilter,
+      failed: CheckboxFilter,
+      warning: CheckboxFilter,
+      inapplicable: CheckboxFilter
+    },
+    type: {
+      act: CheckboxFilter,
+      wcag: CheckboxFilter
+    },
+    principle:  {
+      perceivable: CheckboxFilter,
+      operable: CheckboxFilter,
+      understandable: CheckboxFilter,
+      robust: CheckboxFilter,
+    },
+    level: {
+      a: CheckboxFilter,
+      aa: CheckboxFilter,
+      aaa: CheckboxFilter,
+      beyond: CheckboxFilter
+    },
+    [key: string]: {
+      [key: string]: any
+    }
+  };
 
   showRulesResults: any;
 
-  filterShow: boolean;
-  filterPrinciples: boolean;
-  filterLevels: boolean;
-
-  modulesToExecute:
-    | {
-      act: boolean;
-      wcag: boolean;
-    }
-    | undefined;
-
   currentModule = 'starting';
   data: Evaluation | undefined;
+
+  hasActRules = false;
+  hasWcagRules = false;
 
   term: any;
 
@@ -99,12 +92,10 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
   possibleResults: string[][];
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private cd: ChangeDetectorRef,
-    private router: Router,
-    //private readonly socket: Socket,
-    private modulesService: ModulesService,
     private translate: TranslateService,
     private readonly evaluation: EvaluationService
   ) {
@@ -113,28 +104,43 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
     this.showFilters = true;
 
-    this.showPassed = true;
-    this.showFailed = true;
-    this.showWarning = true;
-    this.showInapplicable = false;
+    const queryParams = this.route.snapshot.queryParams;
 
-    this.showPerceivable = true;
-    this.showOperable = true;
-    this.showUnderstandable = true;
-    this.showRobust = true;
+    const paramIsChecked = (name: string, options: { default: boolean } = { default: true }) => {
+      // Trying to match https://www.w3.org/TR/wai-aria/#aria-checked
+      const val = queryParams[name]
+      if (val === "checked") return true
+      if (val === "unchecked") return false
+      return options.default
+    }
 
-    this.showA = true;
-    this.showAA = true;
-    this.showAAA = true;
-    this.showBeyond = false;
+    this.filters = {
+      outcome: {
+        passed: paramIsChecked('outcome-passed'),
+        failed: paramIsChecked('outcome-failed'),
+        warning: paramIsChecked('outcome-warning'),
+        inapplicable: paramIsChecked('outcome-inapplicable', { default: false })
+      },
+      type: {
+        act: paramIsChecked('type-act'),
+        wcag: paramIsChecked('type-wcag')
+      },
+      principle: {
+        perceivable: paramIsChecked('principle-perceivable'),
+        operable: paramIsChecked('principle-operable'),
+        understandable: paramIsChecked('principle-understandable'),
+        robust: paramIsChecked('principle-robust'),
+      },
+      level: {
+        a: paramIsChecked('level-a'),
+        aa: paramIsChecked('level-aa'),
+        aaa: paramIsChecked('level-aaa'),
+        beyond: paramIsChecked('level-beyond', { default: false })
+      }
+    };
 
     this.showRulesResults = {};
     this.rules = [];
-
-    this.filterShow = false;
-    this.filterShow = false;
-    this.filterPrinciples = false;
-    this.filterLevels = false;
 
     this.skipLinkPath = `${window.location.href}#main`;
 
@@ -151,54 +157,20 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       ],
     ];
 
-    // to remove existent hashes
-    /*if(window.location.hash){
-      window.location.hash = '';
-    }*/
     if (window.location.hash) {
       location.hash = '';
       location.reload();
     }
-
-    // slice off the remaining '#' in HTML5:
-    /*if (typeof window.history.replaceState == 'function') {
-      history.replaceState({}, '', window.location.href.slice(0, -1));
-    }*/
-
-    // the following code does not work yet! (thats why we remove hashes - to not trick anyone)
-    /*this.navigationEnd = this.router.events.subscribe(s => {
-      if (s instanceof NavigationEnd) {
-        const tree = router.parseUrl(router.url);
-        if (tree.fragment) {
-          const element = document.querySelector('#' + tree.fragment);
-          if (element) {
-            element.scrollIntoView(true);
-          }
-        }
-      }
-    });*/
-
-    this.showACT = !!this.modulesToExecute?.act;
-    this.showWCAG = !!this.modulesToExecute?.wcag;
   }
 
   ngOnInit(): void {
-    this.modulesService.modules.subscribe(
-      (modules: any) => (this.modulesToExecute = modules)
-    );
-
-    this.showACT = !!this.modulesToExecute?.act;
-    this.showWCAG = !!this.modulesToExecute?.wcag;
-    //this.showCSS = this.modulesToExecute['css'];
-    //this.showBP = this.modulesToExecute['bp'];
-
     this.paramsSub = this.route.params.subscribe((params) => {
       this.url = decodeURIComponent(params.url);
 
       const options = {
         url: this.url,
-        act: !!this.modulesToExecute?.act,
-        wcag: !!this.modulesToExecute?.wcag,
+        act: this.filters.type.act,
+        wcag: this.filters.type.wcag,
       };
       this.evaluation.evaluate(options).subscribe((report) => {
         if (report) {
@@ -209,134 +181,23 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         this.evaluateLoading = false;
         this.cd.detectChanges();
       });
-
-      /*this.socket.connect();
-      this.socket.emit('evaluate', {url: encodeURIComponent(this.url), modules: this.modulesToExecute});
-      this.socket.on('evaluator', data => {
-        this.data = new Evaluation(data);
-      });
-      this.socket.on('moduleStart', (module: any) => {
-        this.currentModule = module;
-        this.cd.detectChanges();
-      });
-      this.socket.on('moduleEnd', (report: any) => {
-        this.data.addModuleEvaluation(report.module, report.report);
-      });
-      this.socket.on('prepare-data', () => {
-        this.currentModule = 'preparing-data';
-        this.processData(this.data.getFinalReport());
-        this.cd.detectChanges();
-      });
-      this.socket.on('evaluationEnd', () => {
-        setTimeout(() => {
-          this.evaluateLoading = false;
-          this.cd.detectChanges();
-          this.socket.disconnect();
-        }, 100);
-      });
-      this.socket.on('errorHandle', error => {
-        this.error = true;
-        this.evaluateLoading = false;
-        this.cd.detectChanges();
-        this.socket.disconnect();
-      });*/
     });
-
-    /*this.earl = JSON.parse(sessionStorage.getItem('earl'));
-    this.json = JSON.parse(sessionStorage.getItem('json'));
-    this.html = sessionStorage.getItem('postProcessingHTML');
-    this.evaluateLoading = false;
-    this.rules = keys(this.json.modules.evaluation.act.data);
-    this.processData();
-    console.log(this.earl);
-    console.log(this.json);*/
 
     this.cd.detectChanges();
   }
 
   ngOnDestroy(): void {
     this.paramsSub?.unsubscribe();
-    // this.navigationEnd.unsubscribe();
-    // this.evaluationSub.unsubscribe();
   }
 
-  initializeData(): void {
-    this.modulesService.modules.subscribe(
-      (modules: any) => (this.modulesToExecute = modules)
-    );
+  setQueryParam(group: string, filter: string): void {
+    const isChecked = this.filters[group][filter];
 
-    this.showACT = !!this.modulesToExecute?.act;
-    this.showWCAG = !!this.modulesToExecute?.wcag;
-    //this.showCSS = this.modulesToExecute['css'];
-    //this.showBP = this.modulesToExecute['bp'];
-
-    this.paramsSub = this.route.params.subscribe((params) => {
-      this.url = <string>params.url;
-      const options = {
-        url: this.url,
-        act: !!this.modulesToExecute?.act,
-        wcag: !!this.modulesToExecute?.wcag,
-      };
-      this.evaluation.evaluate(options).subscribe((report) => {
-        if (report) {
-          this.processData(report);
-        } else {
-          this.error = true;
-        }
-        this.evaluateLoading = false;
-        this.cd.detectChanges();
-      });
-
-      /*this.socket.connect();
-      this.socket.emit('evaluate', {
-        url: encodeURIComponent(this.url),
-        modules: this.modulesToExecute,
-      });
-      this.socket.on('evaluator', (data: any) => {
-        this.data = new Evaluation(data);
-      });
-      this.socket.on('moduleStart', (module: any) => {
-        this.currentModule = module;
-        this.cd.detectChanges();
-      });
-      this.socket.on('moduleEnd', (report: any) => {
-        this.data.addModuleEvaluation(report.module, report.report);
-      });
-      this.socket.on('prepare-data', () => {
-        this.currentModule = 'preparing-data';
-        this.processData(this.data.getFinalReport());
-        this.cd.detectChanges();
-      });
-      this.socket.on('evaluationEnd', () => {
-        setTimeout(() => {
-          this.evaluateLoading = false;
-          this.cd.detectChanges();
-          this.socket.disconnect();
-        }, 100);
-      });
-      this.socket.on('errorHandle', (error) => {
-        this.error = true;
-        this.evaluateLoading = false;
-        this.cd.detectChanges();
-        this.socket.disconnect();
-      });*/
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { [`${group}-${filter}`]: isChecked ? 'checked' : 'unchecked' },
+      queryParamsHandling: 'merge'
     });
-
-    /*this.earl = JSON.parse(sessionStorage.getItem('earl'));
-    this.json = JSON.parse(sessionStorage.getItem('json'));
-    this.html = sessionStorage.getItem('postProcessingHTML');
-    this.evaluateLoading = false;
-    this.rules = keys(this.json.modules.evaluation.act.data);
-    this.processData();
-    console.log(this.earl);
-    console.log(this.json);*/
-
-    this.cd.detectChanges();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.showFilters = window.innerWidth > 599;
   }
 
   private processData(data: any): void {
@@ -355,37 +216,21 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       if (!subtitlePossibilities.includes(sub)) subtitlePossibilities.push(sub);
 
       rulesOrTechniques = value['assertions'];
-
       switch (key) {
         case 'act-rules':
           //rulesOrTechniques = value['rules'];
           typeString = 'ACT Rule';
+          this.hasActRules = true;
           break;
         case 'wcag-techniques':
           //rulesOrTechniques = value['techniques'];
           typeString = 'WCAG Technique';
+          this.hasWcagRules = true;
           break;
-        /*case 'css-techniques':
-          //rulesOrTechniques = value['techniques'];
-          typeString = 'CSS Technique';
-          break;
-        case 'best-practices':
-          //rulesOrTechniques = value['best-practices'];
-          typeString = 'Best Practice';
-          break;*/
       }
 
       for (const key in rulesOrTechniques ?? {}) {
         const val = rulesOrTechniques[key];
-        /*/ Extra step in act-rules because theres an element field instead of htmlCode and pointer
-        if(typeString === 'ACT Rule' && val['results'].length){
-          forEach(val['results'], function(v, k) {
-            if(v['elements'].length){
-              v['htmlCode'] = v['elements'][0]['htmlCode'];
-              v['pointer'] = v['elements'][0]['pointer'];
-            }
-          });
-        }*/
         groupedResults = groupBy(val['results'], (res: any) => res['verdict']);
         passedRes = groupedResults.get('passed');
         failedRes = groupedResults.get('failed');
@@ -485,50 +330,44 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
     switch (outcome) {
       case 'passed':
-        show = this.showPassed;
+        show = this.filters.outcome.passed;
         break;
       case 'failed':
-        show = this.showFailed;
+        show = this.filters.outcome.failed;
         break;
       case 'warning':
-        show = this.showWarning;
+        show = this.filters.outcome.warning;
         break;
       case 'inapplicable':
-        show = this.showInapplicable;
+        show = this.filters.outcome.inapplicable;
         break;
     }
 
     if (show) {
       switch (rule['type']) {
         case 'ACT Rule':
-          show = this.showACT;
+          show = this.filters.type.act;
           break;
         case 'WCAG Technique':
-          show = this.showWCAG;
+          show = this.filters.type.wcag;
           break;
-        /*case 'CSS Technique':
-          show = this.showCSS;
-          break;
-        case 'Best Practice':
-          show = this.showBP;
-          break;*/
       }
     }
 
     if (show) {
       if (levels.length === 0) {
-        show = this.showBeyond;
+        show = this.filters.level.beyond;
       } else {
 
         show = levels.reduce<boolean>((accumulator, currentLevels) => {
           if (currentLevels.includes('A')) {
-            accumulator = accumulator || this.showA;
+            accumulator = accumulator || this.filters.level.a;
           }
           if (currentLevels.includes('AA')) {
-            accumulator = accumulator || this.showAA;
+            accumulator = accumulator || this.filters.level.aa;
           }
           if (currentLevels.includes('AAA')) {
-            accumulator = accumulator || this.showAAA;
+            accumulator = accumulator || this.filters.level.aaa;
           }
           return accumulator;
         }, false)
@@ -538,22 +377,20 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
 
     if (show) {
       if (principles.includes('Perceivable')) {
-        show = this.showPerceivable;
+        show = this.filters.principle.perceivable;
       }
       if (principles.includes('Operable')) {
-        show = this.showOperable;
+        show = this.filters.principle.operable;
       }
       if (principles.includes('Understandable')) {
-        show = this.showUnderstandable;
+        show = this.filters.principle.understandable;
       }
       if (principles.includes('Robust')) {
-        show = this.showRobust;
+        show = this.filters.principle.robust;
       }
     }
     return show;
   }
-
-
 
   trackByIndex(index: number, rule: any): number {
     return rule['code'];
@@ -565,8 +402,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
         .map((n) => Number(n))
         .reduce((a: number, b: number) => a + b, 0) === 0
     );
-    // rule: string
-    // return this.getNumberResults(rule).reduce((a, b) => a + b, 0) === 0;
   }
 
   areAllTheSameTypeOfResults(numbers: any): boolean {
@@ -577,15 +412,6 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       }
     }
     return count <= 1;
-    /*
-    rule: string
-    let count = 0;
-    for (const results of this.getNumberResults(rule)) {
-      if (results > 0) {
-        count++;
-      }
-    }
-    return count <= 1;*/
   }
 
   prepareSubtitle(subPoss: string[]) {
@@ -605,10 +431,10 @@ export class EvaluationPageComponent implements OnInit, OnDestroy {
       this.subtitle =
         this.translate.instant('EVALUATION_PAGE.summary.tested') +
         ' ' +
-        this.subtitle;
+        (this.subtitle || "");
     } else {
       this.subtitle =
-        this.subtitle +
+        (this.subtitle || "") +
         ' ' +
         this.translate.instant('EVALUATION_PAGE.summary.tested');
     }
