@@ -43,7 +43,7 @@ export class UrlInputComponent implements OnInit {
     url = url.replace('http://', '');
     url = url.replace('www.', '');*/
 
-    this.router.navigate(['/', encodeURIComponent(this.urlForm.value)], {
+    this.router.navigate(['/', encodeURIComponent(this.urlForm.value.trim())], {
       queryParams: {
         'type-act': this.executeACT ? 'checked' : 'unchecked',
         'type-wcag': this.executeWCAG ? 'checked' : 'unchecked',
@@ -52,7 +52,7 @@ export class UrlInputComponent implements OnInit {
   }
 
   urlValidator(control: AbstractControl): any {
-    const url = control.value;
+    const url = control.value?.trim();
 
     if (url === '' || url === null) {
       return null;
