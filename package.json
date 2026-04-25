@@ -41,7 +41,7 @@
     "@angular-devkit/build-angular": "~13.2.1",
     "@angular/cli": "~13.2.1",
     "@angular/compiler-cli": "~13.2.0",
-    "@qualweb/types": "^0.7.26",
+    "@qualweb/types": "^0.7.27",
     "@types/highlight.js": "^10.1.0",
     "@types/jasmine": "~3.6.11",
     "@types/lodash.clone": "^4.5.6",
